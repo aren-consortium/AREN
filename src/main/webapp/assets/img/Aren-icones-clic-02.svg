@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="103px"
+	 height="103px" viewBox="0 0 103 103" enable-background="new 0 0 103 103" xml:space="preserve">
+<g id="Charte">
+</g>
+<g id="dispo" display="none">
+	<g display="inline">
+		<circle fill="#FFFFFF" stroke="#BA4100" stroke-linejoin="bevel" stroke-miterlimit="10" cx="51.821" cy="51.396" r="47"/>
+		<g>
+			<defs>
+				<circle id="SVGID_1_" cx="51.822" cy="51.396" r="41.745"/>
+			</defs>
+			<clipPath id="SVGID_2_">
+				<use xlink:href="#SVGID_1_"  overflow="visible"/>
+			</clipPath>
+			<g clip-path="url(#SVGID_2_)">
+				
+					<rect x="31.976" y="30.12" transform="matrix(0.8741 -0.4858 0.4858 0.8741 -23.8932 37.6136)" fill="none" stroke="#BA4100" stroke-miterlimit="10" width="57.248" height="69.541"/>
+				<line fill="none" stroke="#BA4100" stroke-width="3" stroke-miterlimit="10" x1="30.366" y1="52.758" x2="66.437" y2="32.705"/>
+				<line fill="none" stroke="#BA4100" stroke-width="3" stroke-miterlimit="10" x1="35.186" y1="60.723" x2="71.256" y2="40.672"/>
+				<path fill="#BA4100" d="M60.747,66.221c0.807,2.135,13.293,15.248,12.809,10.5c-0.339-3.314-3.019-6.402-6.479-8.314
+					c-0.898-0.497-2.804-1.389-4.602-1.699c3.349-4.559,6.228-11.474,4.207-15.003C63.629,46.375,61.795,66.348,60.747,66.221
+					c-8.122-0.986-13.666,3.619-16.324,6.834c-2.869,3.467,14.04-1.58,16.914-5.424"/>
+			</g>
+		</g>
+	</g>
+	<rect id="_x3C_Tranche_x3E__4_" display="inline" fill="none" width="103" height="103"/>
+</g>
+<g id="survol" display="none">
+	<g display="inline">
+		<g>
+			<circle fill="#FFFFFF" stroke="#BA4100" stroke-linejoin="bevel" stroke-miterlimit="10" cx="51.821" cy="51.396" r="47"/>
+			<g>
+				<defs>
+					<circle id="SVGID_7_" cx="51.822" cy="51.396" r="41.745"/>
+				</defs>
+				<clipPath id="SVGID_4_">
+					<use xlink:href="#SVGID_7_"  overflow="visible"/>
+				</clipPath>
+				<g clip-path="url(#SVGID_4_)">
+					
+						<rect x="31.976" y="30.12" transform="matrix(0.8741 -0.4858 0.4858 0.8741 -23.8932 37.6136)" fill="none" stroke="#BA4100" stroke-miterlimit="10" width="57.248" height="69.541"/>
+					
+						<line fill="none" stroke="#BA4100" stroke-width="3" stroke-miterlimit="10" x1="30.366" y1="52.758" x2="66.437" y2="32.705"/>
+					
+						<line fill="none" stroke="#BA4100" stroke-width="3" stroke-miterlimit="10" x1="35.186" y1="60.723" x2="71.256" y2="40.672"/>
+					<path fill="#BA4100" d="M60.747,66.221c0.807,2.135,13.293,15.248,12.809,10.5c-0.339-3.314-3.019-6.402-6.479-8.314
+						c-0.898-0.497-2.804-1.389-4.602-1.699c3.349-4.559,6.228-11.474,4.207-15.003C63.629,46.375,61.795,66.348,60.747,66.221
+						c-8.122-0.986-13.666,3.619-16.325,6.834c-2.868,3.467,14.041-1.58,16.915-5.424"/>
+				</g>
+			</g>
+		</g>
+		<circle fill="none" stroke="#60C3C5" stroke-linejoin="bevel" stroke-miterlimit="10" cx="51.821" cy="51.396" r="50"/>
+	</g>
+</g>
+<g id="clic">
+	<g>
+		
+			<circle fill="#BA4100" stroke="#BA4100" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" cx="51.821" cy="51.396" r="47"/>
+		<g>
+			<defs>
+				<circle id="SVGID_9_" cx="51.822" cy="51.396" r="41.745"/>
+			</defs>
+			<clipPath id="SVGID_6_">
+				<use xlink:href="#SVGID_9_"  overflow="visible"/>
+			</clipPath>
+			<g clip-path="url(#SVGID_6_)">
+				
+					<rect x="31.976" y="30.12" transform="matrix(0.8741 -0.4858 0.4858 0.8741 -23.8932 37.6136)" fill="#FFFFFF" stroke="#BA4100" stroke-miterlimit="10" width="57.248" height="69.541"/>
+				<line fill="none" stroke="#BA4100" stroke-width="2" stroke-miterlimit="10" x1="30.366" y1="52.758" x2="66.437" y2="32.705"/>
+				<line fill="none" stroke="#BA4100" stroke-width="2" stroke-miterlimit="10" x1="35.186" y1="60.723" x2="71.256" y2="40.672"/>
+				<path fill="#BA4100" d="M60.747,66.221c0.807,2.135,13.293,15.248,12.809,10.5c-0.339-3.314-3.019-6.402-6.479-8.314
+					c-0.898-0.497-2.804-1.389-4.602-1.699c3.349-4.559,6.228-11.474,4.207-15.003C63.629,46.375,61.795,66.348,60.747,66.221
+					c-8.122-0.986-13.666,3.619-16.325,6.834c-2.868,3.467,14.041-1.58,16.915-5.424"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

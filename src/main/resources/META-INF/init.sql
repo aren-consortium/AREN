@@ -1,0 +1,2 @@
+INSERT INTO institutions (id, created) VALUES (0, CURRENT_TIMESTAMP);
+INSERT INTO users (id, first_name, last_name, email, username, password, is_active, last_login, token_validity, created, authority, institution_id) VALUES (0, 'Super', 'Admin', 'super.admin@lirmm.fr', 'admin', '$2a$10$sbbuW2wJ9FX.pgfsTRkZreFMAemTLwe6dXCPsxzZBnkd6P1dyY9kO', TRUE, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SUPERADMIN', 0);

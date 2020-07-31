@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <!-- Connection information -->
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/db_name"/>
+            <property name="hibernate.connection.username" value="db_user"/>
+            <property name="hibernate.connection.password" value="db_password"/>
+            <property name="hibernate.default_schema" value="public"/>
+            <!-- SQL and DB config -->
+            <property name="hibernate.generate_statistics" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.use_sql_comments" value="false"/>
+            <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JDBCTransactionFactory"/>
+            <property name="hibernate.current_session_context_class" value="thread"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.jdbc.batch_size" value="30"/>
+            <property name="hibernate.jdbc.batch_versioned_data" value="true"/>
+
+            <!-- DB inititialization -->
+            <!--property name="hibernate.hbm2ddl.auto" value="drop-and-create"/-->
+            <!--property name="hibernate.hbm2ddl.import_files" value="META-INF/init.sql"/-->
+
+            <!-- Pool configuration -->
+            <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+            <property name="hibernate.c3p0.acquire_increment" value="5"/>
+            <property name="hibernate.c3p0.idle_test_period" value="60"/>
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.timeout" value="0"/>
+            <property name="hibernate.c3p0.acquireRetryAttempts" value="1"/>
+            <property name="hibernate.c3p0.acquireRetryDelay" value="250"/>
+            <property name="hibernate.c3p0.maxIdleTime" value="3000"/>
+        </properties>
+    </persistence-unit>
+</persistence>

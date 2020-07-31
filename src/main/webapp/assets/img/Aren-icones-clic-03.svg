@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="103px"
+	 height="103px" viewBox="0 0 103 103" enable-background="new 0 0 103 103" xml:space="preserve">
+<g id="Charte">
+</g>
+<g id="dispo" display="none">
+	<g display="inline">
+		<circle fill="#FFFFFF" stroke="#BA4100" stroke-miterlimit="10" cx="51.926" cy="51.396" r="47"/>
+		<polygon fill="none" stroke="#BA4100" stroke-miterlimit="10" points="81.264,51.5 51.5,81.264 51.5,21.736 		"/>
+		<path fill="#FFFFFF" stroke="#BA4100" stroke-width="3" stroke-miterlimit="10" d="M41.567,37.23
+			c10.684,0,19.343,6.639,19.343,14.83c0,8.189-8.659,14.828-19.343,14.828c-3.667,0-7.087-0.797-10.011-2.158l-8.041,3.447
+			l2.186-7.648c-2.185-2.402-3.476-5.32-3.476-8.469C22.226,43.869,30.884,37.23,41.567,37.23"/>
+	</g>
+	<rect id="_x3C_Tranche_x3E__3_" display="inline" fill="none" width="103" height="103"/>
+</g>
+<g id="survol" display="none">
+	<g display="inline">
+		<g>
+			<circle fill="#FFFFFF" stroke="#BA4100" stroke-miterlimit="10" cx="51.926" cy="51.396" r="47"/>
+			<polygon fill="none" stroke="#BA4100" stroke-miterlimit="10" points="81.264,51.5 51.5,81.264 51.5,21.736 			"/>
+			<path fill="#FFFFFF" stroke="#BA4100" stroke-width="3" stroke-miterlimit="10" d="M41.567,36.935
+				c10.684,0,19.343,6.639,19.343,14.83c0,8.189-8.659,14.828-19.343,14.828c-3.667,0-7.087-0.798-10.011-2.158l-8.041,3.447
+				l2.186-7.649c-2.185-2.402-3.476-5.319-3.476-8.468C22.226,43.573,30.884,36.935,41.567,36.935"/>
+		</g>
+		<circle fill="none" stroke="#60C3C5" stroke-miterlimit="10" cx="51.926" cy="51.396" r="50"/>
+	</g>
+</g>
+<g id="clic">
+	<g>
+		<circle fill="#BA4100" stroke="#BA4100" stroke-width="2" stroke-miterlimit="10" cx="51.926" cy="51.396" r="47"/>
+		<polygon fill="#FFFFFF" stroke="#FFFFFF" stroke-miterlimit="10" points="81.264,51.5 51.5,81.264 51.5,21.736 		"/>
+		<path fill="#FFFFFF" stroke="#BA4100" stroke-width="2" stroke-miterlimit="10" d="M41.567,36.935
+			c10.684,0,19.343,6.639,19.343,14.83c0,8.189-8.659,14.828-19.343,14.828c-3.667,0-7.087-0.798-10.011-2.158l-8.041,3.447
+			l2.186-7.649c-2.185-2.402-3.476-5.319-3.476-8.468C22.226,43.573,30.884,36.935,41.567,36.935"/>
+	</g>
+</g>
+</svg>

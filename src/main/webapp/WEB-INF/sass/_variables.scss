@@ -1,0 +1,63 @@
+// VARIBLES
+@font-face {
+    font-family: "Seravek";
+    src: url("../font/seravek-light-webfont.woff") format('woff');
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: "Seravek";
+    src: url("../font/seravek-regular-webfont.woff") format('woff');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Seravek";
+    src: url("../font/seravek-medium-webfont.woff") format('woff');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Seravek";
+    src: url("../font/seravek-bold-webfont.woff") format('woff');
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url("../font/material-icons.woff") format('woff2');
+}
+
+$navigation-height: 64px;
+$header-height: 60px;
+
+$background-color: white;
+
+$primary-color: hsl(21, 100%, 36%) !default;
+$secondary-color: hsl(180, 33%, 45%) !default;
+$primary-color-light: lighten($primary-color, 60%) !default;
+$secondary-color-light: lighten($secondary-color, 50%) !default;
+
+$selection-color: lighten( saturate($secondary-color,15%) , 10%) !default;
+
+$primary-secondary-color-light: mix($primary-color-light, $secondary-color-light);
+
+$disabled-color: #B2B2B2;
+$disabled-color-light: #DDDFE2;
+$disabled-color-dark: #808080;
+
+$text-select-color: #C6E4E3;
+
+$success-color: #26A96C !default;
+/*$error-color: color("red", "base") !default;*/
+$link-color: #336362 !default;
+$font-color-light: #B2B2B2 !default;
+$font-stack: Seravek, Helvetica, Roboto, Arial, sans-serif;
+
+$h1-fontsize: 1.4em !default;
+$h2-fontsize: 1.2em !default;
+$h3-fontsize: 1em !default;
+$h4-fontsize: 0.8em !default;
+$h5-fontsize: 0.8em !default;
