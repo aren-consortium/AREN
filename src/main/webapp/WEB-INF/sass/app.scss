@@ -129,6 +129,7 @@ html {
             }
             .current-view-wrapper {
                 min-height: calc(100vh - #{$navigation-height});
+                padding-bottom: 30px;
                 .current-view {
                     height: 100%;
                     > .container {
