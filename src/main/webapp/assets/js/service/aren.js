@@ -513,8 +513,13 @@ ApiService = function (anUrl, locale) {
     this.import = ({ data, onSuccess, onError, onProgress } = {}) => {
 
         let parseResponse = function (response) {
-            let newResponses = response.split("data: ");
-            return JSON.parse(newResponses[newResponses.length - 1]);
+            let newResponses = response.split("\ndata: ");
+            let lastResponse = newResponses[newResponses.length - 1];
+            try {
+                return JSON.parse(lastResponse);
+            } catch (ex) {
+                return lastResponse;
+            }
         };
         ajaxCall({
             method: "POST",

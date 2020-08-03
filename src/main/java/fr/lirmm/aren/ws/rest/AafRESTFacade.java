@@ -45,9 +45,6 @@ public class AafRESTFacade {
     private ServletContext servletContext;
 
     @Context
-    private RequestScope scope;
-
-    @Context
     private ObjectMapperProvider mapperProvider;
 
     @Context
@@ -74,21 +71,15 @@ public class AafRESTFacade {
         String uploadedFileLocation = realPath + "/WEB-INF/AafImport/" + fileDetail.getFileName();
         writeToFile(uploadedInputStream, uploadedFileLocation);
 
-        File file = new File(uploadedFileLocation);
-        aafService.init(file);
-
         aafService.setDispatcher((Float progress) -> {
             eventSink.send(sse.newEvent(progress + ""));
         });
 
-        Runnable asyncProcess = () -> {
-            List<String> output = aafService.proceedImportation();
-            eventSink.send(sse.newEvent(parseMessage(output)));
-            eventSink.close();
-            file.delete();
-        };
-
-        scope.runInScope(asyncProcess);
+        File file = new File(uploadedFileLocation);
+        List<String> output = aafService.proceedImportation(file);
+        eventSink.send(sse.newEvent(parseMessage(output)));
+        eventSink.close();
+        file.delete();
     }
 
     private String parseMessage(List<String> arrayOfString) {

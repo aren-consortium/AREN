@@ -1,6 +1,5 @@
 package fr.lirmm.aren.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +26,7 @@ import fr.lirmm.aren.model.aaf.DeleteRequest;
 import fr.lirmm.aren.model.aaf.FicAlimMENESR;
 import fr.lirmm.aren.model.aaf.ModifyRequest;
 import fr.lirmm.aren.security.PasswordEncoder;
+import java.io.File;
 
 /**
  * Service that provides operations for AAF xml import
@@ -95,7 +95,7 @@ public class AAFImportService {
      * @param file
      * @return
      */
-    public float init(File file) {
+    private void init(File file) {
 
         // Removes the check of external DTD on XML files
         System.setProperty("javax.xml.accessExternalDTD", "all");
@@ -121,19 +121,16 @@ public class AAFImportService {
                 toProcess.get(klass).put(method, new ArrayList<>());
             }
         }
-
-        amoutToProcess = alimAAF.length();
+        amoutToProcess = 0;
         amoutProceed = 0;
-
-        return amoutToProcess;
     }
 
     /**
      *
      * @return
      */
-    public List<String> proceedImportation() {
-        return proceedImportation(true, true);
+    public List<String> proceedImportation(File file) {
+        return proceedImportation(file, true, true);
     }
 
     /**
@@ -144,15 +141,41 @@ public class AAFImportService {
      * but already exist in local storage
      * @return
      */
-    public List<String> proceedImportation(boolean insertOnUpdate, boolean updateOnInsert) {
+    public List<String> proceedImportation(File file, boolean insertOnUpdate, boolean updateOnInsert) {
+        this.init(file);
 
         loadIdsMaps();
 
         // This populate the toProcess Map that will execute the real import
-        for (AbstractRequest req : alimAAF.getRequest()) {
-            onRequest(req);
+        for (AbstractRequest request : alimAAF.getRequest()) {
+            String entId = request.getId();
+            AttributeList attrs = request.getAttributes();
+            AttributeList opAttr = request.getOperationalAttributes();
+            attrs.addAll(opAttr);
+
+            Method method = null;
+            if (request.getClass() == AddRequest.class) {
+                method = Method.CREATE;
+            } else if (request.getClass() == ModifyRequest.class) {
+                method = Method.UPDATE;
+            } else if (request.getClass() == DeleteRequest.class) {
+                method = Method.DELETE;
+            }
+
+            AbstractEntEntity entity = parse(attrs, entId);
+            Class<? extends AbstractEntEntity> entityClass = getType(entity);
+
+            toProcess.get(entityClass).get(method).add(entity);
+            if (entityClass == Institution.class) {
+                for (Team team : ((Institution) entity).getTeams()) {
+                    toProcess.get(Team.class).get(method).add(team);
+                    this.amoutToProcess++;
+                }
+            }
+            this.amoutToProcess++;
         }
 
+        // This executes the real import
         getEntityManager().getTransaction().begin();
         // The order is important to avoid foreign key error
         for (Class<? extends AbstractEntEntity> klass : new Class[]{Institution.class, Team.class, User.class}) {
@@ -160,6 +183,7 @@ public class AAFImportService {
             for (Method method : new Method[]{Method.CREATE, Method.UPDATE, Method.DELETE}) {
                 for (AbstractEntEntity entity : toProcess.get(klass).get(method)) {
                     proceed(method, entity, insertOnUpdate, updateOnInsert);
+                    this.amoutProceed++;
                     dispatchProgression();
                 }
             }
@@ -186,10 +210,9 @@ public class AAFImportService {
      */
     private void dispatchProgression() {
 
-        amoutProceed++;
-        if (dispatcher != null) {
-            float progression = amoutProceed / amoutToProcess;
-            dispatcher.accept(progression);
+        if (this.dispatcher != null) {
+            float progression = this.amoutProceed / this.amoutToProcess;
+            this.dispatcher.accept(progression);
         }
     }
 
@@ -225,37 +248,6 @@ public class AAFImportService {
         });
 
         return map;
-    }
-
-    /**
-     * Process the request with the goog arguments
-     *
-     * @param request
-     */
-    private void onRequest(AbstractRequest request) {
-        String entId = request.getId();
-        AttributeList attrs = request.getAttributes();
-        AttributeList opAttr = request.getOperationalAttributes();
-        attrs.addAll(opAttr);
-
-        Method method = null;
-        if (request.getClass() == AddRequest.class) {
-            method = Method.CREATE;
-        } else if (request.getClass() == ModifyRequest.class) {
-            method = Method.UPDATE;
-        } else if (request.getClass() == DeleteRequest.class) {
-            method = Method.DELETE;
-        }
-
-        AbstractEntEntity entity = parse(attrs, entId);
-        Class<? extends AbstractEntEntity> entityClass = getType(entity);
-
-        toProcess.get(entityClass).get(method).add(entity);
-        if (entityClass == Institution.class) {
-            for (Team team : ((Institution) entity).getTeams()) {
-                toProcess.get(Team.class).get(method).add(team);
-            }
-        }
     }
 
     /**
