@@ -114,6 +114,7 @@ const messages = {
         reformulation_assist: "Assistant de reformulation",
         idefix_link: "Lien IDEFIX",
         with_hypostases: "Avec hypostase",
+        without_institution: "Sans établissement",
         helper: {
             mark_as_read: "Marquer comme lue",
             mark_as_unread: "Marquer comme non lue",

@@ -20,8 +20,8 @@
         methods: {
             fetchData( ) {
                 ArenService.Institutions.getAll({
-                    onSuccess: institutions => {
-                        institutions.sort((a, b) => a.id === 0 ? -1 : b.id === 0 ? 1 : (this.displayName(a) > this.displayName(b)) ? 1 : -1);
+                    onSuccess: () => {
+                        ArenService.Store.Institution.sort((a, b) => a.id === 0 ? -1 : b.id === 0 ? 1 : (this.displayName(a) < this.displayName(b)) ? -1 : (this.displayName(a) > this.displayName(b)));
                         this.fetchInstitution( );
                     }
                 });
@@ -34,9 +34,9 @@
             },
             displayName(inst) {
                 if (inst.id === 0) {
-                    return "Sans établissement";
+                    return this.$t('without_institution');
                 } else {
-                    return inst.type + inst.name;
+                    return inst.type + " " + inst.name;
                 }
             }
         }
