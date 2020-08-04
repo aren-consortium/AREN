@@ -17,11 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import javax.persistence.OrderBy;
-import javax.persistence.Transient;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
 
@@ -65,11 +61,11 @@ public class Team extends AbstractEntEntity implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "debates_count")
-    private Integer debatesCount;
+    private Integer debatesCount = 0;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "users_count")
-    private Integer usersCount;
+    private Integer usersCount = 0;
 
     /**
      *
