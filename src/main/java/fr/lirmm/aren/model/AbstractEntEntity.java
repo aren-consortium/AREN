@@ -41,8 +41,12 @@ public abstract class AbstractEntEntity extends AbstractDatedEntity {
             return false;
         }
         AbstractEntEntity other = (AbstractEntEntity) object;
-        return (this.getId() != null && other.getId() != null && this.getId().equals(other.getId()))
-                || (this.getEntId() != null && other.getEntId() != null && this.getEntId().equals(other.getEntId()));
+        if (this.getEntId() != null && other.getEntId() != null) {
+            return this.getEntId().equals(other.getEntId());
+        } else if (this.getId() != null && other.getId() != null) {
+            return this.getId().equals(other.getId());
+        }
+        return false;
     }
 
     /**
