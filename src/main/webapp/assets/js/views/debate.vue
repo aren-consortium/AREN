@@ -416,7 +416,7 @@
                     }
                 });
             },
-            async selectionHandler(comment) {
+            selectionHandler(comment) {
                 if (!this.$root.isArchive) {
                     let selection = getSelection( );
                     let position = selection.anchorNode.compareDocumentPosition(selection.focusNode);
