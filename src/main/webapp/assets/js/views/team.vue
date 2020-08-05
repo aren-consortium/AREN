@@ -14,7 +14,8 @@
         </template>
 
         <users-grid
-            v-bind:people="team.users">
+            v-bind:people="team.users"
+            v-bind:editable="true">
             <template v-slot:side.actions="{ user }">
                 <action-button
                     v-bind:tooltip="$t('helper.remove_user_from_team')"

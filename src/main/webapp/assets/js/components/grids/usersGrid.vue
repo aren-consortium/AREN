@@ -57,10 +57,13 @@
                 });
             },
             filter(user) {
-                return user.authority !== Authority.DELETED && (user.lastName + user.firstName).toLowerCase().includes(this.search.toLowerCase());
+                if (this.search) {
+                    return user.authority !== Authority.DELETED && user.fullName().toLowerCase().includes(this.search.toLowerCase());
+                }
+                return user.authority !== Authority.DELETED;
             },
             sort(a, b) {
-                return (a.lastName + a.firstName > b.lastName + b.firstName) ? 1 : -1;
+                return (a.fullName() > b.fullName()) ? 1 : -1;
             }
         }
     };

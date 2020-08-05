@@ -1,5 +1,5 @@
 <template>
-    <tooltiped v-if="tooltip || tooltip-disabled"
+    <tooltiped v-if="tooltip || tooltipDisabled"
                v-bind:value="(disabled && tooltipDisabled) ? tooltipDisabled : tooltip">
         <span v-bind:class="'waves-effect waves-light btn' + (disabled ? ' disabled' : '')"
               @click="disabled ? '' : $emit('press', $event)">

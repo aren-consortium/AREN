@@ -13,7 +13,7 @@
                 if (!data.on) {
                     data.on = {};
                 }
-                data.staticClass += ' toultiped';
+                data.staticClass += ' tooltiped';
                 data.on.mouseover = () => this.$tooltip.display(this.value, this.$el);
                 data.on.mouseleave = () => this.$tooltip.hide();
                 data.on.mousedown = () => this.$tooltip.hide();

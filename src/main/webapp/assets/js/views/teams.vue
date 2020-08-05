@@ -8,7 +8,7 @@
         <template v-slot:right v-if="institution">
             <action-button v-if="$root.user.is('MODO')"
                            class="primary-color"
-                           @press="manageUsers = !manageUsers"
+                           @press="manageUsers = !manageUsers; scrollTop()"
                            v-bind:label="manageUsers ? $t('team_managment') : $t('user_managment')">
             </action-button>
             <action-button
@@ -154,6 +154,9 @@
                         }
                     }
                 });
+            },
+            scrollTop() {
+                document.documentElement.scrollTop = 0;
             }
         },
         components: {
