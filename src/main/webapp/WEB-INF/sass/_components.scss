@@ -41,12 +41,6 @@ grid {
             bottom: 15px;
         }
     }
-    @for $i from 1 through 12 {
-        .colspan-#{$i} { grid-column: span $i; }
-    }
-    @for $i from 1 through 12 {
-        .rowspan-#{$i} { grid-row: span $i; }
-    }
     ghead {
         color: $font-color-light;
         gh {
@@ -64,6 +58,9 @@ grid {
             grid-column: 1 / -1;
             border-top: 1px solid $disabled-color;
         }
+    }
+    .pagination {
+        grid-column: 1 / -1;
     }
 
     gbody > gr {

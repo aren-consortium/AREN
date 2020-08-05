@@ -1,9 +1,11 @@
 <template>
-    <grid-layout 
+    <grid-layout
         v-bind:columns="[ '1fr', '1fr', '1fr' ]"
         v-bind:actions="[ '1' ]"
         v-bind:headers="[  $t('title'), $t('users'), $t('debates') ]"
-        v-bind:items="sortedTeams"
+        v-bind:items="teams"
+        v-bind:filter="filter"
+        v-bind:sort="sort"
         @selection-change="$emit('selection-change', $event)">
 
         <template v-slot:column.1="{ value: team }">
@@ -29,15 +31,12 @@
     module.exports = {
         mixins: [VueGrid],
         props: ['teams', 'search'],
-        computed: {
-            sortedTeams( ) {
-                if (this.search) {
-                    return this.teams.filter((team) => {
-                        return team.name.toLowerCase( ).includes(this.search.toLowerCase( ));
-                    }).sort((a, b) => (a.name > b.name) ? 1 : -1);
-                } else {
-                    return this.teams.sort((a, b) => (a.name > b.name) ? 1 : -1);
-                }
+        methods: {
+            filter(team) {
+                return team.name.toLowerCase( ).includes(this.search.toLowerCase( ));
+            },
+            sort(a, b) {
+                return (a.name > b.name) ? 1 : -1;
             }
         }
     };

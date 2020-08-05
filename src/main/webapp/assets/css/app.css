@@ -6502,54 +6502,6 @@ grid gh .card {
     position: sticky;
     top: 15px;
     bottom: 15px; }
-grid .colspan-1 {
-    grid-column: span 1; }
-grid .colspan-2 {
-    grid-column: span 2; }
-grid .colspan-3 {
-    grid-column: span 3; }
-grid .colspan-4 {
-    grid-column: span 4; }
-grid .colspan-5 {
-    grid-column: span 5; }
-grid .colspan-6 {
-    grid-column: span 6; }
-grid .colspan-7 {
-    grid-column: span 7; }
-grid .colspan-8 {
-    grid-column: span 8; }
-grid .colspan-9 {
-    grid-column: span 9; }
-grid .colspan-10 {
-    grid-column: span 10; }
-grid .colspan-11 {
-    grid-column: span 11; }
-grid .colspan-12 {
-    grid-column: span 12; }
-grid .rowspan-1 {
-    grid-row: span 1; }
-grid .rowspan-2 {
-    grid-row: span 2; }
-grid .rowspan-3 {
-    grid-row: span 3; }
-grid .rowspan-4 {
-    grid-row: span 4; }
-grid .rowspan-5 {
-    grid-row: span 5; }
-grid .rowspan-6 {
-    grid-row: span 6; }
-grid .rowspan-7 {
-    grid-row: span 7; }
-grid .rowspan-8 {
-    grid-row: span 8; }
-grid .rowspan-9 {
-    grid-row: span 9; }
-grid .rowspan-10 {
-    grid-row: span 10; }
-grid .rowspan-11 {
-    grid-row: span 11; }
-grid .rowspan-12 {
-    grid-row: span 12; }
 grid ghead {
     color: #B2B2B2; }
 grid ghead gh {
@@ -6562,6 +6514,8 @@ grid gbody gr.spacer {
 grid gbody .separator {
     grid-column: 1 / -1;
     border-top: 1px solid #B2B2B2; }
+grid .pagination {
+    grid-column: 1 / -1; }
 grid gbody > gr > gd {
     min-height: 70px; }
 grid.striped gbody > gr:nth-child(odd) gd {
@@ -7306,8 +7260,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
     margin-bottom: 5px;
     margin-top: -5px; }
 #debate #mainContainer {
-    height: calc(100vh - 170px);
-    margin-bottom: 15px; }
+    height: calc(100vh - 170px); }
 #debate #documentContainer, #debate #commentsContainer {
     width: 50%;
     height: 100%;
@@ -7725,7 +7678,6 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
     transition: height .3s, padding .3s; }
 #document .ql-container {
     margin-top: -1px;
-    margin-bottom: 15px;
     background: white;
     border-top: 1px solid #ccc;
     transition: margin-top .3s; }
@@ -7779,6 +7731,11 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
     top: 250px;
     background: white;
     z-index: 8; }
+#createDebate .steps .collection-item > span {
+    display: inline-block;
+    max-width: calc(100% - 40px); }
+#createDebate .steps .collection-item .close {
+    cursor: pointer; }
 #createDebate #advancedOptions > li {
     cursor: pointer; }
 #createDebate #advancedOptions > li .arrow {

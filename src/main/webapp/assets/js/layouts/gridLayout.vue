@@ -10,15 +10,17 @@
 
         <gbody v-if="items">
             <!-- if there is no groups, then `rows` is an array with a single element that is `items` -->
-            <template v-for="(group, index) in rows">
+            <template v-for="(group, index) in groups"
+                      v-if="pages === 0 || groupInPage(index)">
                 <div v-if="index > 0" class="separator"></div>
-                <gr v-if="$scopedSlots['row.group']" v-bind:ref="'group'+group.id" class="header">
-                    <gh v-bind:style="'grid-row: span ' + (groupedRows(group).length * 2 + 3)">
-                        <slot name="row.group" v-bind:value="group"></slot>
+                <gr v-if="$scopedSlots['row.group']" v-bind:ref="'group'+group.item.id" class="header">
+                    <gh v-bind:style="'grid-row: span ' + (group.children.length * 2 + 3)">
+                        <slot name="row.group" v-bind:value="group.item"></slot>
                     </gh>
                 </gr>
 
-                <gr v-for="(item, rowNum) in groupedRows(group)"
+                <gr v-for="(item, rowNum) in group.children"
+                    v-if="pages === 0 || rowInPage(index, rowNum)"
                     v-bind:key="item.id"
                     v-bind:ref="'row'+item.id"
                     v-bind:id="'row'+item.id">
@@ -50,13 +52,31 @@
                     </gr>
                 </gr>
             </template>
-
         </gbody>
+
+        <ul  class="pagination" v-if="pages > 1" class="pagination">
+            <li v-bind:class="page === 0 ? 'disabled' : 'waves-effect'">
+                <a @click="page > 0 ? page-- : ''"><i class="material-icons">chevron_left</i></a>
+            </li>
+            <li v-for="n in pages"
+                v-bind:class="{'waves-effect':true, active: page === (n-1)}">
+                <a @click="page = (n-1)">{{ n }}</a>
+            </li>
+            <li v-bind:class="page === pages-1 ? 'disabled' : 'waves-effect'">
+                <a @click="page < pages-1 ? page++ : ''"><i class="material-icons">chevron_right</i></a>
+            </li>
+        </ul>
+
     </grid>
 </template>
 
 <script>
     module.exports = {
+        data() {
+            return {
+                page: 0
+            }
+        },
         props: {
             extendable: {type: Boolean, default: false},
             striped: {type: Boolean, default: true},
@@ -64,15 +84,34 @@
             headers: Array,
             items: Array,
             actions: Array,
-            groupedItems: Function
+            groupedItems: Function,
+            filter: Function,
+            sort: Function,
+            pagination: {type: Number, default: 20},
         },
         computed: {
-            rows( ) {
+            groups( ) {
+                let groups = [];
                 if (this.groupedItems) {
-                    return this.items;
+                    groups = this.items.map((group) => {
+                        return {item: group, children: this.filterAndSort(this.groupedItems(group))}
+                    });
                 } else {
-                    return [this.items];
+                    return [{item: {}, children: this.filterAndSort(this.items)}]
                 }
+                return groups;
+            },
+            pages() {
+                if (this.pagination != -1) {
+                    return Math.ceil(this.groups.reduce((acc, cur) => acc += cur.children.length, 0) / this.pagination);
+                }
+                return 0;
+            },
+            pageStart() {
+                return this.page * this.pagination;
+            },
+            pageEnd() {
+                return (this.page + 1) * this.pagination;
             },
             columnsLayout() {
                 let layout = this.columns.join(' ');
@@ -82,13 +121,30 @@
                 return layout;
             }
         },
+        watch: {
+            pages() {
+                this.page = 0;
+            }
+        },
         methods: {
-            groupedRows(group) {
-                if (this.groupedItems) {
-                    return this.groupedItems(group);
-                } else {
-                    return group;
+            filterAndSort(items) {
+                let its = items;
+                if (this.filter) {
+                    its = its.filter(this.filter);
                 }
+                if (this.sort) {
+                    its = its.sort(this.sort);
+                }
+                return its;
+            },
+            groupInPage(index) {
+                let pageIndex = this.groups.slice(0, index).reduce((acc, cur) => acc += cur.children.length, 0);
+                let pageNextIndex = pageIndex + this.groups[index].children.length;
+                return pageIndex < this.pageEnd && pageNextIndex >= this.pageStart;
+            },
+            rowInPage(gIndex, index) {
+                let pageIndex = this.groups.slice(0, gIndex).reduce((acc, cur) => acc += cur.children.length, 0) + index;
+                return pageIndex >= this.pageStart && pageIndex < this.pageEnd;
             }
         }
     };

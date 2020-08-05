@@ -2,7 +2,9 @@
     <grid-layout
         v-bind:columns="[ '1fr', '1fr', '1fr', '1fr', '1fr' ]"
         v-bind:headers="[ $t('first_name'), $t('last_name'), $t('authority'), $t('email') , $t('username') ]"
-        v-bind:items="sortedPeople"
+        v-bind:items="people"
+        v-bind:filter="filter"
+        v-bind:sort="sort"
         @selection-change="$emit('selection-change', $event)">
 
         <template v-if="$scopedSlots['side.actions']" v-slot:side.actions="{ value: user }">
@@ -48,22 +50,17 @@
     module.exports = {
         mixins: [VueGrid],
         props: ['people', 'editable', 'search'],
-        computed: {
-            sortedPeople() {
-                if (this.search) {
-                    return this.people.filter((person) => {
-                        return person.authority !== Authority.DELETED && (person.lastName + person.firstName).toLowerCase().includes(this.search.toLowerCase());
-                    }).sort((a, b) => (a.lastName + a.firstName > b.lastName + b.firstName) ? 1 : -1);
-                } else {
-                    return this.people.sort((a, b) => (a.lastName + a.firstName > b.lastName + b.firstName) ? 1 : -1);
-                }
-            }
-        },
         methods: {
             updateUser(user) {
                 ArenService.Users.edit({
                     data: user
                 });
+            },
+            filter(user) {
+                return user.authority !== Authority.DELETED && (user.lastName + user.firstName).toLowerCase().includes(this.search.toLowerCase());
+            },
+            sort(a, b) {
+                return (a.lastName + a.firstName > b.lastName + b.firstName) ? 1 : -1;
             }
         }
     };
