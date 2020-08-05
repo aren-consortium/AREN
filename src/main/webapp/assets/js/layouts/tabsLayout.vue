@@ -47,7 +47,7 @@
             changeTab(index) {
                 if (!this.tabs[index].disabled && index !== this.activeIndex) {
                     this.activeIndex = index;
-                    this.$emit('changeTab', index);
+                    this.$emit('change-tab', index);
                     if (this.withLink) {
                         window.location.hash = '#' + (this.tabs[index].id || this.activeIndex);
                     }
