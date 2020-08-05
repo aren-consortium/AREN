@@ -1,8 +1,8 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.TreeSet;
-import java.util.SortedSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,13 +51,11 @@ public class Team extends AbstractEntEntity implements Serializable {
     private Institution institution;
 
     @ManyToMany(mappedBy = "teams")
-    @SortNatural
-    private SortedSet<Debate> debates = new TreeSet<>();
+    private Set<Debate> debates = new HashSet<>();
 
     @ManyToMany(mappedBy = "teams")
-    @SortNatural
     @Where(clause = "is_active = true")
-    private SortedSet<User> users = new TreeSet<>();
+    private Set<User> users = new HashSet<>();
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "debates_count")
@@ -120,7 +118,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Debate> getDebates() {
+    public Set<Debate> getDebates() {
         return debates;
     }
 
@@ -128,7 +126,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      *
      * @param debates
      */
-    public void setDebates(SortedSet<Debate> debates) {
+    public void setDebates(Set<Debate> debates) {
         this.debates = debates;
     }
 
@@ -137,7 +135,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
@@ -145,7 +143,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      *
      * @param users
      */
-    public void setUsers(SortedSet<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

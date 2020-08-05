@@ -32,7 +32,6 @@ import fr.lirmm.aren.model.ws.Scrap;
 import fr.lirmm.aren.service.HttpRequestService;
 import fr.lirmm.aren.service.ODFService;
 import java.io.File;
-import java.util.SortedSet;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
@@ -117,8 +116,8 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
     @Override
     @RolesAllowed({"MODO"})
     public Debate create(Debate debate) {
-        SortedSet<Team> teams = debate.getTeams();
-        SortedSet<User> guests = debate.getGuests();
+        Set<Team> teams = debate.getTeams();
+        Set<User> guests = debate.getGuests();
         super.create(debate);
         debate.getTeams().addAll(teams);
         debate.getGuests().addAll(guests);

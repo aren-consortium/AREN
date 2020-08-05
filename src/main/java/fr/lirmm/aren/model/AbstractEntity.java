@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author Florent Descroix {@literal <florentdescroix@posteo.net>}
  */
 @MappedSuperclass
-public abstract class AbstractEntity implements Comparable<AbstractEntity> {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -169,15 +169,5 @@ public abstract class AbstractEntity implements Comparable<AbstractEntity> {
     @Override
     public String toString() {
         return "fr.lirmm.aren.model." + this.getClass().getName() + " [ id=" + id + " ]";
-    }
-
-    /**
-     *
-     * @param t
-     * @return
-     */
-    @Override
-    public int compareTo(AbstractEntity t) {
-        return this.getId() == t.getId() ? 0 : this.getId() < t.getId() ? -1 : 1;
     }
 }

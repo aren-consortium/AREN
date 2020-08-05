@@ -14,7 +14,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import fr.lirmm.aren.exception.InsertEntityException;
 import fr.lirmm.aren.model.AbstractEntity;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 import javax.inject.Inject;
 
 /**
@@ -201,7 +201,7 @@ public abstract class AbstractService<T extends AbstractEntity> {
     public Set<T> findAll() {
         CriteriaQuery<T> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
         cq.select(cq.from(entityClass));
-        return new TreeSet<T>(getEntityManager().createQuery(cq).getResultList());
+        return new HashSet<T>(getEntityManager().createQuery(cq).getResultList());
     }
 
     /**

@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 
 import fr.lirmm.aren.service.CategoryService;
 import fr.lirmm.aren.model.Category;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * JAX-RS resource class for Categories managment
@@ -58,7 +58,7 @@ public class CategoryRESTFacade extends AbstractRESTFacade<Category> {
      */
     @Override
     @RolesAllowed({"GUEST"})
-    public TreeSet<Category> findAll() {
+    public HashSet<Category> findAll() {
         boolean withDocument = false;
         if (getUser().is("MODO")) {
             withDocument = this.overview == null;

@@ -1,8 +1,8 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.TreeSet;
-import java.util.SortedSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
-
 
 /**
  * Model for Institutions with anotations for storage and serialization
@@ -50,13 +49,11 @@ public class Institution extends AbstractEntEntity implements Serializable {
     private String academy;
 
     @OneToMany(mappedBy = "institution")
-    @SortNatural
     @Where(clause = "is_active = true")
-    private SortedSet<User> users = new TreeSet<>();
+    private Set<User> users = new HashSet<User>();
 
     @OneToMany(mappedBy = "institution")
-    @SortNatural
-    private SortedSet<Team> teams = new TreeSet<>();
+    private Set<Team> teams = new HashSet<Team>();
 
     /**
      *
@@ -111,7 +108,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
@@ -119,7 +116,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      *
      * @param users
      */
-    public void setUsers(SortedSet<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
@@ -127,7 +124,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      *
      * @return
      */
-    public SortedSet<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teams;
     }
 
@@ -135,7 +132,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      *
      * @param teams
      */
-    public void setTeams(SortedSet<Team> teams) {
+    public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
 

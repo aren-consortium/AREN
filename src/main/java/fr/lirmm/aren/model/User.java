@@ -1,8 +1,8 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.TreeSet;
-import java.util.SortedSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -109,16 +109,13 @@ public class User extends AbstractEntEntity implements Serializable {
     private boolean active = true;
 
     @ManyToMany(mappedBy = "guests")
-    @SortNatural
-    private SortedSet<Debate> invitedDebates = new TreeSet<>();
+    private Set<Debate> invitedDebates = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
-    @SortNatural
-    private SortedSet<Comment> comments = new TreeSet<>();
+    private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
-    @SortNatural
-    private SortedSet<Debate> createdDebates = new TreeSet<>();
+    private Set<Debate> createdDebates = new HashSet<>();
 
     @JoinColumn(name = "institution_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -130,12 +127,10 @@ public class User extends AbstractEntEntity implements Serializable {
             inverseJoinColumns = {
                 @JoinColumn(name = "team_id", referencedColumnName = "id")})
     @ManyToMany
-    @SortNatural
-    private SortedSet<Team> teams = new TreeSet<>();
+    private Set<Team> teams = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
-    @SortNatural
-    private SortedSet<Notification> notifications = new TreeSet<>();
+    private Set<Notification> notifications = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "authority", nullable = false)
@@ -274,7 +269,7 @@ public class User extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Debate> getInvitedDebates() {
+    public Set<Debate> getInvitedDebates() {
         return invitedDebates;
     }
 
@@ -282,7 +277,7 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      * @param invitedDebates
      */
-    public void setInvitedDebates(SortedSet<Debate> invitedDebates) {
+    public void setInvitedDebates(Set<Debate> invitedDebates) {
         this.invitedDebates = invitedDebates;
     }
 
@@ -291,7 +286,7 @@ public class User extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
@@ -299,7 +294,7 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      * @param comments
      */
-    public void setComments(SortedSet<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
 
@@ -308,7 +303,7 @@ public class User extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Debate> getCreatedDebates() {
+    public Set<Debate> getCreatedDebates() {
         return createdDebates;
     }
 
@@ -316,7 +311,7 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      * @param createdDebates
      */
-    public void setCreatedDebates(SortedSet<Debate> createdDebates) {
+    public void setCreatedDebates(Set<Debate> createdDebates) {
         this.createdDebates = createdDebates;
     }
 
@@ -340,7 +335,7 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      * @return
      */
-    public SortedSet<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teams;
     }
 
@@ -348,7 +343,7 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      * @param teams
      */
-    public void setTeams(SortedSet<Team> teams) {
+    public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
 
@@ -375,7 +370,7 @@ public class User extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Notification> getNotifications() {
+    public Set<Notification> getNotifications() {
         return notifications;
     }
 
@@ -383,7 +378,7 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      * @param notifications
      */
-    public void setNotifications(SortedSet<Notification> notifications) {
+    public void setNotifications(Set<Notification> notifications) {
         this.notifications = notifications;
     }
 

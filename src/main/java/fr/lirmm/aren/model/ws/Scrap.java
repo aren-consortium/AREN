@@ -2,8 +2,8 @@ package fr.lirmm.aren.model.ws;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import fr.lirmm.aren.model.Comment;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -55,7 +55,7 @@ public class Scrap implements Comparable {
     private Long endOffset;
 
     @JsonIdentityReference(alwaysAsId = true)
-    private SortedSet<Comment> comments = new TreeSet<>();
+    private Set<Comment> comments = new HashSet<>();
 
     /**
      *
@@ -131,7 +131,7 @@ public class Scrap implements Comparable {
      *
      * @return
      */
-    public SortedSet<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
@@ -139,7 +139,7 @@ public class Scrap implements Comparable {
      *
      * @param comments
      */
-    public void setComments(SortedSet<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
 

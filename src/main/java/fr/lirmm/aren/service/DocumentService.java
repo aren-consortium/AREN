@@ -8,7 +8,7 @@ import javax.ws.rs.NotFoundException;
 
 import fr.lirmm.aren.model.Document;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {link Document}.
@@ -79,7 +79,7 @@ public class DocumentService extends AbstractService<Document> {
      * @return
      */
     public Set<Document> findAll(boolean withDebates) {
-        return new TreeSet<Document>(generateQuery(null, withDebates).getResultList());
+        return new HashSet<Document>(generateQuery(null, withDebates).getResultList());
     }
 
     /**

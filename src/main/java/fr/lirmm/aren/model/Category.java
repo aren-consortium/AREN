@@ -2,8 +2,8 @@ package fr.lirmm.aren.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.TreeSet;
-import java.util.SortedSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,8 +41,7 @@ public class Category extends AbstractEntity implements Serializable {
     private String picture;
 
     @OneToMany(mappedBy = "category")
-    @SortNatural
-    private SortedSet<Document> documents = new TreeSet<>();
+    private Set<Document> documents = new HashSet<>();
 
     @Column(name = "debates_count")
     private Integer debatesCount = 0;
@@ -90,7 +89,7 @@ public class Category extends AbstractEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Document> getDocuments() {
+    public Set<Document> getDocuments() {
         return documents;
     }
 
@@ -98,7 +97,7 @@ public class Category extends AbstractEntity implements Serializable {
      *
      * @param documents
      */
-    public void setDocuments(SortedSet<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 

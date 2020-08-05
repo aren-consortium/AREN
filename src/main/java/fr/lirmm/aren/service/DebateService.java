@@ -10,7 +10,7 @@ import fr.lirmm.aren.model.Debate;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.model.User.Authority;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {link Debate}.
@@ -134,7 +134,7 @@ public class DebateService extends AbstractService<Debate> {
      * @return
      */
     public Set<Debate> findAllByUser(User user, Long categoryId, boolean withDocument, boolean withComments, boolean withTeams, boolean withGuests, boolean withUsers) {
-        return new TreeSet<Debate>(generateQuery(null, user, categoryId, withDocument, withComments, withTeams, withGuests, withUsers).getResultList());
+        return new HashSet<Debate>(generateQuery(null, user, categoryId, withDocument, withComments, withTeams, withGuests, withUsers).getResultList());
     }
 
     /**

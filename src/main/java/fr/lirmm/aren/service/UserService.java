@@ -10,7 +10,7 @@ import fr.lirmm.aren.security.PasswordEncoder;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {@link User}.
@@ -117,7 +117,7 @@ public class UserService extends AbstractService<User> {
      */
     public Set<User> findAll(boolean standalone) {
 
-        return new TreeSet<User>(getEntityManager().createQuery("SELECT u "
+        return new HashSet<User>(getEntityManager().createQuery("SELECT u "
                 + "FROM User u "
                 + "WHERE u.active = true "
                 + (standalone

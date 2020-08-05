@@ -7,7 +7,7 @@ import javax.ws.rs.NotFoundException;
 import fr.lirmm.aren.model.Comment;
 import fr.lirmm.aren.model.TagSet;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -70,7 +70,7 @@ public class CommentService extends AbstractService<Comment> {
      * @return
      */
     public Set<Comment> findAll() {
-        return new TreeSet<Comment>(getEntityManager().createQuery("SELECT c "
+        return new HashSet<Comment>(getEntityManager().createQuery("SELECT c "
                 + "FROM Comment c", Comment.class)
                 .getResultList());
     }
@@ -81,7 +81,7 @@ public class CommentService extends AbstractService<Comment> {
      * @return
      */
     public Set<Comment> findAll(List<Long> ids) {
-        return new TreeSet<Comment>(getEntityManager().createQuery("SELECT c "
+        return new HashSet<Comment>(getEntityManager().createQuery("SELECT c "
                 + "FROM Comment c "
                 + "WHERE id IN :ids", Comment.class)
                 .setParameter("ids", ids)

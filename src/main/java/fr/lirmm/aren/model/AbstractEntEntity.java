@@ -48,14 +48,4 @@ public abstract class AbstractEntEntity extends AbstractDatedEntity {
         }
         return false;
     }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
 }

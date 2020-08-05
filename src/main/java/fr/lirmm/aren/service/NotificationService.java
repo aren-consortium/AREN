@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import fr.lirmm.aren.model.Notification;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {link Notification}.
@@ -39,7 +39,7 @@ public class NotificationService extends AbstractService<Notification> {
         if (notifs.isEmpty()) {
             return null;
         }
-        return new TreeSet<Notification>(notifs);
+        return new HashSet<Notification>(notifs);
     }
 
     /**
@@ -49,7 +49,7 @@ public class NotificationService extends AbstractService<Notification> {
      * @return
      */
     public Set<Notification> findAllFirstsByUser(Long userId, int readenLimit) {
-        return new TreeSet<Notification>(getEntityManager().createQuery("SELECT n1 "
+        return new HashSet<Notification>(getEntityManager().createQuery("SELECT n1 "
                 + "FROM Notification n1 "
                 + "WHERE n1.owner.id = :userId "
                 + "AND (n1.unread = true "

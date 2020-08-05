@@ -16,8 +16,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.time.ZonedDateTime;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
+import java.util.HashSet;
 import javax.persistence.FetchType;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
@@ -54,8 +54,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
             inverseJoinColumns = {
                 @JoinColumn(name = "team_id", referencedColumnName = "id")})
     @ManyToMany
-    @SortNatural
-    private SortedSet<Team> teams = new TreeSet<>();
+    private Set<Team> teams = new HashSet<>();
 
     @JoinTable(name = "debates_guests",
             joinColumns = {
@@ -63,13 +62,11 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
             inverseJoinColumns = {
                 @JoinColumn(name = "user_id", referencedColumnName = "id")})
     @ManyToMany
-    @SortNatural
     @Where(clause = "is_active = true")
-    private SortedSet<User> guests = new TreeSet<>();
+    private Set<User> guests = new HashSet<>();
 
     @OneToMany(mappedBy = "debate")
-    @SortNatural
-    private SortedSet<Comment> comments = new TreeSet<>();
+    private Set<Comment> comments = new HashSet<>();
 
     @JoinColumn(name = "document_id", referencedColumnName = "id", updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -152,7 +149,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teams;
     }
 
@@ -160,7 +157,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      *
      * @param teams
      */
-    public void setTeams(SortedSet<Team> teams) {
+    public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
 
@@ -187,7 +184,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<User> getGuests() {
+    public Set<User> getGuests() {
         return guests;
     }
 
@@ -195,7 +192,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      *
      * @param guests
      */
-    public void setGuests(SortedSet<User> guests) {
+    public void setGuests(Set<User> guests) {
         this.guests = guests;
     }
 
@@ -222,7 +219,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public SortedSet<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
@@ -230,7 +227,7 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      *
      * @param comments
      */
-    public void setComments(SortedSet<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
 

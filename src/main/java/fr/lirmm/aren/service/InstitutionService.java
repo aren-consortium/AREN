@@ -7,7 +7,7 @@ import javax.ws.rs.NotFoundException;
 
 import fr.lirmm.aren.model.Institution;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {link Institution}.
@@ -49,7 +49,7 @@ public class InstitutionService extends AbstractService<Institution> {
      * @return
      */
     public Set<Institution> findAll(boolean withTeam, boolean withUsers) {
-        return new TreeSet<Institution>(getEntityManager().createQuery("SELECT i "
+        return new HashSet<Institution>(getEntityManager().createQuery("SELECT i "
                 + "FROM Institution i "
                 + (withTeam || withUsers
                         ? "LEFT JOIN FETCH i.users u "

@@ -7,7 +7,7 @@ import javax.ws.rs.NotFoundException;
 
 import fr.lirmm.aren.model.Team;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {link Team}.
@@ -40,7 +40,7 @@ public class TeamService extends AbstractService<Team> {
      */
     public Set<Team> findAll(boolean standalone) {
 
-        return new TreeSet<Team>(getEntityManager().createQuery("SELECT t "
+        return new HashSet<Team>(getEntityManager().createQuery("SELECT t "
                 + "FROM Team t "
                 + (standalone
                         ? "WHERE t.institution IS NULL"

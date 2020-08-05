@@ -8,7 +8,7 @@ import javax.ws.rs.NotFoundException;
 
 import fr.lirmm.aren.model.Category;
 import fr.lirmm.aren.model.User;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * Service that provides operations for {link Category}.
@@ -65,8 +65,8 @@ public class CategoryService extends AbstractService<Category> {
         return results.get(0);
     }
 
-    public TreeSet<Category> findAllByUser(User user, boolean withDocuments) {
-        return new TreeSet<Category>(generateQuery(null, user, withDocuments).getResultList());
+    public HashSet<Category> findAllByUser(User user, boolean withDocuments) {
+        return new HashSet<Category>(generateQuery(null, user, withDocuments).getResultList());
     }
 
     /**
@@ -82,7 +82,7 @@ public class CategoryService extends AbstractService<Category> {
      *
      * @return
      */
-    public TreeSet<Category> findAll() {
+    public HashSet<Category> findAll() {
         return findAllByUser(null, false);
     }
 }

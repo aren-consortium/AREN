@@ -31,18 +31,4 @@ public abstract class AbstractDatedEntity extends AbstractEntity {
     public void setCreated(ZonedDateTime created) {
         this.created = created;
     }
-
-    /**
-     *
-     * @param t
-     * @return
-     */
-    @Override
-    public int compareTo(AbstractEntity t) {
-        if (t instanceof AbstractDatedEntity) {
-            return created.compareTo(((AbstractDatedEntity) t).getCreated());
-        } else {
-            return super.compareTo(t);
-        }
-    }
 }
