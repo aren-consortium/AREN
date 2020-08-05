@@ -1,11 +1,12 @@
 <template>
-    <grid-layout 
+    <grid-layout
         v-bind:extendable="extendable"
         v-bind:columns="[ 'min-content', '4fr', '1fr' ]"
         v-bind:headers="[ $t('category'), $t('title'), $t('author') ]"
         v-bind:actions="[ 2 ]"
         v-bind:items="categories"
         v-bind:grouped-items="( group ) => group.documents"
+        v-bind:sort="( a, b ) => (a.name > b.name) ? 1 : -1"
         @selection-change="$emit('selection-change', $event)">
 
         <template v-slot:row.group="{ value: category }">

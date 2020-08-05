@@ -14,7 +14,8 @@
             {label:$t('with_dots')},
             {label:$t('on_the_doc')},
             {label:$t('recapitulative'), disabled: !debate.document}
-            ]">
+            ]"
+            @change-tab="scrollTop()">
 
             <template v-slot:tab.1.header>
                 <documented v-bind:value="$t('documentation.create_debate_with')">
@@ -79,14 +80,18 @@
                 <div class="container">
 
                     <div class="row" v-if="debate.document">
-                        <template v-if="debate.teams.length !== 0 && debate.guest.length !== 0">
+                        <template v-if="debate.teams.length !== 0 || debate.guests.length !== 0">
                             <div class="col s4">
                                 <ul class="collection with-header">
                                     <li class="collection-header">
                                         <h2 class="valign-wrapper"><i class="material-icons">group</i>{{ $t('teams') }}</h2>
                                     </li>
                                     <li v-for="team in debate.teams" v-bind:key="team.id" class="collection-item">
-                                        <span v-if="team.institution.id !== 0"> {{ team.institution.type }} {{ team.institution.name }} - </span>{{ team.name }}
+                                        <span>
+                                            <span v-if="team.institution.id !== 0"> {{ team.institution.type }} {{ team.institution.name }} - </span>{{ team.name }}
+                                        </span>
+                                        <i class="right close material-icons"
+                                           @click="debate.teams.remove(team)">delete_forever</i>
                                     </li>
                                 </ul>
                             </div>
@@ -97,7 +102,11 @@
                                         <h2 class="valign-wrapper"><i class="material-icons">person</i>{{ $t('guests') }}</h2>
                                     </li>
                                     <li v-for="user in debate.guests" v-bind:key="user.id" class="collection-item">
-                                        {{ user.fullName() }} - {{ user.atuthority }}
+                                        <span>
+                                            {{ user.fullName() }} - {{ user.atuthority }}
+                                        </span>
+                                        <i class="right close material-icons"
+                                           @click="debate.guests.remove(user)">delete_forever</i>
                                     </li>
                                 </ul>
                             </div>
@@ -255,6 +264,9 @@
                         });
                     }
                 });
+            },
+            scrollTop() {
+                document.documentElement.scrollTop = 0;
             }
         },
         components: {

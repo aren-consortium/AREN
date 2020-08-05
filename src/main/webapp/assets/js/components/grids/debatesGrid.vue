@@ -1,11 +1,12 @@
 <template>
-    <grid-layout 
+    <grid-layout
         v-bind:extendable="extendable"
         v-bind:columns="[ 'min-content', '2fr', '1fr', '2fr', '3fr', '2fr', '2fr' ]"
         v-bind:headers="[ $t('category'), $t('restitution'), $t('posts'), $t('last_post'), $t('document'), $t('teams'), $t('moderators') ]"
         v-bind:actions="[ 2, 2, 2 ]"
         v-bind:items="categories"
         v-bind:grouped-items="( group ) => group.debates()"
+        v-bind:sort="( a, b ) => a.created - b.created"
         @selection-change="$emit('selection-change', $event)">
 
         <template v-slot:row.group="{ value: category }">
@@ -39,7 +40,7 @@
         </template>
 
         <template v-slot:column.4="{ value: debate }">
-            {{ debate.document.name }} 
+            {{ debate.document.name }}
         </template>
 
         <template v-slot:column.5="{ value: debate }">

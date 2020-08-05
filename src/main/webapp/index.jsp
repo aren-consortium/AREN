@@ -87,7 +87,22 @@
                             </documented>
                             <documented v-bind:value="$t('documentation.user_panel')">
                                 <li id="userSettings">
-                                <user-panel></user-panel>
+                                    <span tabindex="1" class="dropdown-button">
+                                        <span class="btn-floating btn waves-effect waves-light">
+                                            <template v-if="user.firstName">
+                                                {{ user.firstName[0] }}.{{ $root.user.lastName[0] }}
+                                            </template>
+                                            <template v-else>
+                                                {{ user.username[0] }}.{{ $root.user.username[1] }}
+                                            </template>
+                                        </span>
+                                        <div class="dropdown-content">
+                                            <h4 class="dropdown-title"> {{ $root.user.fullName() }}</h4>
+                                            <a class="waves-effect waves-light btn-small" @click="$refs.passwdModal.open()"> {{ $t('change_password') }}</span>
+                                                <a class="waves-effect waves-light btn-small" @click="logout()">{{ $t('menu.logout') }}</a>
+                                                </ul>
+                                        </div>
+                                    </span>
                                 </li>
                             </documented>
                         </template>
@@ -150,7 +165,7 @@
                 <reset-password-modal ref="resetPasswdModal"></reset-password-modal>
             </template>
 
-            <password-modal></password-modal>
+            <password-modal ref="passwdModal"></password-modal>
 
             <toaster></toaster>
             <tooltip></tooltip>
@@ -301,7 +316,6 @@
                     "notifications-panel": vueLoader('components/widgets/notificationsPanel'),
                     "login-modal": vueLoader('components/modals/loginModal'),
                     "create-user-modal": vueLoader('components/modals/createUserModal'),
-                    "user-panel": vueLoader('components/widgets/userPanel'),
                     "password-modal": vueLoader('components/modals/passwordModal'),
                     "reset-password-modal": vueLoader('components/modals/resetPasswordModal'),
                     "toaster": vueLoader('components/singletons/toaster'),

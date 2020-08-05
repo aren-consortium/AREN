@@ -24,8 +24,7 @@
             {id: 'tags', label:$t('tags'), hidden: !debate.idfixLink},
             {id: 'export', label:$t('odt_export'), href:'ws/debates/'+debate.id+'/export'},
             ]"
-            v-bind:with-link="true"
-            @change-tab="$refs.debateTree.update()">
+            v-bind:with-link="true">
             <template v-slot:tab.1>
                 <d3-tree ref="debateTree"
                          v-bind:debate="debate"

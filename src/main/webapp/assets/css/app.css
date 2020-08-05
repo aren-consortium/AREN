@@ -6942,7 +6942,7 @@ img {
     -ms-user-select: none;
     user-select: none; }
 
-#search {
+.search-box > input {
     margin-bottom: 0; }
 
 html body {
@@ -6977,11 +6977,18 @@ html body #app #loading {
     border-radius: none;
     z-index: 10; }
 html body #app .current-view-wrapper {
+    display: flex;
+    flex-direction: column;
     min-height: calc(100vh - 64px);
     padding-bottom: 30px; }
 html body #app .current-view-wrapper .current-view {
-    height: 100%; }
+    display: flex;
+    flex-direction: column;
+    flex: 1; }
 html body #app .current-view-wrapper .current-view > .container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     width: 85%; }
 html body #app .current-view-wrapper .current-view > .container > #header {
     position: sticky;
@@ -7017,6 +7024,8 @@ html body #app .current-view-wrapper .current-view > .container > #header #backT
     position: absolute;
     top: 18px;
     left: 0; }
+html body #app .current-view-wrapper .current-view > .container > grid {
+    flex: 1; }
 html body #app .current-view-wrapper .current-view > .container > grid > ghead gh {
     position: sticky;
     top: 124px;
@@ -7256,7 +7265,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
     font-weight: bold; }
 #debate #options .search-box {
     margin: 0; }
-#debate #options .search-box #search {
+#debate #options .search-box > input {
     margin-bottom: 5px;
     margin-top: -5px; }
 #debate #mainContainer {

@@ -5,7 +5,7 @@
 
             <div id="header">
                 <div>
-                    <a id="backTo" href="javascript:history.back()"><i class="material-icons">chevron_left</i></a>
+                    <!--a id="backTo" href="javascript:history.back()"><i class="material-icons">chevron_left</i></a-->
                     <slot name="title"></slot>
                 </div>
                 <div>

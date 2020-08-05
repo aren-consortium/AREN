@@ -96,8 +96,9 @@
                     groups = this.items.map((group) => {
                         return {item: group, children: this.filterAndSort(this.groupedItems(group))}
                     });
+                    this.filterAndSort(groups);
                 } else {
-                    return [{item: {}, children: this.filterAndSort(this.items)}]
+                    groups = [{item: {}, children: this.filterAndSort(this.items)}]
                 }
                 return groups;
             },

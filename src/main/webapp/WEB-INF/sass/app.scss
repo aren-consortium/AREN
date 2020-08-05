@@ -85,8 +85,10 @@ img {
     user-select: none;
 }
 
-#search {
-    margin-bottom: 0;
+.search-box {
+    > input {
+        margin-bottom: 0;
+    }
 }
 
 html {
@@ -128,11 +130,18 @@ html {
                 z-index: 10;
             }
             .current-view-wrapper {
+                display: flex;
+                flex-direction: column;
                 min-height: calc(100vh - #{$navigation-height});
                 padding-bottom: 30px;
                 .current-view {
-                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
                     > .container {
+                        display: flex;
+                        flex-direction: column;
+                        flex: 1;
                         width: 85%;
                         > #header {
                             position: sticky;
@@ -176,6 +185,7 @@ html {
                             }
                         }
                         > grid {
+                            flex: 1;
                             > ghead gh {
                                 position: sticky;
                                 top: ($navigation-height + $header-height);
@@ -524,7 +534,7 @@ nav {
         }
         .search-box {
             margin: 0;
-            #search {
+            > input {
                 margin-bottom: 5px;
                 margin-top: -5px;
             }
