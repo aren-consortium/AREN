@@ -69,6 +69,7 @@ const messages = {
         date: "Date",
         position: "Position",
         creation_success: "Création réussie",
+        import_success: "Importation réussie",
         display_team: "Afficher le groupe",
         new_team: "Nouveau groupe",
         new_user: "Nouvel⋅le utilisateur⋅rice",
@@ -115,6 +116,8 @@ const messages = {
         idefix_link: "Lien IDEFIX",
         with_hypostases: "Avec hypostase",
         without_institution: "Sans établissement",
+        running: "En cours...",
+        import: "Importer",
         helper: {
             mark_as_read: "Marquer comme lue",
             mark_as_unread: "Marquer comme non lue",
@@ -180,7 +183,8 @@ const messages = {
             public_debate: "Le débat sera accessible par n'importe quel utilisateur⋅ice, même non coonnecté⋅e",
             reformulation_assist: "Affiche un smiley lors de la reformulation",
             idefix_link: "Ajoute des tags aux documents et arguments pour les utiliser avec IDFIX",
-            with_hypostases: "Propose une selection d'hypostase pour les arguments"
+            with_hypostases: "Propose une selection d'hypostase pour les arguments",
+            aaf_import_success: "Les données AAF ont bien été importées, vous pouvez fermer cette fenêtre."
         },
         notification: {
             team_added_to_debate: "Votre groupe {teamName} participe au débat {debateName}.",
@@ -204,7 +208,8 @@ const messages = {
             mandatory_property: "La valeur {propertyName} est nécessaire.",
             internal: "ERREUR INTERNE",
             expired_token: "Jeton d'authentification expiré",
-            internal_message: "Toutes nos excuses, une erreur s'est produite sur nos serveurs.<br>Veuillez réessayer ou contacter un administrateur⋅trice si l'erreur persiste."
+            internal_message: "Toutes nos excuses, une erreur s'est produite sur nos serveurs.<br>Veuillez réessayer ou contacter un administrateur⋅trice si l'erreur persiste.",
+            aaf_import: "Erreur lors de l'import AAF. Il est probable que votre fichier soit corompu ou n'entre pas dans les standard de l'application."
         },
         menu: {
             open: "Ouvrir un débat",

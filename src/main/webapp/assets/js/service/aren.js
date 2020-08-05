@@ -261,7 +261,11 @@ User.prototype.manyToMany = {
     teams: [Team, "users"]
 };
 User.prototype.fullName = function ( ) {
-    return this.firstName + " " + this.lastName;
+    if (this.firstName && this.lastName) {
+        return this.firstName + " " + this.lastName;
+    } else {
+        return this.username;
+    }
 };
 User.prototype.is = function (authority) {
     return Authority._value[this.authority] >= Authority._value[authority];

@@ -21,7 +21,7 @@
 
                 <button v-bind:class="['right', 'btn', 'waves-effect', 'waves-light', {disabled: !file}]"
                         @click="startImport()">
-                    {{ progress !== false ? "En cours..." : "Importer" }}
+                    {{ progress !== false ? $t('running') : $t('import') }}
                     <i v-if="progress === false" class="material-icons right">send</i>
                 </button>
                 <div class="progress">
@@ -51,13 +51,19 @@
                     data,
                     onSuccess: (response) => {
                         this.$confirm({
-                            title: "OK",
-                            message: "OK",
+                            title: this.$t('import_success'),
+                            message: this.$t('helper.aaf_import_success'),
                             isInfo: true
                         });
-                        this.progress = false;
-                        this.file = false;
-                        this.$refs.file.value = "";
+                        this.reinit();
+                    },
+                    onError: () => {
+                        this.$confirm({
+                            title: this.$t('error.Insertion error'),
+                            message: this.$t('error.aaf_import_error'),
+                            isInfo: true
+                        });
+                        this.reinit();
                     },
                     onProgress: (response) => {
                         this.progress = response * 100;
@@ -67,6 +73,11 @@
             },
             selectFile( ) {
                 this.file = this.$refs.file.files[0];
+            },
+            reinit() {
+                this.progress = false;
+                this.file = false;
+                this.$refs.file.value = "";
             }
         }
     };

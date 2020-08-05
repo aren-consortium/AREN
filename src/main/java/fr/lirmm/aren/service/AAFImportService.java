@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -27,6 +26,7 @@ import fr.lirmm.aren.model.aaf.FicAlimMENESR;
 import fr.lirmm.aren.model.aaf.ModifyRequest;
 import fr.lirmm.aren.security.PasswordEncoder;
 import java.io.File;
+import javax.persistence.EntityManager;
 
 /**
  * Service that provides operations for AAF xml import
@@ -37,10 +37,19 @@ import java.io.File;
 public class AAFImportService {
 
     @Inject
-    private PasswordEncoder passwordEncoder;
+    private EntityManager em;
 
     @Inject
-    private EntityManager em;
+    private UserService userService;
+
+    @Inject
+    private InstitutionService institutionService;
+
+    @Inject
+    private TeamService teamService;
+
+    @Inject
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Object storing the parsed AAF xml file
@@ -80,14 +89,6 @@ public class AAFImportService {
      * ArrayList that store the log of the import
      */
     private volatile List<String> log = new ArrayList<>();
-
-    /**
-     *
-     * @return
-     */
-    protected EntityManager getEntityManager() {
-        return em;
-    }
 
     /**
      *
@@ -154,6 +155,8 @@ public class AAFImportService {
             if (!attrs.isEmpty()) {
                 String entId = request.getId();
                 AttributeList opAttr = request.getOperationalAttributes();
+                attrs.addAll(opAttr);
+
                 Method method = null;
                 if (request.getClass() == AddRequest.class) {
                     method = Method.CREATE;
@@ -180,7 +183,8 @@ public class AAFImportService {
 
         // This executes the real import
         // The order is important to avoid foreign key error
-        getEntityManager().getTransaction().begin();
+        em.setProperty("activeTransactions", 0);
+        em.getTransaction().begin();
         for (Class<? extends AbstractEntEntity> klass : new Class[]{Institution.class, Team.class, User.class}) {
             // The order is important too
             for (Method method : new Method[]{Method.CREATE, Method.UPDATE, Method.DELETE}) {
@@ -190,7 +194,6 @@ public class AAFImportService {
                 }
             }
         }
-        getEntityManager().getTransaction().commit();
 
         return log;
     }
@@ -237,7 +240,7 @@ public class AAFImportService {
      */
     private Map<String, Long> getEntIdToIdMap(Class<? extends AbstractEntEntity> klass) {
         Map<String, Long> map = new HashMap<String, Long>();
-        List<Object[]> result = getEntityManager().createQuery(
+        List<Object[]> result = em.createQuery(
                 "SELECT t.entId, t.id "
                 + "FROM " + klass.getSimpleName() + " t "
                 + "WHERE t.entId IS NOT NULL", Object[].class)
@@ -264,6 +267,17 @@ public class AAFImportService {
      */
     private void proceed(Class entityClass, Method method, AbstractEntEntity entity, boolean insertOnUpdate, boolean updateOnInsert) {
 
+        AbstractService service;
+        if (entityClass.equals(Institution.class)) {
+            service = institutionService;
+        } else if (entityClass.equals(Team.class)) {
+            service = teamService;
+        } else if (entityClass.equals(User.class)) {
+            service = userService;
+        } else {
+            return;
+        }
+
         boolean alreadyExists = maps.get(entityClass).containsKey(entity.getEntId());
 
         switch (method) {
@@ -279,7 +293,8 @@ public class AAFImportService {
                         log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " already exists");
                     }
                 } else {
-                    getEntityManager().persist(entity);
+                    service.create(entity);
+                    // getEntityManager().persist(entity);
                     log.add("SUCCESS : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId());
                 }
                 break;
@@ -296,7 +311,8 @@ public class AAFImportService {
                         log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " not found.");
                     }
                 } else {
-                    getEntityManager().merge(entity);
+                    service.edit(entity);
+                    //getEntityManager().merge(entity);
                     log.add("SUCCESS : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId());
                 }
                 break;
@@ -305,7 +321,8 @@ public class AAFImportService {
                 if (!alreadyExists) {
                     log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " not found.");
                 } else {
-                    getEntityManager().remove(entity);
+                    service.remove(entity);
+                    //getEntityManager().remove(entity);
                     log.add("SUCCESS : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId());
                 }
                 break;
@@ -320,7 +337,7 @@ public class AAFImportService {
         Long id = maps.get(User.class).get(entId);
         User user = new User();
         if (id != null) {
-            user = getEntityManager().getReference(User.class, id);
+            user = userService.getReference(id);
         }
         user.setEntId(entId);
         user.setLastName(attrs.getLastName());
@@ -333,7 +350,7 @@ public class AAFImportService {
         user.setPassword(hashedPassword);
 
         Long instId = maps.get(Institution.class).get(attrs.getInstitutionId());
-        Institution inst = getEntityManager().getReference(Institution.class, instId);
+        Institution inst = institutionService.getReference(instId);
         user.setInstitution(inst);
 
         List<String> classOrGroup = new ArrayList<>();
@@ -343,7 +360,7 @@ public class AAFImportService {
         for (String teamEntId : classOrGroup) {
             Long teamId = maps.get(Team.class).get(teamEntId);
             if (teamId != null) {
-                Team team = getEntityManager().getReference(Team.class, teamId);
+                Team team = teamService.getReference(teamId);
                 user.addTeam(team);
             }
         }
@@ -356,7 +373,7 @@ public class AAFImportService {
         Long id = maps.get(Institution.class).get(entId);
         Institution inst = new Institution();
         if (id != null) {
-            inst = getEntityManager().getReference(Institution.class, id);
+            inst = institutionService.getReference(id);
         }
         inst.setEntId(entId);
 
@@ -387,7 +404,7 @@ public class AAFImportService {
         Long id = maps.get(Team.class).get(entId);
         Team team = new Team();
         if (id != null) {
-            team = getEntityManager().getReference(Team.class, id);
+            team = teamService.getReference(id);
         }
         team.setEntId(entId);
         team.setName(name);
