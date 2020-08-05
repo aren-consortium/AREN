@@ -490,6 +490,7 @@ ApiService = function (anUrl, locale) {
                 }
             }
         };
+
         xhttp.open(method, url + "/" + path, async);
         for (let header in headers) {
             xhttp.setRequestHeader(header.name, header.value);
@@ -510,8 +511,7 @@ ApiService = function (anUrl, locale) {
     }
     };
 
-    this.import = ({ data, onSuccess, onError, onProgress } = {}) => {
-
+    this.import = ({ data, onSuccess, onError, onProgress, loading } = {}) => {
         let parseResponse = function (response) {
             let newResponses = response.split("\ndata: ");
             let lastResponse = newResponses[newResponses.length - 1];
@@ -528,7 +528,8 @@ ApiService = function (anUrl, locale) {
             onProgress: (response) => onProgress(parseResponse(response)),
             onSuccess: (response) => onSuccess(parseResponse(response)),
             onError: onError,
-            json: false
+            json: false,
+            loading: loading
         });
     };
     let parse = function (obj, className) {
