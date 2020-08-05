@@ -90,13 +90,22 @@ public class AAFImportService {
     }
 
     /**
-     * Initialize the variable and parse the XML file
      *
-     * @param file
      * @return
      */
-    private void init(File file) {
+    public List<String> proceedImportation(File file) {
+        return proceedImportation(file, true, true);
+    }
 
+    /**
+     *
+     * @param insertOnUpdate if true, insert elements that should be updated but
+     * don't exist in local storage
+     * @param updateOnInsert if true, update elements that should be inserted
+     * but already exist in local storage
+     * @return
+     */
+    public List<String> proceedImportation(File file, boolean insertOnUpdate, boolean updateOnInsert) {
         // Removes the check of external DTD on XML files
         System.setProperty("javax.xml.accessExternalDTD", "all");
 
@@ -123,68 +132,61 @@ public class AAFImportService {
         }
         amoutToProcess = 0;
         amoutProceed = 0;
-    }
 
-    /**
-     *
-     * @return
-     */
-    public List<String> proceedImportation(File file) {
-        return proceedImportation(file, true, true);
-    }
-
-    /**
-     *
-     * @param insertOnUpdate if true, insert elements that should be updated but
-     * don't exist in local storage
-     * @param updateOnInsert if true, update elements that should be inserted
-     * but already exist in local storage
-     * @return
-     */
-    public List<String> proceedImportation(File file, boolean insertOnUpdate, boolean updateOnInsert) {
-        this.init(file);
+        // Count amout to proceed
+        for (AbstractRequest request : alimAAF.getRequest()) {
+            AttributeList opAttr = request.getOperationalAttributes();
+            if (opAttr.isInstitution()) {
+                AttributeList attrs = request.getAttributes();
+                this.amoutToProcess += attrs.getClasses().size();
+                this.amoutToProcess += attrs.getGroups().size();
+            }
+            this.amoutToProcess++;
+        }
+        this.amoutToProcess = this.amoutToProcess * 2;
 
         loadIdsMaps();
 
         // This populate the toProcess Map that will execute the real import
         for (AbstractRequest request : alimAAF.getRequest()) {
-            String entId = request.getId();
             AttributeList attrs = request.getAttributes();
-            AttributeList opAttr = request.getOperationalAttributes();
-            attrs.addAll(opAttr);
 
-            Method method = null;
-            if (request.getClass() == AddRequest.class) {
-                method = Method.CREATE;
-            } else if (request.getClass() == ModifyRequest.class) {
-                method = Method.UPDATE;
-            } else if (request.getClass() == DeleteRequest.class) {
-                method = Method.DELETE;
-            }
-
-            AbstractEntEntity entity = parse(attrs, entId);
-            Class<? extends AbstractEntEntity> entityClass = getType(entity);
-
-            toProcess.get(entityClass).get(method).add(entity);
-            if (entityClass == Institution.class) {
-                for (Team team : ((Institution) entity).getTeams()) {
-                    toProcess.get(Team.class).get(method).add(team);
-                    this.amoutToProcess++;
+            if (!attrs.isEmpty()) {
+                String entId = request.getId();
+                AttributeList opAttr = request.getOperationalAttributes();
+                Method method = null;
+                if (request.getClass() == AddRequest.class) {
+                    method = Method.CREATE;
+                } else if (request.getClass() == ModifyRequest.class) {
+                    method = Method.UPDATE;
+                } else if (request.getClass() == DeleteRequest.class) {
+                    method = Method.DELETE;
                 }
+
+                if (opAttr.isInstitution()) {
+                    Institution institution = parseInstitution(attrs, entId);
+                    toProcess.get(Institution.class).get(method).add(institution);
+                    for (Team team : ((Institution) institution).getTeams()) {
+                        toProcess.get(Team.class).get(method).add(team);
+                        this.dispatchProgression();
+                    }
+                } else if (opAttr.isUser()) {
+                    User user = parseUser(attrs, entId);
+                    toProcess.get(User.class).get(method).add(user);
+                }
+                this.dispatchProgression();
             }
-            this.amoutToProcess++;
         }
 
         // This executes the real import
-        getEntityManager().getTransaction().begin();
         // The order is important to avoid foreign key error
+        getEntityManager().getTransaction().begin();
         for (Class<? extends AbstractEntEntity> klass : new Class[]{Institution.class, Team.class, User.class}) {
             // The order is important too
             for (Method method : new Method[]{Method.CREATE, Method.UPDATE, Method.DELETE}) {
                 for (AbstractEntEntity entity : toProcess.get(klass).get(method)) {
-                    proceed(method, entity, insertOnUpdate, updateOnInsert);
-                    this.amoutProceed++;
-                    dispatchProgression();
+                    proceed(klass, method, entity, insertOnUpdate, updateOnInsert);
+                    this.dispatchProgression();
                 }
             }
         }
@@ -210,6 +212,7 @@ public class AAFImportService {
      */
     private void dispatchProgression() {
 
+        this.amoutProceed++;
         if (this.dispatcher != null) {
             float progression = this.amoutProceed / this.amoutToProcess;
             this.dispatcher.accept(progression);
@@ -259,9 +262,8 @@ public class AAFImportService {
      * @param entity
      * @param entId
      */
-    private void proceed(Method method, AbstractEntEntity entity, boolean insertOnUpdate, boolean updateOnInsert) {
+    private void proceed(Class entityClass, Method method, AbstractEntEntity entity, boolean insertOnUpdate, boolean updateOnInsert) {
 
-        Class<? extends AbstractEntEntity> entityClass = getType(entity);
         boolean alreadyExists = maps.get(entityClass).containsKey(entity.getEntId());
 
         switch (method) {
@@ -271,7 +273,7 @@ public class AAFImportService {
                         // If the entity already exists and updateOnInsert is true, we update it
                         // And add a warning
                         log.add("WARNING : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " updated instead of created");
-                        proceed(Method.UPDATE, entity, false, false);
+                        proceed(entityClass, Method.UPDATE, entity, false, false);
                     } else {
                         // If the entity already exists it adds an error
                         log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " already exists");
@@ -288,7 +290,7 @@ public class AAFImportService {
                         // If the entity is not found and insertOnUpdate is true, we insert it
                         // And add a warning
                         log.add("WARNING : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " created instead of updated.");
-                        proceed(Method.CREATE, entity, false, false);
+                        proceed(entityClass, Method.CREATE, entity, false, false);
                     } else {
                         // If the entity is not found it adds an error
                         log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " not found.");
@@ -313,27 +315,7 @@ public class AAFImportService {
         }
     }
 
-    /**
-     * Redirect to the right parsing method
-     *
-     * @param attrs
-     * @param entId
-     * @return
-     */
-    private AbstractEntEntity parse(AttributeList attrs, String entId) {
-        if (attrs.isUser()) {
-            return parseUser(attrs, entId);
-        } else if (attrs.isInstitution()) {
-            return parseInstitution(attrs, entId);
-        }
-        return null;
-    }
-
     private User parseUser(AttributeList attrs, String entId) {
-
-        if (attrs.isEmpty()) {
-            return null;
-        }
 
         Long id = maps.get(User.class).get(entId);
         User user = new User();
@@ -371,10 +353,6 @@ public class AAFImportService {
 
     private Institution parseInstitution(AttributeList attrs, String entId) {
 
-        if (attrs.isEmpty()) {
-            return null;
-        }
-
         Long id = maps.get(Institution.class).get(entId);
         Institution inst = new Institution();
         if (id != null) {
@@ -402,13 +380,9 @@ public class AAFImportService {
 
     private Team parseTeam(String value, Institution inst) {
 
-        if (value.isEmpty()) {
-            return null;
-        }
-
         String[] explodeName = value.split("\\$");
         String entId = inst.getEntId() + "$" + explodeName[0];
-        String name = explodeName[1].length() > 1 ? explodeName[1] : explodeName[0];
+        String name = explodeName.length > 2 && explodeName[1].length() > 1 ? explodeName[1] : explodeName[0];
 
         Long id = maps.get(Team.class).get(entId);
         Team team = new Team();
@@ -419,13 +393,5 @@ public class AAFImportService {
         team.setName(name);
 
         return team;
-    }
-
-    private Class<? extends AbstractEntEntity> getType(AbstractEntEntity entity) {
-        if (entity.getClass().getSuperclass() == AbstractEntEntity.class) {
-            return entity.getClass();
-        } else {
-            return (Class<? extends AbstractEntEntity>) entity.getClass().getSuperclass();
-        }
     }
 }

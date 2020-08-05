@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.glassfish.jersey.process.internal.RequestScope;
 
 import fr.lirmm.aren.service.AAFImportService;
 import fr.lirmm.aren.ws.ObjectMapperProvider;
