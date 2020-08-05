@@ -21,8 +21,8 @@
 
                 <button v-bind:class="['right', 'btn', 'waves-effect', 'waves-light', {disabled: !file}]"
                         @click="startImport()">
-                    {{ success && !file ? "Terminé !" : progress !== false ? "En cours..." : "Importer" }}
-                    <i v-if="progress === false && !success" class="material-icons right">send</i>
+                    {{ progress !== false ? "En cours..." : "Importer" }}
+                    <i v-if="progress === false" class="material-icons right">send</i>
                 </button>
                 <div class="progress">
                     <div class="determinate" v-bind:style="'width: ' + progress + '%'"></div>
@@ -38,7 +38,6 @@
         data( ) {
             return {
                 progress: false,
-                success: false,
                 file: false
             };
         },
@@ -51,16 +50,23 @@
                 ArenService.import({
                     data,
                     onSuccess: (response) => {
-                        this.success = true;
+                        this.$confirm({
+                            title: "OK",
+                            message: "OK",
+                            isInfo: true
+                        });
                         this.progress = false;
+                        this.file = false;
+                        this.$refs.file.value = "";
                     },
                     onProgress: (response) => {
                         this.progress = response * 100;
-                    }});
+                    },
+                    loading: false
+                });
             },
             selectFile( ) {
                 this.file = this.$refs.file.files[0];
-                this.success = false;
             }
         }
     };
