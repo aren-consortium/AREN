@@ -31,9 +31,9 @@
                         <i class="material-icons">hearing</i>
                         <div class="reformulation"
                              v-html="highlightedReformulation"></div>
-                        <tooltiped v-if="!preview && comment.debate.idfixLink && comment.tags">
+                        <tooltiped v-if="!preview && comment.debate.idfixLink && comment.tags"
+                                   v-bind:value="comment.tags.length > 0 ? $t('tags_edition') : $t('no_tags_yet')">
                             <span v-bind:class="{tags: true, disabled: comment.tags.length === 0}"
-                                  v-bind:value="comment.tags.length > 0 ? $t('tags_edition') : $t('no_tags_yet')"
                                   @click="comment.tags.length > 0 ? $emit('tag-edition', comment) : ''">
                                 <i class="material-icons">local_offer</i>
                             </span>
