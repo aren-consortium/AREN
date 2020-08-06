@@ -9,7 +9,8 @@
             <div class="col s6 center-align">
                 <template v-for="tag in tags">
                     <tooltiped v-bind:value="$tc('nb_comments', tag.comments.length)">
-                        <label v-bind:class="{ chip: true, negative: (tag.color === -1), positive: (tag.color === 1), valid: (tag.color === 2), active: autoSelectedTags.includes(tag) }">
+                        <label v-bind:class="{ chip: true, active: autoSelectedTags.includes(tag)}"
+                               v-bind:style="{ background: gradient(tag)}">
                             <input type="checkbox" v-bind:value="tag" v-model="selectedTags"/>
                             <span>{{ tag.value }}</span>
                         </label>
@@ -34,11 +35,6 @@
         },
         data() {
             return {
-                geryTags: [],
-                blueTags: [],
-                redTags: [],
-                greenTags: [],
-
                 selectedTags: [],
                 autoSelectedTags: [],
                 tags: [],
@@ -51,25 +47,35 @@
             this.debate.comments.forEach((comment) => {
                 if (comment.tags) {
                     comment.tags.forEach((tag) => {
-                        let id = (tag.negative ? "-" : "") + tag.value;
+                        let id = tag.value;
                         if (!tagsObj.hasOwnProperty(id)) {
                             tagsObj[id] = new Tag(tag);
                             tagsObj[id].comments = [];
-                            tagsObj[id].color = 0;
+                            tagsObj[id].colors = {red: 0, blue: 0, green: 0};
+                        }
+                        if (comment.proposedTags.includes(tag)) {
+                            if (tag.negative) {
+                                tagsObj[id].colors.red++;
+                            } else {
+                                tagsObj[id].colors.blue++;
+                            }
                         }
                         tagsObj[id].comments.push(comment);
                     });
+
                     comment.proposedTags.forEach((tag) => {
-                        let id = (tag.negative ? "-" : "") + tag.value;
-                        if (!tagsObj.hasOwnProperty(id)) {
-                            tagsObj[id] = new Tag(tag);
-                            tagsObj[id].comments = [];
-                            tagsObj[id].color = 2;
-                        } else if (tagsObj[id].color !== 2) {
-                            tagsObj[id].color = tag.negative ? -1 : 1;
-                        }
-                        if (tagsObj[id].color === 2) {
-                            tagsObj[id].comments.push(comment);
+                        if (!comment.tags.includes(tag)) {
+                            let id = tag.value;
+                            if (!tagsObj.hasOwnProperty(id)) {
+                                tagsObj[id] = new Tag(tag);
+                                tagsObj[id].comments = [];
+                                tagsObj[id].colors = {red: 0, blue: 0, green: 1};
+                            } else {
+                                tagsObj[id].colors.green++;
+                            }
+                            if (!tagsObj[id].comments.includes(comment)) {
+                                tagsObj[id].comments.push(comment);
+                            }
                         }
                     });
                 }
@@ -93,6 +99,18 @@
                         );
                     }
                 }
+            }
+        },
+        methods: {
+            gradient(tag) {
+                let len = tag.comments.length;
+                let blue = (tag.colors.blue / len) * 100;
+                let red = blue + ((tag.colors.red / len) * 100);
+                let green = red + ((tag.colors.green / len) * 100);
+
+                return "linear-gradient(110deg, #4D9999 " + blue + "%, transparent " + blue + "%), \
+                        linear-gradient(110deg, #BA4100 " + red + "%, transparent " + red + "%), \
+                        linear-gradient(110deg, #26A96C " + green + "%, #B2B2B2 " + green + "%)";
             }
         },
         components: {
