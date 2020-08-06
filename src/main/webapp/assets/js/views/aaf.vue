@@ -60,7 +60,7 @@
                     onError: () => {
                         this.$confirm({
                             title: this.$t('error.Insertion error'),
-                            message: this.$t('error.aaf_import_error'),
+                            message: this.$t('error.aaf_import'),
                             isInfo: true
                         });
                         this.reinit();

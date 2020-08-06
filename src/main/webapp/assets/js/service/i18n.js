@@ -208,8 +208,8 @@ const messages = {
             mandatory_property: "La valeur {propertyName} est nécessaire.",
             internal: "ERREUR INTERNE",
             expired_token: "Jeton d'authentification expiré",
-            internal_message: "Toutes nos excuses, une erreur s'est produite sur nos serveurs.<br>Veuillez réessayer ou contacter un administrateur⋅trice si l'erreur persiste.",
-            aaf_import: "Erreur lors de l'import AAF. Il est probable que votre fichier soit corompu ou n'entre pas dans les standard de l'application."
+            internal_message: "<p>Toutes nos excuses, une erreur s'est produite sur nos serveurs.</p><p>Veuillez réessayer ou contacter un administrateur⋅trice si l'erreur persiste.</p>",
+            aaf_import: "<p>Erreur lors de l'import AAF.</p><p>Il est probable que votre fichier soit corompu ou n'entre pas dans les standard de l'application.</p>"
         },
         menu: {
             open: "Ouvrir un débat",
