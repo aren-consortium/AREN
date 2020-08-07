@@ -4,6 +4,7 @@
 <% ResourceBundle resource = ResourceBundle.getBundle("application");
     String productionMode = resource.getString("production");
     String serverRoot = resource.getString("reverse-proxy");
+    boolean canMail = resource.getString("smtp.server").length() > 0;
     serverRoot = serverRoot.length() == 0 ? request.getContextPath() : serverRoot;%>
 
 <!DOCTYPE html>
@@ -108,7 +109,9 @@
                         </template>
                         <li v-else>
                             <a class="waves-effect waves-light btn" @click="login()">{{ $t('menu.login') }}</a>
+                            <% if (canMail) {%>
                             <a class="waves-effect waves-light btn" @click="signIn()">{{ $t('menu.signin') }}</a>
+                            <% }%>
                         </li>
                         <li id="help" @click="helpMe()">
                             <i class="material-icons">help</i>
