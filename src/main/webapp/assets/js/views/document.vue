@@ -53,6 +53,12 @@
                 editionMode: false
             };
         },
+        created() {
+            if (!this.$root.user.is('MODO')) {
+                this.$router.push("/404");
+                return;
+            }
+        },
         mounted( ) {
             this.fetchData( );
         },

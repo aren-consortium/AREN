@@ -229,20 +229,16 @@
 
                     ArenService.onLoad = (loading) => this.loading = loading;
                     ArenService.onError = (json, xhttp) => {
-                        if (xhttp.status === 404 || xhttp.status === 403) {
-                            this.$router.push("/404");
+                        if (typeof json === "string") {
+                            this.error = {title: 'internal', message: 'internal_message'};
                         } else {
-                            if (typeof json === "string") {
-                                this.error = {title: 'internal', message: 'internal_message'};
-                            } else {
-                                this.error = json;
-                            }
-                            this.$confirm({
-                                title: this.$t('error.' + this.error.title),
-                                message: this.$t('error.' + this.error.message, this.error.details),
-                                isInfo: true
-                            });
+                            this.error = json;
                         }
+                        this.$confirm({
+                            title: this.$t('error.' + this.error.title),
+                            message: this.$t('error.' + this.error.message, this.error.details),
+                            isInfo: true
+                        });
                     };
                 },
                 mounted() {

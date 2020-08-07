@@ -286,6 +286,9 @@
                         id: this.$route.params.id,
                         onSuccess: (debate) => {
                             this.debate = debate;
+                        },
+                        onError: () => {
+                            this.$router.push("/404");
                         }
                     });
                 } else {

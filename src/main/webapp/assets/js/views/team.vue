@@ -45,6 +45,10 @@
             };
         },
         created() {
+            if (!this.$root.user.is('MODO')) {
+                this.$router.push("/404");
+                return;
+            }
             this.fetchData( );
         },
         methods: {
