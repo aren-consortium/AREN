@@ -18,14 +18,14 @@
     pointer-events: auto;
 }
 
-grid {
+.grid {
     grid-auto-rows: min-content;
     display: inline-grid;
     width: 100%;
-    ghead, gbody, gfoot, gr {
+    .ghead, .gbody, .gfoot, .gr {
         display: contents;
     }
-    gd, gh {
+    .gd, .gh {
         display: grid;
         grid-auto-columns: 1fr;
         justify-content: center;
@@ -33,7 +33,7 @@ grid {
         text-align: center;
         padding: 15px;
     }
-    gh {
+    .gh {
         align-content: baseline;
         .card {
             position: sticky;
@@ -41,50 +41,50 @@ grid {
             bottom: 15px;
         }
     }
-    ghead {
+    .ghead {
         color: $font-color-light;
-        gh {
+        .gh {
             z-index: 8;
-            border-bottom: 1px solid $disabled-color;
+            border-bottom: 1px solid $grey-color;
             max-height: 40px;
             line-height: 1em;
         }
     }
-    gbody {
-        gr.spacer {
+    .gbody {
+        .gr.spacer {
             grid-column: 1 / -1;
         }
         .separator {
             grid-column: 1 / -1;
-            border-top: 1px solid $disabled-color;
+            border-top: 1px solid $grey-color;
         }
     }
     .pagination {
         grid-column: 1 / -1;
     }
 
-    gbody > gr {
-        > gd {
+    .gbody > .gr {
+        > .gd {
             min-height: 70px;
         }
     }
 
     &.striped {
-        gbody > gr {
-            &:nth-child(odd) gd {
+        .gbody > .gr {
+            &:nth-child(odd) .gd {
                 background-color: $primary-color-light;
             }
-            &:nth-child(odd):hover gd {
-                background-color: $primary-secondary-color-light;
+            &:nth-child(odd):hover .gd {
+                background-color: mix($primary-color-light, $secondary-color-light);
             }
-            &:nth-child(even):hover gd {
+            &:nth-child(even):hover .gd {
                 background-color: $secondary-color-light;
             }
         }
     }
 
-    gbody > gr {
-        gd.action {
+    .gbody > .gr {
+        .gd.action {
             grid-auto-flow: column;
             grid-gap: 5px;
             &.side {
@@ -94,7 +94,7 @@ grid {
             }
         }
 
-        > gr.extendable > gd.action {
+        > .gr.extendable > .gd.action {
             padding-top: 0;
             padding-bottom: 0;
             transition: padding .3s, max-height .3s;
@@ -105,10 +105,10 @@ grid {
         }
 
         &:focus-within {
-            gd {
+            .gd {
                 background-color: $selection-color !important;
             }
-            > gr.extendable > gd.action {
+            > .gr.extendable > .gd.action {
                 padding-bottom: 15px;
                 .btn {
                     max-height: 36px;
@@ -247,7 +247,7 @@ grid {
             margin: 0;
             padding: 8px;
             font-weight: bold;
-            border-bottom: 1px solid $disabled-color-light;
+            border-bottom: 1px solid $grey-color-light;
             .option {
                 position: absolute;
                 right: 8px;
@@ -418,7 +418,7 @@ grid {
     cursor: pointer;
     user-select: none;
     color: white;
-    background-color: $disabled-color;
+    background-color: $grey-color;
     &.negative {
         background-color: $primary-color;
     }
@@ -459,7 +459,7 @@ grid {
     line-height: normal;
     padding: .8rem 0 .8rem 0;
     min-height: 3rem;
-    border-bottom: 1px solid $disabled-color;
+    border-bottom: 1px solid $grey-color;
     border-radius: 0;
     outline: none;
     width: 100%;

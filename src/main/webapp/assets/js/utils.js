@@ -246,3 +246,14 @@ function inScrollView(container, element) {
     let scrollBottom = elemRect.top + (container.scrollTop - containerRect.top - containerRect.height) + elemRect.height;
     return (container.scrollTop < scrollTop && container.scrollTop > scrollBottom);
 }
+
+/***** Color function *****/
+const HSL = {
+    fromString(color) {
+        let match = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g.exec(color);
+        return {h: match[1], s: match[2], l: match[3] / 100};
+    },
+    toString(hsl) {
+        return "hsl(" + hsl.h + ", " + hsl.s * 100 + "%, " + hsl.l * 100 + "%)";
+    }
+}

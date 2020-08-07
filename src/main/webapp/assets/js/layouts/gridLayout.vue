@@ -1,60 +1,60 @@
 <template>
-    <grid v-bind:class="{ striped: striped }"
-          v-bind:style="'grid-template-columns: ' + columnsLayout">
-        <ghead>
-            <gr>
-                <gh v-for="(header, index) in headers" v-bind:key="index">{{ header }}</gh>
-                <gh v-if="$scopedSlots['side.actions']"></gh>
-            </gr>
-        </ghead>
+    <div v-bind:class="{ grid: true, striped: striped }"
+         v-bind:style="'grid-template-columns: ' + columnsLayout">
+        <div class="ghead">
+            <div class="gr">
+                <div class="gh" v-for="(header, index) in headers" v-bind:key="index">{{ header }}</div>
+                <div class="gh" v-if="$scopedSlots['side.actions']"></div>
+            </div>
+        </div>
 
-        <gbody v-if="items">
+        <div class="gbody" v-if="items">
             <!-- if there is no groups, then `rows` is an array with a single element that is `items` -->
             <template v-for="(group, index) in groups"
                       v-if="pages === 0 || groupInPage(index)">
                 <div v-if="index > 0" class="separator"></div>
-                <gr v-if="$scopedSlots['row.group']" v-bind:ref="'group'+group.item.id" class="header">
-                    <gh v-bind:style="'grid-row: span ' + (group.children.length * 2 + 3)">
+                <div v-if="$scopedSlots['row.group']" v-bind:ref="'group'+group.item.id" class="gr header">
+                    <div class="gh" v-bind:style="'grid-row: span ' + (group.children.length * 2 + 3)">
                         <slot name="row.group" v-bind:value="group.item"></slot>
-                    </gh>
-                </gr>
+                    </div>
+                </div>
 
-                <gr v-for="(item, rowNum) in group.children"
-                    v-if="pages === 0 || rowInPage(index, rowNum)"
-                    v-bind:key="item.id"
-                    v-bind:ref="'row'+item.id"
-                    v-bind:id="'row'+item.id">
-                    <gd v-for="colNum in columns.length - ($scopedSlots['row.group'] ? 1 : 0)"
-                        v-bind:key="colNum"
-                        tabindex="0">
+                <div class="gr" v-for="(item, rowNum) in group.children"
+                     v-if="pages === 0 || rowInPage(index, rowNum)"
+                     v-bind:key="item.id"
+                     v-bind:ref="'row'+item.id"
+                     v-bind:id="'row'+item.id">
+                    <div class="gd" v-for="colNum in columns.length - ($scopedSlots['row.group'] ? 1 : 0)"
+                         v-bind:key="colNum"
+                         tabindex="0">
                         <slot v-bind:name="'column.' + colNum" v-bind:value="item"></slot>
-                    </gd>
+                    </div>
 
-                    <gd v-if="$scopedSlots['side.actions']"
-                        class="side action"
-                        tabindex="0">
+                    <div v-if="$scopedSlots['side.actions']"
+                         class="gd side action"
+                         tabindex="0">
                         <slot v-if="!extendable" name="side.actions" v-bind:value="item"></slot>
-                    </gd>
+                    </div>
 
-                    <gr v-if="extendable" class="extendable">
-                        <gd v-for="(action, actNum) in actions"
-                            v-bind:key="actNum"
-                            class="action"
-                            tabindex="0"
-                            v-bind:style="'grid-column: span ' + action">
+                    <div v-if="extendable" class="gr extendable">
+                        <div v-for="(action, actNum) in actions"
+                             v-bind:key="actNum"
+                             class="gd action"
+                             tabindex="0"
+                             v-bind:style="'grid-column: span ' + action">
                             <slot v-bind:name="'action.' + (actNum + 1)" v-bind:value="item"></slot>
-                        </gd>
-                        <gd v-if="$scopedSlots['side.actions']"
-                            tabindex="0"
-                            class="side action">
+                        </div>
+                        <div v-if="$scopedSlots['side.actions']"
+                             tabindex="0"
+                             class="gd side action">
                             <slot name="side.actions" v-bind:value="item"></slot>
-                        </gd>
-                    </gr>
-                </gr>
+                        </div>
+                    </div>
+                </div>
             </template>
-        </gbody>
+        </div>
 
-        <ul  class="pagination" v-if="pages > 1" class="pagination">
+        <ul v-if="pages > 1" class="pagination">
             <li v-bind:class="page === 0 ? 'disabled' : 'waves-effect'">
                 <a @click="page > 0 ? page-- : ''"><i class="material-icons">chevron_left</i></a>
             </li>
@@ -67,7 +67,7 @@
             </li>
         </ul>
 
-    </grid>
+    </div>
 </template>
 
 <script>

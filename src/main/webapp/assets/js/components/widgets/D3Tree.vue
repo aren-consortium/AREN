@@ -146,9 +146,9 @@
             },
             color(d) {
                 return d.data === this.debate ? "#F8ECE7"
-                        : d.data.opinion === 'FOR' ? '#4D9999'
-                        : d.data.opinion === 'AGAINST' ? '#BA4100'
-                        : d.data.opinion === 'NEUTRAL' ? '#B2B2B2' : '';
+                        : d.data.opinion === 'FOR' ? blueColor
+                        : d.data.opinion === 'AGAINST' ? redColor
+                        : d.data.opinion === 'NEUTRAL' ? greyColor : '';
             },
             displayDetail(d) {
                 d.timeout = setTimeout(() => {

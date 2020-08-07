@@ -46,6 +46,7 @@
                              @mouseup="$emit('selection-end', comment)"
                              v-html="highlightedArgumentation"></div>
                         <bullets-container
+                            v-if="!preview"
                             @over-bullet="$emit('select-me', $event)"
                             @click-bullet="$emit('focus-me', $event)"
                             v-bind:displayable-comments="displayableComments"
@@ -162,7 +163,9 @@
             }
         },
         beforeDestroy() {
-            this.observer.disconnect();
+            if (this.hideOnScroll) {
+                this.observer.disconnect();
+            }
             window.removeEventListener('beforeprint', this.display);
         },
         components: {

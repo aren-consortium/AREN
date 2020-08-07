@@ -52,9 +52,9 @@
                 showDetail: false,
                 focusOn: false,
                 detail: false,
-                opinionDisplay: [{key: "FOR", label: this.$t('comment.for'), color: '#4D9999'},
-                    {key: "AGAINST", label: this.$t('comment.against'), color: '#BA4100'},
-                    {key: "NEUTRAL", label: this.$t('comment.neutral'), color: '#B2B2B2'}],
+                opinionDisplay: [{key: "FOR", label: this.$t('comment.for'), color: blueColor},
+                    {key: "AGAINST", label: this.$t('comment.against'), color: redColor},
+                    {key: "NEUTRAL", label: this.$t('comment.neutral'), color: greyColor}],
                 arc: d3.arc()
                         .startAngle(d => this.arcAngle(d.x0))
                         .endAngle(d => this.arcAngle(d.x1))

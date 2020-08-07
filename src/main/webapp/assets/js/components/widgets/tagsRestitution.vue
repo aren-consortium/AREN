@@ -108,9 +108,9 @@
                 let red = blue + ((tag.colors.red / len) * 100);
                 let green = red + ((tag.colors.green / len) * 100);
 
-                return "linear-gradient(110deg, #4D9999 " + blue + "%, transparent " + blue + "%), \
-                        linear-gradient(110deg, #BA4100 " + red + "%, transparent " + red + "%), \
-                        linear-gradient(110deg, #26A96C " + green + "%, #B2B2B2 " + green + "%)";
+                return "linear-gradient(110deg, " + blueColor + " " + blue + "%, transparent " + blue + "%), \
+                        linear-gradient(110deg, " + redColor + " " + red + "%, transparent " + red + "%), \
+                        linear-gradient(110deg, " + greenColor + " " + green + "%, " + greyColor + " " + green + "%)";
             }
         },
         components: {

@@ -91,12 +91,17 @@ img {
     }
 }
 
+$navigation-height: 64px;
+$header-height: 60px;
+
 html {
     body {
         min-width: 900px;
         overflow-y: scroll;
         overflow-x: auto;
         #app {
+            --primary-color-hover: var(--primary-color)10;
+            --secondary-color-hover: var(--secondary-color)10;
             display: flex;
             min-height: 100vh;
             flex-direction: column;
@@ -184,15 +189,15 @@ html {
                                 left: 0;
                             }
                         }
-                        > grid {
+                        > .grid {
                             flex: 1;
-                            > ghead gh {
+                            > .ghead .gh {
                                 position: sticky;
                                 top: ($navigation-height + $header-height);
                                 background: $background-color;
                                 z-index: 8;
                             }
-                            gh > .card {
+                            .gh > .card {
                                 top: 179px;
                             }
                         }
@@ -329,7 +334,7 @@ nav {
     #userSettings {
         .dropdown-content {
             a.btn {
-                background: $disabled-color;
+                background: $grey-color;
                 color: white;
                 width: calc(100% - 30px);
             }
@@ -383,14 +388,14 @@ nav {
                 li {
                     position: relative;
                     margin-right: 25px;
-                    border-bottom: 1px solid $disabled-color-light;
+                    border-bottom: 1px solid $grey-color-light;
                     &.unread {
                         background-color: $primary-color-light;
                         .read-toggle {
                             border-width: 3px;
                         }
                         &:hover {
-                            background-color: $primary-secondary-color-light;
+                            background-color: mix($primary-color-light, $secondary-color-light);
                         }
                     }
                     &:hover {
@@ -417,9 +422,9 @@ nav {
                         width: 10px;
                         height: 10px;
                         padding: 0;
-                        border: 5px solid $disabled-color;
+                        border: 5px solid $grey-color;
                         &:hover {
-                            border-color: $disabled-color-dark;
+                            border-color: $grey-color-dark;
                         }
                         border-radius: 10px;
                         transition: opacity .3s;
@@ -471,16 +476,16 @@ nav {
     .opinion {
         height: 16px;
         width: 100%;
-        background-color: $disabled-color;
+        background-color: $grey-color;
         .for {
             height: 100%;
             float: left;
-            background-color: $secondary-color;
+            background-color: $blue-color;
         }
         .against {
             height: 100%;
             float: right;
-            background-color: $primary-color;
+            background-color: $red-color;
 
         }
     }
@@ -664,14 +669,14 @@ nav {
         .selection {
             cursor: pointer;
             &:hover, &.active {
-                background: $primary-secondary-color-light;
-                border-left-color:  $disabled-color-dark;
-                border-right-color:  $disabled-color-dark;
+                background: lighten($grey-color-light, 50%);
+                border-left-color:  $grey-color-dark;
+                border-right-color:  $grey-color-dark;
                 &::before {
-                    background-image: linear-gradient($primary-secondary-color-light, transparent);
+                    background-image: linear-gradient(#{lighten($grey-color-light, 5%)}, transparent);
                 }
                 &::after {
-                    background-image: linear-gradient(transparent, $primary-secondary-color-light);
+                    background-image: linear-gradient(transparent, #{lighten($grey-color-light, 5%)});
                 }
             }
         }
@@ -700,13 +705,13 @@ nav {
                     border-radius: 10px;
                 }
                 &.for::before {
-                    background: $secondary-color;
+                    background: $blue-color;
                 }
                 &.neutral::before {
-                    background: $disabled-color;
+                    background: $grey-color;
                 }
                 &.against::before {
-                    background: $primary-color;
+                    background: $red-color;
                 }
                 &:hover {
                     cursor: pointer;
@@ -718,15 +723,14 @@ nav {
 
             }
             .bullets-drop-down {
-                background: linear-gradient($primary-color, $disabled-color, $secondary-color);
                 &.for {
-                    background: $secondary-color;
+                    background: $blue-color;
                 }
                 &.against {
-                    background: $primary-color;
+                    background: $red-color;
                 }
                 &.neutral {
-                    background: $disabled-color;
+                    background: $grey-color;
                 }
                 min-width: 10px;
                 padding: 5px;
@@ -761,7 +765,7 @@ nav {
             &:hover .bullets-drop-down {
                 position: fixed;
                 z-index: 9999;
-                background: $background-color;
+                background: $background-color !important;
                 width: 10px;
                 > .label {
                     height: 0;
@@ -832,24 +836,24 @@ nav {
         right: .5em;
     }
     &.for {
-        border-color: $secondary-color;
-        outline-color: $secondary-color;
+        border-color: $blue-color;
+        outline-color: $blue-color;
         .comment-header * {
-            color: $secondary-color;
+            color: $blue-color;
         }
     }
     &.neutral {
-        border-color: $disabled-color;
-        outline-color: $disabled-color;
+        border-color: $grey-color;
+        outline-color: $grey-color;
         .comment-header * {
-            color: $disabled-color;
+            color: $grey-color;
         }
     }
     &.against {
-        border-color: $primary-color;
-        outline-color: $primary-color;
+        border-color: $red-color;
+        outline-color: $red-color;
         .comment-header * {
-            color: $primary-color;
+            color: $red-color;
         }
     }
     &:focus-within {
@@ -907,9 +911,9 @@ nav {
 .selection {
     overflow: hidden;
     position: relative;
-    background: $disabled-color-light;
-    border-left: 3px solid $disabled-color;
-    border-right: 3px solid $disabled-color;
+    background: $grey-color-light;
+    border-left: 3px solid $grey-color;
+    border-right: 3px solid $grey-color;
     border-radius: 5px;
     transition: background .3s, border-color .3s;
     text-align: justify;
@@ -924,12 +928,12 @@ nav {
         content: "";
         width: calc(100% - 12px);
         height: 10px;
-        background-image: linear-gradient(transparent, $disabled-color-light);
+        background-image: linear-gradient(transparent, $grey-color-light);
         left: 0;
         bottom: 0;
     }
     &::before {
-        background-image: linear-gradient($disabled-color-light, transparent);
+        background-image: linear-gradient($grey-color-light, transparent);
         top: 0;
     }
     > div {
@@ -1044,13 +1048,13 @@ nav {
         }
         label {
             &> .against {
-                background-color: $primary-color;
+                background-color: $red-color;
             }
             &> .neutral {
-                background-color: $disabled-color;
+                background-color: $grey-color;
             }
             &> .for {
-                background-color: $secondary-color;
+                background-color: $blue-color;
             }
         }
     }
@@ -1096,9 +1100,9 @@ nav {
 }
 
 #documents {
-    grid {
-        gr.header {
-            gh:hover {
+    .grid {
+        .gr.header {
+            .gh:hover {
                 background-color: $secondary-color-light;
             }
             .card-action {
@@ -1109,11 +1113,10 @@ nav {
                 transition: all .3s;
                 .btn {
                     max-height: 0;
-                    transition: max-height .3s;
                 }
             }
             &:focus-within {
-                gh {
+                .gh {
                     background-color: $selection-color !important;
                 }
                 .card-action {
@@ -1199,17 +1202,18 @@ nav {
                 }
             }
         }
-        grid { > ghead gh {
-                   position: sticky;
-                   top: 202px;
-                   background: $background-color;
-                   z-index: 8;
-               }
-               gh {
-                   .card {
-                       top: 242px;
-                   }
-               }
+        .grid {
+            > .ghead .gh {
+                position: sticky;
+                top: 202px;
+                background: $background-color;
+                z-index: 8;
+            }
+            .gh {
+                .card {
+                    top: 242px;
+                }
+            }
         }
         #contributors {
             > div > .tabs {
@@ -1218,7 +1222,7 @@ nav {
                 background: $background-color;
                 z-index: 8;
             }
-            grid > ghead gh {
+            .grid > .ghead .gh {
                 position: sticky;
                 top: 250px;
                 background: $background-color;

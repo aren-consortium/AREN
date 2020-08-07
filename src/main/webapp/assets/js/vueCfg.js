@@ -1,6 +1,3 @@
-// Ignore custom tag
-Vue.config.ignoredElements = ['grid', 'gbody', 'ghead', 'gfoot', 'gr', 'gd', 'gh'];
-
 /***** Register Vue components *****/
 Vue.component('base-layout', vueLoader('layouts/baseLayout'));
 Vue.component('grid-layout', vueLoader('layouts/gridLayout'));

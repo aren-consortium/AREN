@@ -30,23 +30,12 @@
     src: url("../font/material-icons.woff") format('woff2');
 }
 
-$navigation-height: 64px;
-$header-height: 60px;
-
 $background-color: white;
-
-$primary-color: hsl(21, 100%, 36%) !default;
-$secondary-color: hsl(180, 33%, 45%) !default;
-$primary-color-light: lighten($primary-color, 60%) !default;
-$secondary-color-light: lighten($secondary-color, 50%) !default;
-
-$selection-color: lighten( saturate($secondary-color,15%) , 10%) !default;
-
-$primary-secondary-color-light: mix($primary-color-light, $secondary-color-light);
-
-$disabled-color: #B2B2B2;
-$disabled-color-light: #DDDFE2;
-$disabled-color-dark: #808080;
+$primary-color: #B84000 !default;
+$secondary-color: #4D9999 !default;
+$primary-color-light: change-color($primary-color, $lightness: 95%);
+$secondary-color-light: change-color($secondary-color, $lightness: 95%);
+$selection-color: change-color($secondary-color, $saturation: 60%, $lightness: 60%) !default;
 
 $text-select-color: #C6E4E3;
 
@@ -61,3 +50,17 @@ $h2-fontsize: 1.2em !default;
 $h3-fontsize: 1em !default;
 $h4-fontsize: 0.8em !default;
 $h5-fontsize: 0.8em !default;
+
+$blue-color: #4D9999;
+$red-color: #BA4100;
+$green-color: #26A96C;
+$grey-color: #B2B2B2;
+$grey-color-light: #DDDFE2;
+$grey-color-dark: #808080;
+
+:root {
+    --blue-color: #{$blue-color};
+    --red-color: #{$red-color};
+    --green-color: #{$green-color};
+    --grey-color: #{$grey-color};
+}

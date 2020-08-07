@@ -79,9 +79,9 @@
                     data.forEach((d, i) => {
                         d.label = this.byOpinion ? this.$t('comment.' + d.key.toLowerCase()) : d.values[0].owner.fullName();
                         d.color = this.byOpinion
-                                ? (d.key === 'FOR' ? '#4D9999'
-                                        : d.key === 'AGAINST' ? '#BA4100'
-                                        : d.key === 'NEUTRAL' ? '#B2B2B2' : '')
+                                ? (d.key === 'FOR' ? blueColor
+                                        : d.key === 'AGAINST' ? redColor
+                                        : d.key === 'NEUTRAL' ? greyColor : '')
                                 : d3.interpolateRainbow(i / data.length);
                         d.letterCount = d.values.reduce((acc, c) => acc + c.argumentation.length, 0);
                         d.commentCount = d.values.length;

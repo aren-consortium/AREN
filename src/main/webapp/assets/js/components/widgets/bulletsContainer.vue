@@ -11,7 +11,8 @@
                 </div>
             </template>
 
-            <div v-else v-bind:class="{ 'bullets-drop-down': true, 'z-depth-2': true, 'for': onlyFor(), 'against': onlyAgainst(), 'neutral': onlyNeutral() }">
+            <div v-else v-bind:class="{ 'bullets-drop-down': true, 'z-depth-2': true, 'for': onlyFor(), 'against': onlyAgainst(), 'neutral': onlyNeutral() }"
+                 v-bind:style="{ background: gradient(bullets) }">
                 <div class="label">{{ bullets.length }}</div>
                 <div class="body"
                      v-bind:style="'height: ' + bullets.length*10 + 'px'">
@@ -84,6 +85,22 @@
             },
             onlyNeutral() {
                 return this.bullets.filter(bullet => bullet.comment.opinion === Opinion.NEUTRAL).length === this.bullets.length;
+            },
+            gradient(bullets) {
+                let len = bullets.length;
+                let blue = 0, red = 0;
+                for (let i = 0; i < len; i++) {
+                    if (bullets[i].comment.opinion == "FOR") {
+                        blue++
+                    } else if (bullets[i].comment.opinion == "AGAINST") {
+                        red++;
+                    }
+                }
+                blue = Math.max(20, (blue / len) * 100);
+                red = Math.min(80, blue + ((red / len) * 100));
+
+                return "linear-gradient(110deg, " + blueColor + " " + blue + "%, transparent " + blue + "%), \
+                        linear-gradient(110deg, " + redColor + " " + red + "%, " + greyColor + " " + red + "%)";
             }
         }
     };

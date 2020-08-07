@@ -176,6 +176,11 @@
         <script>
             BrowserNotification.requestPermission();
             const ArenService = new ApiService(document.baseURI + "ws", "FR-fr");
+            let styles = window.getComputedStyle(document.documentElement);
+            const redColor = styles.getPropertyValue('--red-color');
+            const blueColor = styles.getPropertyValue('--blue-color');
+            const greenColor = styles.getPropertyValue('--green-color');
+            const greyColor = styles.getPropertyValue('--grey-color');
 
             new Vue({
                 el: "#app",
@@ -186,7 +191,7 @@
                     loading: false,
                     error: false,
                     mounted: false,
-                    help: false,
+                    help: false
                 },
                 computed: {
                     isArchive: {
