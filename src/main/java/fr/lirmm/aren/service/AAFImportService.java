@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -26,7 +27,8 @@ import fr.lirmm.aren.model.aaf.FicAlimMENESR;
 import fr.lirmm.aren.model.aaf.ModifyRequest;
 import fr.lirmm.aren.security.PasswordEncoder;
 import java.io.File;
-import javax.persistence.EntityManager;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Service that provides operations for AAF xml import
@@ -37,19 +39,10 @@ import javax.persistence.EntityManager;
 public class AAFImportService {
 
     @Inject
-    private EntityManager em;
-
-    @Inject
-    private UserService userService;
-
-    @Inject
-    private InstitutionService institutionService;
-
-    @Inject
-    private TeamService teamService;
-
-    @Inject
     private PasswordEncoder passwordEncoder;
+
+    @Inject
+    private EntityManager em;
 
     /**
      * Object storing the parsed AAF xml file
@@ -89,6 +82,14 @@ public class AAFImportService {
      * ArrayList that store the log of the import
      */
     private volatile List<String> log = new ArrayList<>();
+
+    /**
+     *
+     * @return
+     */
+    protected EntityManager getEntityManager() {
+        return em;
+    }
 
     /**
      *
@@ -149,6 +150,7 @@ public class AAFImportService {
         loadIdsMaps();
 
         // This populate the toProcess Map that will execute the real import
+        Set<Long> newUsersId = new HashSet<Long>();
         for (AbstractRequest request : alimAAF.getRequest()) {
             AttributeList attrs = request.getAttributes();
 
@@ -156,7 +158,6 @@ public class AAFImportService {
                 String entId = request.getId();
                 AttributeList opAttr = request.getOperationalAttributes();
                 attrs.addAll(opAttr);
-
                 Method method = null;
                 if (request.getClass() == AddRequest.class) {
                     method = Method.CREATE;
@@ -183,17 +184,23 @@ public class AAFImportService {
 
         // This executes the real import
         // The order is important to avoid foreign key error
-        em.setProperty("activeTransactions", 0);
-        em.getTransaction().begin();
+        getEntityManager().getTransaction().begin();
         for (Class<? extends AbstractEntEntity> klass : new Class[]{Institution.class, Team.class, User.class}) {
             // The order is important too
             for (Method method : new Method[]{Method.CREATE, Method.UPDATE, Method.DELETE}) {
                 for (AbstractEntEntity entity : toProcess.get(klass).get(method)) {
                     proceed(klass, method, entity, insertOnUpdate, updateOnInsert);
+                    newUsersId.add(entity.getId());
                     this.dispatchProgression();
                 }
             }
         }
+        getEntityManager().createQuery("UPDATE Team t SET "
+                + "t.usersCount = (SELECT COUNT(u) from t.users u) "
+                + "WHERE t IN (SELECT t1 FROM User u LEFT JOIN u.teams t1 WHERE u.id IN :ids)")
+                .setParameter("ids", newUsersId)
+                .executeUpdate();
+        getEntityManager().getTransaction().commit();
 
         return log;
     }
@@ -240,7 +247,7 @@ public class AAFImportService {
      */
     private Map<String, Long> getEntIdToIdMap(Class<? extends AbstractEntEntity> klass) {
         Map<String, Long> map = new HashMap<String, Long>();
-        List<Object[]> result = em.createQuery(
+        List<Object[]> result = getEntityManager().createQuery(
                 "SELECT t.entId, t.id "
                 + "FROM " + klass.getSimpleName() + " t "
                 + "WHERE t.entId IS NOT NULL", Object[].class)
@@ -267,17 +274,6 @@ public class AAFImportService {
      */
     private void proceed(Class entityClass, Method method, AbstractEntEntity entity, boolean insertOnUpdate, boolean updateOnInsert) {
 
-        AbstractService service;
-        if (entityClass.equals(Institution.class)) {
-            service = institutionService;
-        } else if (entityClass.equals(Team.class)) {
-            service = teamService;
-        } else if (entityClass.equals(User.class)) {
-            service = userService;
-        } else {
-            return;
-        }
-
         boolean alreadyExists = maps.get(entityClass).containsKey(entity.getEntId());
 
         switch (method) {
@@ -293,8 +289,7 @@ public class AAFImportService {
                         log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " already exists");
                     }
                 } else {
-                    service.create(entity);
-                    // getEntityManager().persist(entity);
+                    getEntityManager().persist(entity);
                     log.add("SUCCESS : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId());
                 }
                 break;
@@ -311,8 +306,7 @@ public class AAFImportService {
                         log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " not found.");
                     }
                 } else {
-                    service.edit(entity);
-                    //getEntityManager().merge(entity);
+                    getEntityManager().merge(entity);
                     log.add("SUCCESS : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId());
                 }
                 break;
@@ -321,8 +315,7 @@ public class AAFImportService {
                 if (!alreadyExists) {
                     log.add("ERROR : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId() + " not found.");
                 } else {
-                    service.remove(entity);
-                    //getEntityManager().remove(entity);
+                    getEntityManager().remove(entity);
                     log.add("SUCCESS : " + method.name() + " : " + entityClass.getSimpleName() + " : " + entity.getEntId());
                 }
                 break;
@@ -337,7 +330,7 @@ public class AAFImportService {
         Long id = maps.get(User.class).get(entId);
         User user = new User();
         if (id != null) {
-            user = userService.getReference(id);
+            user = getEntityManager().getReference(User.class, id);
         }
         user.setEntId(entId);
         user.setLastName(attrs.getLastName());
@@ -350,7 +343,7 @@ public class AAFImportService {
         user.setPassword(hashedPassword);
 
         Long instId = maps.get(Institution.class).get(attrs.getInstitutionId());
-        Institution inst = institutionService.getReference(instId);
+        Institution inst = getEntityManager().getReference(Institution.class, instId);
         user.setInstitution(inst);
 
         List<String> classOrGroup = new ArrayList<>();
@@ -360,7 +353,7 @@ public class AAFImportService {
         for (String teamEntId : classOrGroup) {
             Long teamId = maps.get(Team.class).get(teamEntId);
             if (teamId != null) {
-                Team team = teamService.getReference(teamId);
+                Team team = getEntityManager().getReference(Team.class, teamId);
                 user.addTeam(team);
             }
         }
@@ -373,7 +366,7 @@ public class AAFImportService {
         Long id = maps.get(Institution.class).get(entId);
         Institution inst = new Institution();
         if (id != null) {
-            inst = institutionService.getReference(id);
+            inst = getEntityManager().getReference(Institution.class, id);
         }
         inst.setEntId(entId);
 
@@ -404,7 +397,7 @@ public class AAFImportService {
         Long id = maps.get(Team.class).get(entId);
         Team team = new Team();
         if (id != null) {
-            team = teamService.getReference(id);
+            team = getEntityManager().getReference(Team.class, id);
         }
         team.setEntId(entId);
         team.setName(name);
