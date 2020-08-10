@@ -33,6 +33,18 @@ public class MailingService {
     @Configurable("smtp.password")
     private String smtpPassword;
 
+    @Inject
+    @Configurable("smtp.port")
+    private String smtpPort;
+
+    @Inject
+    @Configurable("smtp.tls")
+    private String smtpTls;
+
+    @Inject
+    @Configurable("smtp.auth")
+    private String smtpAuth;
+
     /**
      *
      * @param from
@@ -43,10 +55,10 @@ public class MailingService {
     public void sendMail(String from, String to, String subject, String content) throws AddressException, MessagingException {
 
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", smtpAuth);
+        props.put("mail.smtp.starttls.enable", smtpTls);
         props.put("mail.smtp.host", smtpServer);
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", smtpPort);
 
         // Get the Session object.
         Session session = Session.getInstance(props,
