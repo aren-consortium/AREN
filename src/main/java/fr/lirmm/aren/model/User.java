@@ -26,7 +26,6 @@ import java.time.ZonedDateTime;
 import javax.persistence.JoinTable;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.SortNatural;
 
 /**
  * Model for Users with anotations for storage and serialization

@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.HashSet;
 import javax.persistence.FetchType;
-import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
 
 /**

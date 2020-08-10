@@ -23,7 +23,6 @@ import fr.lirmm.aren.model.Comment.Hypostase;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.persistence.Convert;
-import org.hibernate.annotations.SortNatural;
 
 import org.hibernate.annotations.Type;
 
