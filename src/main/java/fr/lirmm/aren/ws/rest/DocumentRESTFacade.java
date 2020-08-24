@@ -56,6 +56,17 @@ public class DocumentRESTFacade extends AbstractRESTFacade<Document> {
     }
 
     /**
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @RolesAllowed({"MODO"})
+    public Document create(Document doc) {
+        return super.create(doc);
+    }
+
+    /**
      * Ducplicate a Documents withe the the associaitons
      *
      * @param id of the Document to duplicate
