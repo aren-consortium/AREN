@@ -269,7 +269,7 @@
                 methods: {
                     logout() {
                         ArenService.Users.logout({
-                            onSuccess: () => document.location.replace("/")
+                            onSuccess: () => document.location.replace("")
                         });
                     },
                     login( ) {
