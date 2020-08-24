@@ -169,7 +169,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
             user.setActive(false);
             super.create(user);
             try {
-                sendLink(user, "mail_new_user_subject", "mail_new_user_body", "/ws/users/activate");
+                sendLink(user, "mail_new_user_subject", "mail_new_user_body");
             } catch (MessagingException ex) {
                 super.remove(user.getId());
                 throw new RuntimeException();
@@ -189,7 +189,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
      * @param body
      * @param defautReturnUrl
      */
-    private void sendLink(User user, String subject, String body, String defautReturnUrl) throws MessagingException {
+    private void sendLink(User user, String subject, String body) throws MessagingException {
         Locale currentLocale = request.getLocale();
         ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
 
@@ -234,7 +234,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         User user = getService().findByUsernameOrEmail(identifier);
         if (user != null && user.isActive()) {
             try {
-                sendLink(user, "mail_reset_password_subject", "mail_reset_password_body", "/ws/users/passwd");
+                sendLink(user, "mail_reset_password_subject", "mail_reset_password_body");
             } catch (MessagingException ex) {
                 throw new RuntimeException();
             }

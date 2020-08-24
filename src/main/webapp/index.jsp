@@ -4,8 +4,10 @@
 <% ResourceBundle resource = ResourceBundle.getBundle("application");
     String productionMode = resource.getString("production");
     String serverRoot = resource.getString("reverse-proxy");
-    boolean canMail = resource.getString("smtp.server").length() > 0;
-    serverRoot = serverRoot.length() == 0 ? request.getContextPath() : serverRoot;%>
+    if (serverRoot.length() == 0) {
+        serverRoot = request.getRequestURL().substring(0, request.getRequestURL().length() - "/index.jsp".length());
+    }
+    boolean canMail = resource.getString("smtp.server").length() > 0;%>
 
 <!DOCTYPE html>
 <html lang="fr">
