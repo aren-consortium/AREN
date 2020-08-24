@@ -29,7 +29,6 @@
                 message: "",
                 validateLabel: "",
                 cancelLabel: "",
-                cancelLabel: "",
                 isInfo: ""
             }
         },
