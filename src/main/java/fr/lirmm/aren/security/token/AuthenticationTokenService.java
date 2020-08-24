@@ -42,7 +42,7 @@ public class AuthenticationTokenService {
         String id = generateTokenIdentifier();
         ZonedDateTime issuedDate = ZonedDateTime.now();
         if (issuedDate.isBefore(user.getTokenValidity())) {
-            issuedDate = user.getTokenValidity().plusSeconds(10);
+            issuedDate = user.getTokenValidity().plusSeconds(30);
         }
 
         AuthenticationTokenDetails authenticationTokenDetails = new AuthenticationTokenDetails.Builder()
