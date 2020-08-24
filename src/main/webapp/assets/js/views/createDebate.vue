@@ -258,6 +258,8 @@
                             title: this.$t("creation_success"),
                             message: this.$t('helper.debate_created',
                                     {documentName: this.debate.document.name, categoryName: this.debate.document.category.name}),
+                            cancelLabel: this.$t('no'),
+                            validateLabel: this.$t('yes'),
                             callback: (returnValue) => {
                                 if (returnValue) {
                                     this.$router.push('/debates/' + this.debate.id);
