@@ -247,7 +247,7 @@
                 this.displayAdvancedOptions = value;
             },
             createDebate( ) {
-                if (this.debate.teams.length === 0 && this.debate.guest.length === 0) {
+                if (this.debate.teams.length === 0 && this.debate.guests.length === 0) {
                     this.debate.openPublic = true;
                 }
                 ArenService.Debates.create({
