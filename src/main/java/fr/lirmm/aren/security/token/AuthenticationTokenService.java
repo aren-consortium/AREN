@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.model.User;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Service which provides operations for authentication tokens.
@@ -40,10 +41,7 @@ public class AuthenticationTokenService {
     public String issueToken(User user, Long validFor) {
 
         String id = generateTokenIdentifier();
-        ZonedDateTime issuedDate = ZonedDateTime.now();
-        if (issuedDate.isBefore(user.getTokenValidity())) {
-            issuedDate = user.getTokenValidity().plusSeconds(30);
-        }
+        ZonedDateTime issuedDate = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
         AuthenticationTokenDetails authenticationTokenDetails = new AuthenticationTokenDetails.Builder()
                 .withId(id)

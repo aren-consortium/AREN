@@ -99,7 +99,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             throw InvalidAuthenticationTokenException.INVALID_TOKEN();
         }
         if (user.getTokenValidity().isAfter(authenticationTokenDetails.getIssuedDate())) {
-            System.out.println(user.getTokenValidity() + " ... " + authenticationTokenDetails.getIssuedDate());
             throw InvalidAuthenticationTokenException.EXPIRED_TOKEN();
         }
 

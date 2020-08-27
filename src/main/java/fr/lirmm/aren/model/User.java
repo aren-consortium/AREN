@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.lirmm.aren.model.ws.DataView;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.JoinTable;
 import org.hibernate.annotations.Filter;
@@ -97,7 +98,7 @@ public class User extends AbstractEntEntity implements Serializable {
     private ZonedDateTime lastLogin;
 
     @Column(name = "token_validity")
-    private ZonedDateTime tokenValidity = ZonedDateTime.now();
+    private ZonedDateTime tokenValidity = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
     @JsonView(DataView.Internal.class)
     @Column(name = "password")

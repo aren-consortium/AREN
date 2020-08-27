@@ -13,10 +13,10 @@ import javax.ws.rs.core.HttpHeaders;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.security.token.AuthenticationTokenService;
 import fr.lirmm.aren.service.CasAuthentificationService;
-import fr.lirmm.aren.service.UserService;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.servlet.http.Cookie;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 /**
@@ -63,7 +63,8 @@ public class CasLogin extends HttpServlet {
                 cookie.setDomain(domain);
                 cookie.setPath("/");
                 cookie.setMaxAge(maxAge);
-                cookie.setSecure(true);
+                cookie.setSecure(false);
+                cookie.setHttpOnly(true);
                 response.addCookie(cookie);
             } catch (MalformedURLException ex) {
             }

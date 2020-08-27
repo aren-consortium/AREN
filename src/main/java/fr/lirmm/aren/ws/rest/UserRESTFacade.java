@@ -168,6 +168,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         if (getUser().getAuthority() == User.Authority.GUEST) {
             user.setActive(false);
             super.create(user);
+            System.out.println(user.getTokenValidity());
             try {
                 sendLink(user, "mail_new_user_subject", "mail_new_user_body");
             } catch (MessagingException ex) {
@@ -194,6 +195,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
 
         String token = authenticationTokenService.issueToken(user, 24L * 60 * 60);
+        System.out.println(authenticationTokenService.parseToken(token).getIssuedDate());
         String activationLink;
         String localSubject;
         String localBody;
