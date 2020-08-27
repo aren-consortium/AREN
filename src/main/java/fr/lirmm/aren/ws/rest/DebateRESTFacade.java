@@ -150,7 +150,6 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
     @Override
     @RolesAllowed({"MODO"})
     public void remove(Long id) {
-        debateService.find(id);
         super.remove(id);
     }
 
