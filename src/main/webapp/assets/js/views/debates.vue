@@ -21,7 +21,7 @@
                     v-bind:tooltip="$t('helper.remove_debate')"
                     v-bind:tooltip-disabled="$t('helper.cannot_remove_debate')"
                     v-bind:disabled="debate.commentsCount !== 0"
-                    @press="deleteDebate(document)"
+                    @press="deleteDebate(debate)"
                     icon="delete">
                 </action-button>
             </template>
