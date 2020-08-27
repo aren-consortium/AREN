@@ -7218,6 +7218,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
     width: 490px; }
 
 #home #welcomeCallout {
+    margin: 0;
     color: #B84000; }
 #home #welcomeCallout img {
     max-height: 100px; }
