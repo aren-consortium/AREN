@@ -14,6 +14,7 @@ import fr.lirmm.aren.model.AbstractEntity;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.model.ws.ChangePassword;
 import fr.lirmm.aren.model.ws.UserCredentials;
+import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.security.token.AuthenticationTokenDetails;
 import fr.lirmm.aren.security.token.AuthenticationTokenService;
 import fr.lirmm.aren.service.AuthentificationService;
@@ -32,9 +33,11 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * JAX-RS resource class for Users managment
@@ -62,6 +65,10 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
 
     @Inject
     private NotificationService notificationService;
+
+    @Inject
+    @Configurable("reverse-proxy")
+    private String reverseProxy;
 
     /**
      *
@@ -168,17 +175,16 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         if (getUser().getAuthority() == User.Authority.GUEST) {
             user.setActive(false);
             super.create(user);
-            System.out.println(user.getTokenValidity());
             try {
                 sendLink(user, "mail_new_user_subject", "mail_new_user_body");
             } catch (MessagingException ex) {
                 super.remove(user.getId());
                 throw new RuntimeException();
             }
-        } else if (!getUser().hasMoreRightThan(user)) {
-            throw AccessDeniedException.PERMISSION_MISSING();
-        } else {
+        } else if (getUser().hasMoreRightThan(user)) {
             super.create(user);
+        } else {
+            throw AccessDeniedException.PERMISSION_MISSING();
         }
         return user;
     }
@@ -199,8 +205,14 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         String activationLink;
         String localSubject;
         String localBody;
+
+        String serverRoot = this.reverseProxy;
+        if (serverRoot.length() == 0) {
+            serverRoot = request.getRequestURL().substring(0, request.getRequestURL().length() - "/ws/users".length());
+        }
+
         if (returnUrl != null && !returnUrl.isEmpty()) {
-            activationLink = returnUrl.replace("{token}", token);
+            activationLink = serverRoot + returnUrl.replace("{token}", token);
             localSubject = messages.getString(subject);
             localBody = MessageFormat.format(messages.getString(body), activationLink, activationLink);
         } else {

@@ -109,7 +109,7 @@
                         <li v-else>
                             <a class="waves-effect waves-light btn" @click="login()">{{ $t('menu.login') }}</a>
                             <% if (canMail) {%>
-                            <a class="waves-effect waves-light btn" @click="signIn()">{{ $t('menu.signin') }}</a>
+                            <a class="waves-effect waves-light btn" @click="signUp()">{{ $t('menu.signin') }}</a>
                             <% }%>
                         </li>
                         <li id="help" @click="helpMe()">
@@ -268,35 +268,11 @@
                             }
                         });
                     },
-                    signIn( ) {
-                        this.$refs.createUserModal.open((newUser) => {
-                            if (newUser) {
-                                ArenService.Users.create({
-                                    data: newUser,
-                                    query: {returnUrl: "<%=serverRoot%>?activation=true&token={token}"},
-                                    onSuccess: () => this.$confirm({
-                                            title: this.$t('user_created'),
-                                            message: this.$t('helper.user_created_email'),
-                                            isInfo: true
-                                        })
-                                });
-                            }
-                        });
+                    signUp( ) {
+                        this.$refs.createUserModal.open();
                     },
                     forgotPassword() {
-                        this.$refs.resetPasswdModal.open((username) => {
-                            if (username) {
-                                ArenService.Users.resetPasswd({
-                                    data: username,
-                                    query: {returnUrl: "<%=serverRoot%>?resetPassword=true&token={token}"},
-                                    onSuccess: () => this.$confirm({
-                                            title: this.$t('password_forgotten'),
-                                            message: this.$t('helper.password_forgotten_email'),
-                                            isInfo: true
-                                        })
-                                });
-                            }
-                        });
+                        this.$refs.resetPasswdModal.open();
                     },
                     helpMe() {
                         this.help = !this.help;

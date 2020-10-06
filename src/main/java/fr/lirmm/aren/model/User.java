@@ -422,7 +422,7 @@ public class User extends AbstractEntEntity implements Serializable {
      */
     @Override
     public boolean isRemovable() {
-        return institution == null && this.getComments().size() == 0;
+        return this.getInstitution().getId() == 0L && this.getComments().size() == 0;
     }
 
     /**

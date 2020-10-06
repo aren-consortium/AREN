@@ -3,7 +3,7 @@
 
         <template v-slot:title>{{ $t('user_creation') }}</template>
 
-        <div class="row">
+        <div v-if="!loading" class="row">
             <text-input type="text" class="col s6"
                         v-model="user.username"
                         v-bind:label="$t('username')"
@@ -50,10 +50,13 @@
                 </select>
             </div>
         </div>
+        <div v-else class="row">
+            {{ $t("helper.creating_user")}}
+        </div>
 
         <template v-slot:footer>
-            <button @click="close()" class="waves-effect waves-green btn-flat">{{ $t('cancel') }}</button>
-            <button @click="close( user );" v-bind:disabled="!samePasswords || exists.username || exists.email || !validEmail" class="waves-effect waves-green btn-flat">{{ $t('validate') }}</button>
+            <button @click="close()" v-bind:disabled="loading" class="waves-effect waves-green btn-flat">{{ $t('cancel') }}</button>
+            <button @click="signUp();" v-bind:disabled="loading || !samePasswords || exists.username || exists.email || !validEmail" class="waves-effect waves-green btn-flat">{{ $t('validate') }}</button>
         </template>
 
     </modal-layout>
@@ -67,7 +70,8 @@
                 user: new User( ),
                 passwordCheck: "",
                 exists: {username: false, email: false},
-                checkExistsTimeout: -1
+                checkExistsTimeout: -1,
+                loading: false
             };
         },
         computed: {
@@ -80,6 +84,7 @@
         },
         methods: {
             afterOpen( ) {
+                this.loading = false;
                 this.user = false;
                 Vue.nextTick(( ) => {
                     this.user = new User( );
@@ -97,6 +102,21 @@
                         }
                     });
                 }, 500);
+            },
+            signUp() {
+                this.loading = true;
+                ArenService.Users.create({
+                    data: this.user,
+                    query: {returnUrl: "?activation=true&token={token}"},
+                    onSuccess: () => {
+                        this.close();
+                        this.$confirm({
+                            title: this.$t('user_created'),
+                            message: this.$t('helper.user_created_email'),
+                            isInfo: true
+                        });
+                    }
+                });
             }
         }
     };

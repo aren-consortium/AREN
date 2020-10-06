@@ -17,8 +17,6 @@ import fr.lirmm.aren.service.CasAuthentificationService;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.servlet.http.Cookie;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
 
 /**
  *

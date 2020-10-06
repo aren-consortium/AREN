@@ -55,20 +55,20 @@ public class DebateService extends AbstractService<Debate> {
     }
 
     private TypedQuery<Debate> generateQuery(Long debateId, User user, Long categoryId, boolean withDocument, boolean withComments, boolean withTeams, boolean withGuests, boolean withUsers) {
-        boolean hasUser = user != null && user.is(Authority.USER) && !user.is(Authority.MODO);
+        boolean isUser = user != null && user.is(Authority.USER) && !user.is(Authority.ADMIN);
         boolean onlyPublic = user != null && user.getAuthority().equals(Authority.GUEST);
         TypedQuery<Debate> query = getEntityManager().createQuery("SELECT d "
                 + "FROM Debate d "
                 + (withComments
                         ? "LEFT JOIN FETCH d.comments c "
                         : "")
-                + (withTeams || withUsers || hasUser
+                + (withTeams || withUsers || isUser
                         ? "LEFT JOIN " + (withTeams || withUsers ? "FETCH" : "") + " d.teams t "
                         : "")
-                + (withUsers || hasUser
+                + (withUsers || isUser
                         ? "LEFT JOIN " + (withUsers ? "FETCH" : "") + " t.users u "
                         : "")
-                + (withGuests || hasUser
+                + (withGuests || isUser
                         ? "LEFT JOIN " + (withGuests ? "FETCH" : "") + " d.guests g "
                         : "")
                 + (withDocument
@@ -80,7 +80,7 @@ public class DebateService extends AbstractService<Debate> {
                 + (categoryId != null
                         ? "AND d.document.category.id = :categoryId "
                         : "")
-                + (hasUser
+                + (isUser
                         ? "AND (d.openPublic IS TRUE "
                         + "OR :user = d.owner "
                         + "OR :user IN g "
@@ -94,7 +94,7 @@ public class DebateService extends AbstractService<Debate> {
         if (debateId != null) {
             query.setParameter("debateId", debateId);
         }
-        if (hasUser) {
+        if (isUser) {
             query.setParameter("user", user);
         }
         if (categoryId != null) {
