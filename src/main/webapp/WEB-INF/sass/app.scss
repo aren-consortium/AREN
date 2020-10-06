@@ -114,7 +114,7 @@ html {
                 :not(.documented) {
                     pointer-events: none;
                 }
-                .documented, #help {
+                .documented {
                     pointer-events: all;
                 }
             }

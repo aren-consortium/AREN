@@ -2,11 +2,7 @@
     <div class="scroll-content" id="home">
         <div id="welcomeCallout" class="row light-color valign-wrapper">
             <img class="col" src="assets/img/imageleves.png">
-                <p class="col">
-                    Bienvenue dans l'espace de débat AREN !<br/>
-                    Il ne s'agit pas d'un chat ou d'un forum, mais d'un lieu d'apprentissage à l'expression argumentée. <br/>
-                    Bien savoir écouter pour mieux répondre, chasser les arguments fallacieux... Amusez-vous à exercer votre esprit critique !<br/>
-                </p>
+                <p class="col" v-html="$t('helper.welcome')"></p>
         </div>
 
         <div class="container">

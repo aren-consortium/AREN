@@ -121,6 +121,8 @@ const messages = {
         running: "En cours...",
         import: "Importer",
         helper: {
+            welcome: "Bienvenue sur la plateforme AREN (Argumentation & Numérique)<br>Il s'agit d’un espace numérique de débat pour pratiquer l’argumentation.<br>Prendre en compte les arguments des autres et justifier son opinion pour mieux argumenter et exercer son esprit critique !",
+            creating_user: "Création en cour, veuillez patienter...",
             mark_as_read: "Marquer comme lue",
             mark_as_unread: "Marquer comme non lue",
             cas_login: "Connectez-vous via le system CAS de l'ENT",
@@ -284,17 +286,16 @@ const messages = {
             method: "Méthode"
         },
         documentation: {
-            help: "<h1>Aide</h1><p>Cliquez sur la flèche pour passer à l'aide suivante, ou survolez les éléments qui vous questionnent.</p><p>Cliquez à nouveau sur l'icone d'aide pour quitter l'interface actuelle.</p>",
+            help: "<h1>Aide</h1><p>Cliquez sur la flèche pour passer à l'aide suivante, ou survolez les éléments qui vous questionnent.</p>",
             user_panel: "<h1>Panneau d'utilisateur⋅ice</h1><p>Vous permet de changer de mot de passe et de vous déconnecter</p>",
             notification_panel: "<h1>Restez informé des débats auxquels vous participez.</h1><p>Vous recevrez une notification lorsqu'une réponse est postée à un de vos arguments et lorsque vous avez été invité⋅e à un nouveau débat.</p>",
             create_debate_with: "<h1>Débatre avec</h1><p>Sélectionnez les personnes et groupes qui pouront participer au débat. Si rien n'est sélectioné le débat sera public, accessible à tou⋅te⋅s</p>",
             create_debate_document: "<h1>Débatre sur</h1><p>Sélectionnez le document sur lequel vous désirez porter le débat</p>",
             create_debate_recap: "<h1>Récapitulatif</h1><p>Vérifiez les informations saisies et selectionez des paramètres avancés</p>",
-            debate_display: "<h1>Informations supplémentaires</h1><p>Sélectionnez <b>Document</b> pour afficher le document à débatre.<br>Sélectionnez <b>Thème</b> pour retrouver les arguments en lien avec une thématique donnée.<br>Sélectionnez <b>Sélections</b> pour afficher les parties de texte le splus argumentées.</p>",
+            debate_display: "<h1>Informations supplémentaires</h1><p>Sélectionnez <b>Document</b> pour afficher le document à débattre.<br>Sélectionnez <b>Thème</b> pour retrouver les arguments en lien avec une thématique donnée.<br>Sélectionnez <b>Sélections</b> pour afficher les parties de texte les plus argumentées.</p>",
             debate_sort: "<h1>Tri des arguments</h1><p>Triez les arguments par <b>date</b> de rédaction ou par <b>position</b> dans le document.</p>",
-            debate_document: "<h1>Document à débatre</h1><p>Ici s'affiche le texte à débatre, lisez attentivement son intégralité avant de porposer des arguments.</p><p>Sélectionnez une partie du texte sur laquelle vous souhaitez intervenir, une icone apparaitra pour vous permettre d'argumenter.</p><p>Vous êtes sur une plateforme dédiée au débat, n'hésitez pas à défendre vos arguments avec des sources, des explications, des connaissances, etc.</p>",
-            debate_bulets: "<h1>Puces d'arguments</h1><p>Les puces représentent les arguments existants sur la ligne du document face à elles. Les couleurs informent de l'opinion de l'argument.</p><p>Au survol, la partie argumentée est mise en surbrillance.<br>Au clic, l'argument est sélectionné dans le panneau de droite.</p>",
-            debate_bulets: "<h1>Puces d'arguments</h1><p>Les puces représentent les arguments existants sur la ligne du document face à elles. Les couleurs informent de l'opinion de l'argument.</p><p>Au survol, la partie argumentée est mise en surbrillance.<br>Au clic, l'argument est sélectionné dans le panneau de droite.</p>",
+            debate_document: "<h1>Document à débattre</h1><p>Ici s'affiche le texte à débattre, lisez-le attentivement avant de proposer des arguments.</p><p>Sélectionnez une partie du texte sur laquelle vous souhaitez intervenir, une icône apparaîtra pour vous permettre d'argumenter.</p><p>Vous êtes sur une plateforme dédiée au débat, n'hésitez pas à défendre votre opinion avec des arguments : s’appuyer sur des données, utiliser des connaissances, donner des exemples, préciser vos sources, etc.</p>",
+            debate_bulets: "<h1>Puces d'arguments</h1><p>Les puces indiquent les sélections du texte sur lesquelles des arguments ont été produits. Les couleurs permettent de savoir si les arguments sont pour ou contre la sélection.</p><p>Au survol, la partie argumentée est mise en surbrillance.<br>Au clic, l'argument est sélectionné dans le panneau de droite.</p>",
             debate_themes: "<h1>Thèmes du débat</h1><p>Saisissez un mot ou un groupe de mot définissant un thème et pressez <b>Entrée</p> pour valier. Les argument savec le thème saisis seront alors calculé et mis en lien avec celui-ci.</p><p>Vous pouvez supprimer un thème an cliquant sur <i class='close material-icons'>delete_forever</i></p>",
             debate_scraps: "<h1>Textes les plus selectioné</h1><p>Voici la liste des portions de texte du document les plus sélectionnées pour argumenter. Chaque seletion est relier aux arguments qui la contienne.</p>",
             debate_spaghettis: "<h1>Spaghettis</h1><p></p>"

@@ -212,9 +212,15 @@
         stroke: white;
     }
 
-    .next {
+    .next, .close {
         user-select: none;
         pointer-events: all !important;
+    }
+    
+    .close {
+        top: 16px;
+        right: 6px;
+        padding-top: 0;
     }
 }
 

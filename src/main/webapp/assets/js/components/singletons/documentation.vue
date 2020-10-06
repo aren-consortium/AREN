@@ -7,6 +7,7 @@
             </svg>
             <div class="content" v-html="value"></div>
             <div class="next fixed-action-btn btn-floating btn-large" @click="next()"><i class="material-icons">arrow_forward</i></div>
+            <div class="close fixed-action-btn btn-floating btn-small red" @click="hide()"><i class="material-icons">close</i></div>
         </div>
     </transition>
 </template>
@@ -119,6 +120,7 @@
             hide() {
                 this.show = false;
                 this.first = true;
+                this.$root.help = false;
             },
             getVisibleRect(el) {
                 let box = el.getBoundingClientRect();

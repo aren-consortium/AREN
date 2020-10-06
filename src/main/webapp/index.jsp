@@ -171,7 +171,9 @@
 
             <toaster></toaster>
             <tooltip></tooltip>
-            <documentation></documentation>
+            <documentation
+                @display="help=$event">
+            </documentation>
             <confirm-dialog></confirm-dialog>
         </div>
 
@@ -275,11 +277,9 @@
                         this.$refs.resetPasswdModal.open();
                     },
                     helpMe() {
-                        this.help = !this.help;
-                        if (this.help) {
+                        if (!this.help) {
+                            this.help = true;
                             this.$documentation.display(this.$t('documentation.help'));
-                        } else {
-                            this.$documentation.hide();
                         }
                     }
                 },
