@@ -100,6 +100,8 @@ const messages = {
         users: "Utilisateur⋅rice⋅s",
         guests: "Invité⋅e⋅s",
         debates: "Débats",
+        new_debate: "Nouveau débat",
+        invite_in_debate: "Inviter au débat",
         SUPERADMIN: "Super administrateur⋅rice",
         SUPERADMIN: "Root",
         ADMIN: "Administrateur⋅rice",
@@ -218,7 +220,6 @@ const messages = {
             documents: "Documents",
             my_debates: "Mes débats",
             public_debates: "Débats publics",
-            archives: "Débats archivés",
             logout: "Déconnection",
             login: "Se connecter",
             signin: "S'enregistrer"

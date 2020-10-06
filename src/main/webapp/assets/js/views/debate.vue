@@ -161,8 +161,7 @@
             </div>
         </div>
 
-        <div v-if="!$root.isArchive"
-             class="selection_popup"
+        <div class="selection_popup"
              v-bind:style="'top: ' + (popup.y - 44) + 'px; left: ' + (popup.x - 44) + 'px;'"
              @click="createComment()"
              @mousedown.stop=""
@@ -170,7 +169,7 @@
             <i class="material-icons">comment</i>
         </div>
 
-        <template v-slot:addons v-if="!$root.isArchive">
+        <template v-slot:addons>
             <comment-modal
                 id="commentModal"
                 ref="commentModal"
@@ -270,32 +269,24 @@
         },
         created( ) {
             this.fetchData( );
-            if (!this.$root.isArchive) {
-                ArenService.CommentListener.listen({
-                    id: this.$route.params.id,
-                    onMessage: (comment) => {
-                        Vue.set(this.displayableComments, comment.id, true);
-                    }
-                });
-            }
+            ArenService.CommentListener.listen({
+                id: this.$route.params.id,
+                onMessage: (comment) => {
+                    Vue.set(this.displayableComments, comment.id, true);
+                }
+            });
         },
         methods: {
             fetchData( ) {
-                if (!this.$root.isArchive) {
-                    ArenService.Debates.get({
-                        id: this.$route.params.id,
-                        onSuccess: (debate) => {
-                            this.debate = debate;
-                        },
-                        onError: () => {
-                            this.$router.push("/404");
-                        }
-                    });
-                } else {
-                    Archive.importation(() => {
-                        this.debate = Archive.get(this.$route.params.id, Debate);
-                    });
-                }
+                ArenService.Debates.get({
+                    id: this.$route.params.id,
+                    onSuccess: (debate) => {
+                        this.debate = debate;
+                    },
+                    onError: () => {
+                        this.$router.push("/404");
+                    }
+                });
             },
             fetchScraps() {
                 ArenService.Debates.getScraps({
@@ -420,42 +411,40 @@
                 });
             },
             selectionHandler(comment) {
-                if (!this.$root.isArchive) {
-                    let selection = getSelection( );
-                    let position = selection.anchorNode.compareDocumentPosition(selection.focusNode);
-                    let backward = false;
-                    if (!position && selection.anchorOffset > selection.focusOffset ||
-                            position === Node.DOCUMENT_POSITION_PRECEDING)
-                        backward = true;
-                    let range = selection.getRangeAt(0);
-                    if (!selection.isCollapsed) {
-                        range.affineToWord();
-                        if (this.newComment === false) {
-                            this.newComment = new Comment( );
-                        }
-                        if (!this.$refs.commentModal.isOpen()) {
-                            this.newComment.debate = this.debate;
-                            this.newComment.hypostases = [];
-                            this.newComment.tags = [];
-                            this.newComment.parent = comment;
-                            this.newComment.selection = range.getHtml();
-                            let container = this.getCommentContainer(this.newComment);
-                            this.newComment.startContainer = container.getChildPathTo(range.startContainer);
-                            this.newComment.endContainer = container.getChildPathTo(range.endContainer);
-                            this.newComment.startOffset = range.startOffset;
-                            this.newComment.endOffset = range.endOffset;
+                let selection = getSelection( );
+                let position = selection.anchorNode.compareDocumentPosition(selection.focusNode);
+                let backward = false;
+                if (!position && selection.anchorOffset > selection.focusOffset ||
+                        position === Node.DOCUMENT_POSITION_PRECEDING)
+                    backward = true;
+                let range = selection.getRangeAt(0);
+                if (!selection.isCollapsed) {
+                    range.affineToWord();
+                    if (this.newComment === false) {
+                        this.newComment = new Comment( );
+                    }
+                    if (!this.$refs.commentModal.isOpen()) {
+                        this.newComment.debate = this.debate;
+                        this.newComment.hypostases = [];
+                        this.newComment.tags = [];
+                        this.newComment.parent = comment;
+                        this.newComment.selection = range.getHtml();
+                        let container = this.getCommentContainer(this.newComment);
+                        this.newComment.startContainer = container.getChildPathTo(range.startContainer);
+                        this.newComment.endContainer = container.getChildPathTo(range.endContainer);
+                        this.newComment.startOffset = range.startOffset;
+                        this.newComment.endOffset = range.endOffset;
 
-                            let popupPos;
-                            let rects = range.getClientRects( );
-                            if (backward) {
-                                popupPos = {x: rects[0].x, y: rects[0].y};
-                            } else {
-                                popupPos = {x: rects[rects.length - 1].x + rects[rects.length - 1].width, y: rects[rects.length - 1].y};
-                            }
-                            this.popup.x = popupPos.x;
-                            this.popup.y = popupPos.y;
-
+                        let popupPos;
+                        let rects = range.getClientRects( );
+                        if (backward) {
+                            popupPos = {x: rects[0].x, y: rects[0].y};
+                        } else {
+                            popupPos = {x: rects[rects.length - 1].x + rects[rects.length - 1].width, y: rects[rects.length - 1].y};
                         }
+                        this.popup.x = popupPos.x;
+                        this.popup.y = popupPos.y;
+
                     }
                 }
             },

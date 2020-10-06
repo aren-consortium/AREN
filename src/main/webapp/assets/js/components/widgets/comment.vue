@@ -7,7 +7,7 @@
             <div v-if="isVisible" ref="innerComment">
                 <label class="comment-header">
                     <h2 class="username">{{ comment.owner.authority === 'DELETED' ? $t('anonymous_user') : comment.owner.fullName() }}</h2>
-                    <router-link class="clickable" v-bind:to="($root.isArchive ? '/archives/' : '/debates/') + comment.debate.id + '?comment=' + comment.id">
+                    <router-link class="clickable" v-bind:to="'/debates/' + comment.debate.id + '?comment=' + comment.id">
                         <time>{{ comment.created.toLocaleString() }}</time>
                     </router-link>
                     <!--tooltip v-if="!preview" v-bind:value="$t('helper.report_comment')">

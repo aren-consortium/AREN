@@ -1,14 +1,14 @@
 <template>
     <base-layout id="debates">
         <template v-slot:title>
-            <h1>{{ $root.isArchive ? $t("menu.archives") : $root.user.is('USER') ? $t('menu.my_debates') : $t('menu.public_debates') }}</h1>
+            <h1>{{ $root.user.is('USER') ? $t('menu.my_debates') : $t('menu.public_debates') }}</h1>
         </template>
 
         <template v-slot:right>
-            <router-link v-if="!$root.isArchive && $root.user.authority !== 'USER'"
+            <router-link v-if="$root.user.is('MODO')"
                          class="waves-effect waves-light btn"
                          to="/createDebate">
-                Nouveau débat
+                {{ $t('new_debate') }}
             </router-link>
         </template>
 
@@ -16,7 +16,7 @@
             v-bind:categories="categories"
             v-bind:extendable="true">
 
-            <template v-if="!$root.isArchive && $root.user.is('MODO')" v-slot:side.actions="{ debate }">
+            <template v-if="$root.user.is('MODO')" v-slot:side.actions="{ debate }">
                 <action-button
                     v-bind:tooltip="$t('helper.remove_debate')"
                     v-bind:tooltip-disabled="$t('helper.cannot_remove_debate')"
@@ -25,16 +25,16 @@
                     icon="delete">
                 </action-button>
             </template>
-            <template v-if="!$root.isArchive && $root.user.is('MODO')" v-slot:add.contributor="{ debate }">
-                <span v-if="$root.user.is('MODO')" class="waves-effect waves-light btn"
+            <template v-if="$root.user.is('MODO')" v-slot:add.contributor="{ debate }">
+                <span class="waves-effect waves-light btn"
                       @click="edit( debate )">
-                    Inviter au débat
+                    {{ $t('invite_in_debate') }}
                 </span>
             </template>
 
         </debates-grid>
 
-        <template v-slot:addons v-if="!$root.isArchive && $root.user.is('MODO')">
+        <template v-slot:addons v-if="$root.user.is('MODO')">
             <contributor-modal
                 ref="contributorModal">
             </contributor-modal>
@@ -54,22 +54,16 @@
         },
         methods: {
             fetchData( ) {
-                if (!this.$root.isArchive) {
-                    this.categories = [];
-                    let categoryId = this.$route.query.category;
-                    ArenService.Debates.getAll({
-                        query: categoryId ? {category: categoryId, overview: true} : {overview: true},
-                        onSuccess: debates => debates.forEach(d => {
-                                if (!this.categories.includes(d.document.category)) {
-                                    this.categories.push(d.document.category)
-                                }
-                            })
-                    });
-                } else {
-                    Archive.importation(() => {
-                        this.categories = Archive.Category;
-                    });
-                }
+                this.categories = [];
+                let categoryId = this.$route.query.category;
+                ArenService.Debates.getAll({
+                    query: categoryId ? {category: categoryId, overview: true} : {overview: true},
+                    onSuccess: debates => debates.forEach(d => {
+                            if (!this.categories.includes(d.document.category)) {
+                                this.categories.push(d.document.category)
+                            }
+                        })
+                });
             },
             edit(debate) {
                 this.$refs.contributorModal.debate = debate;

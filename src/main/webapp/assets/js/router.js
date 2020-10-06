@@ -12,9 +12,6 @@ const router = new VueRouter({
         {path: '/debates/:id', component: vueLoader('views/debate')},
         {path: '/debates/:id/restitution', component: vueLoader('views/restitution')},
         {path: '/debates/:id/print', component: vueLoader('views/debatePrint')},
-        {path: '/archives', component: vueLoader('views/debates')},
-        {path: '/archives/:id', component: vueLoader('views/debate')},
-        {path: '/archives/:id/restitution', component: vueLoader('views/restitution')},
         {path: '/aaf', component: vueLoader('views/aaf')},
         {path: '*', component: vueLoader('views/404')}
     ]

@@ -40,7 +40,6 @@
         <script src="assets/js/service/i18n.min.js"></script>
         <script src="assets/js/service/aren.min.js"></script>
         <script src="assets/js/utils.min.js"></script>
-        <script src="assets/js/archives/import.min.js"></script>
         <script src="assets/js/router.min.js"></script>
         <script src="assets/js/vueCfg.min.js"></script>
         <% } else { %>
@@ -57,7 +56,6 @@
         <script src="assets/js/service/i18n.js"></script>
         <script src="assets/js/service/aren.js"></script>
         <script src="assets/js/utils.js"></script>
-        <script src="assets/js/archives/import.js"></script>
         <script src="assets/js/router.js"></script>
         <script src="assets/js/vueCfg.js"></script>
         <% }%>
@@ -76,7 +74,6 @@
                         <li v-if="user.is('MODO')"><router-link to="/teams"        v-bind:class="{ active: $route.path === '/teams'        }" >{{ $t('menu.teams') }}</router-link></li>
                         <li v-if="user.is('MODO')"><router-link to="/documents"    v-bind:class="{ active: $route.path === '/documents'    }" >{{ $t('menu.documents') }}</router-link></li>
                         <li><router-link to="/debates"   v-bind:class="{ active: $route.path === '/debates' }"  >{{ user.is('USER') ? $t('menu.my_debates') : $t('menu.public_debates') }}</router-link></li>
-                        <li><router-link to="/archives"  v-bind:class="{ active: $route.path === '/archives' }" >{{ $t('menu.archives') }}</router-link></li>
                     </ul>
 
                     <ul class="right">
@@ -197,14 +194,6 @@
                     error: false,
                     mounted: false,
                     help: false
-                },
-                computed: {
-                    isArchive: {
-                        get() {
-                            return this.$route.path.includes("archives");
-                        },
-                        set() {}
-                    }
                 },
                 created() {
                     this.$router.beforeEach((to, from, next) => {

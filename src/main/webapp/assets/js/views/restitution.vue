@@ -75,21 +75,15 @@
         },
         methods: {
             fetchData() {
-                if (this.$root.isArchive) {
-                    Archive.importation(() => {
-                        this.debate = Archive.get(this.$route.params.id, Debate);
-                    }, this.$route.params.id);
-                } else {
-                    ArenService.Debates.get({
-                        id: this.$route.params.id,
-                        onSuccess: (debate) => {
-                            this.debate = debate;
-                        },
-                        onError: () => {
-                            this.$router.push("/404");
-                        }
-                    });
-                }
+                ArenService.Debates.get({
+                    id: this.$route.params.id,
+                    onSuccess: (debate) => {
+                        this.debate = debate;
+                    },
+                    onError: () => {
+                        this.$router.push("/404");
+                    }
+                });
             }
         },
         components: {
