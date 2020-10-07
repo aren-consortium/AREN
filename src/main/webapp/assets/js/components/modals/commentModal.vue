@@ -123,7 +123,7 @@
         <template v-slot:footer>
             <button @click="close(false)" class="waves-effect waves-green btn-flat">{{ $t('cancel') }}</button>
             <button @click="close(true)"
-                     v-bind:disabled="!comment.opinion || !comment.argumentation || (comment.opinion !== 'NEUTRAL' && !comment.reformulation)"
+                     v-bind:disabled="!isFilled"
                      class="waves-effect waves-green btn-flat">{{ $t('validate') }}</button>
         </template>
 
@@ -143,6 +143,11 @@
                 expertMode: false
 
             };
+        },
+        computed: {
+            isFilled() {
+                return this.comment.opinion && this.comment.argumentation && (this.comment.opinion === 'NEUTRAL' || this.comment.reformulation.trim().length > 0);
+            }
         },
         watch: {
             isArgument(newVal, oldVal) {

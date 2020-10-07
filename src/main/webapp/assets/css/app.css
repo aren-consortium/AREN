@@ -6634,23 +6634,26 @@ input[type=range]::-ms-thumb {
     padding-top: 0; }
 
 .dropdown-button {
+  position: relative;
+  display: block;
   overflow: visible;
-  margin: 12px; }
+  margin: 12px 5px;
+  line-height: 1; }
   .dropdown-button:focus .dropdown-content, .dropdown-button:focus-within .dropdown-content {
     display: block;
     opacity: 1; }
   .dropdown-button .dropdown-content {
     overflow: visible;
-    top: 100%;
+    top: calc(100% + 12px);
     left: auto;
-    right: 12px;
+    right: 0;
     min-width: 250px;
     width: min-content; }
     .dropdown-button .dropdown-content::before {
       content: "";
       position: absolute;
       top: -20px;
-      right: 12px;
+      right: 10px;
       border-width: 10px;
       border-style: solid;
       border-color: transparent transparent white transparent; }
@@ -6966,7 +6969,7 @@ html body {
     min-height: 100vh;
     flex-direction: column; }
     html body #app #help {
-      margin-right: 10px;
+      margin: 0 10px;
       cursor: pointer; }
     html body #app.help {
       cursor: help; }
@@ -7004,7 +7007,7 @@ html body {
           width: 85%; }
           html body #app .current-view-wrapper .current-view > .container > #header {
             position: sticky;
-            padding-left: 25px;
+            padding: 0 17px;
             top: 64px;
             background: white;
             display: grid;
@@ -7141,7 +7144,8 @@ nav .menu a {
 nav #userSettings .dropdown-content a.btn, nav #userSettings .dropdown-content a.btn-large, nav #userSettings .dropdown-content a.btn-small {
   background: #B2B2B2;
   color: white;
-  width: calc(100% - 30px); }
+  width: calc(100% - 30px);
+  margin: 10px 15px; }
 nav #userSettings .dropdown-content #changePasswd {
   margin: 5px; }
   nav #userSettings .dropdown-content #changePasswd .input-field input:not(:focus) {
@@ -7265,10 +7269,13 @@ nav #notifications {
   margin: 0; }
 #debate #options {
   position: sticky;
+  padding: 0 17px;
   top: 124px;
   background: white;
   z-index: 2;
   text-align: right; }
+  #debate #options .col {
+    padding: 0; }
   #debate #options #sortCommentsBy, #debate #options #leftDisplay {
     position: absolute;
     bottom: 0; }

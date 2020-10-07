@@ -86,7 +86,7 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
      */
     @POST
     @Path("scalar")
-    @RolesAllowed({"USER"})
+    @RolesAllowed({"GUEST"})
     public String getScalar(Comment comment) {
         return httpRequestService.getScalar(comment);
     }

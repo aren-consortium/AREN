@@ -216,7 +216,7 @@
         user-select: none;
         pointer-events: all !important;
     }
-    
+
     .close {
         top: 16px;
         right: 6px;
@@ -225,8 +225,11 @@
 }
 
 .dropdown-button {
+    position: relative;
+    display: block;
     overflow: visible;
-    margin: 12px;
+    margin: 12px 5px;
+    line-height: 1;
     &:focus, &:focus-within {
         .dropdown-content {
             display: block;
@@ -235,16 +238,16 @@
     }
     .dropdown-content {
         overflow: visible;
-        top: 100%;
+        top: calc(100% + 12px);
         left: auto;
-        right: 12px;
+        right: 0;
         min-width: 250px;
         width: min-content;
         &::before {
             content: "";
             position: absolute;
             top: -20px;
-            right: 12px;
+            right: 10px;
             border-width: 10px;
             border-style: solid;
             border-color: transparent transparent white transparent;

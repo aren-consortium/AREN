@@ -106,7 +106,7 @@ html {
             min-height: 100vh;
             flex-direction: column;
             #help {
-                margin-right: 10px;
+                margin: 0 10px;
                 cursor: pointer;
             }
             &.help {
@@ -150,7 +150,7 @@ html {
                         width: 85%;
                         > #header {
                             position: sticky;
-                            padding-left: 25px;
+                            padding: 0 17px;
                             top: $navigation-height;
                             background: $background-color;
                             display: grid;
@@ -337,6 +337,7 @@ nav {
                 background: $grey-color;
                 color: white;
                 width: calc(100% - 30px);
+                margin: 10px 15px;
             }
             #changePasswd {
                 margin: 5px;
@@ -522,10 +523,14 @@ nav {
 
     #options {
         position: sticky;
+        padding: 0 17px;
         top: ($navigation-height + $header-height);
         background: $background-color;
         z-index: 2;
         text-align: right;
+        .col {
+            padding: 0;
+        }
         #sortCommentsBy, #leftDisplay {
             position: absolute;
             bottom: 0;
@@ -1305,7 +1310,7 @@ nav {
     .D3_tree {
         width: 100%;
         overflow: auto;
-        height: calc(100vh - 172px);
+        height: calc(100vh - 172px); 
         position: relative;
         .detail {
             background: $background-color;

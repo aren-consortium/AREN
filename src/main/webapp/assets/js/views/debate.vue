@@ -454,18 +454,26 @@
                         : this.$refs.documentDisplay;
             },
             createComment( ) {
-                this.$refs.commentModal.open((returnValue) => {
-                    if (returnValue) {
-                        ArenService.Debates.addComment({
-                            id: this.newComment.debate.id,
-                            data: this.newComment,
-                            loading: false
-                        });
-                    }
-                });
-                this.hidePopup( );
-                // For the selected text to stay
-                this.highlight(this.newComment);
+                if (!this.$root.user.is('USER')) {
+                    this.$confirm({
+                        title: this.$t('not_connected'),
+                        message: this.$t('helper.not_connected'),
+                        isInfo: true
+                    });
+                } else {
+                    this.$refs.commentModal.open((returnValue) => {
+                        if (returnValue) {
+                            ArenService.Debates.addComment({
+                                id: this.newComment.debate.id,
+                                data: this.newComment,
+                                loading: false
+                            });
+                        }
+                    });
+                    this.hidePopup( );
+                    // For the selected text to stay
+                    this.highlight(this.newComment);
+                }
             },
             selectComment(comment) {
                 let range = new Range( );

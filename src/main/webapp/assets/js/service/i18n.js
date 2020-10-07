@@ -120,9 +120,12 @@ const messages = {
         without_institution: "Sans établissement",
         running: "En cours...",
         import: "Importer",
+        not_connected: "Vous n'êtes pas connecté⋅e",
+        tutorials: "Tutoriels",
         helper: {
             welcome: "Bienvenue sur la plateforme AREN (Argumentation & Numérique)<br>Il s'agit d’un espace numérique de débat pour pratiquer l’argumentation.<br>Prendre en compte les arguments des autres et justifier son opinion pour mieux argumenter et exercer son esprit critique !",
             creating_user: "Création en cour, veuillez patienter...",
+            not_connected: "Vous devez être inscrit⋅e et connecté⋅e pour réaliser cette action",
             mark_as_read: "Marquer comme lue",
             mark_as_unread: "Marquer comme non lue",
             cas_login: "Connectez-vous via le system CAS de l'ENT",

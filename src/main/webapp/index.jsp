@@ -98,9 +98,10 @@
                                         </span>
                                         <div class="dropdown-content">
                                             <h4 class="dropdown-title"> {{ $root.user.fullName() }}</h4>
-                                            <a class="waves-effect waves-light btn-small" @click="$refs.passwdModal.open()"> {{ $t('change_password') }}</span>
-                                                <a class="waves-effect waves-light btn-small" @click="logout()">{{ $t('menu.logout') }}</a>
-                                                </ul>
+                                            <a class="waves-effect waves-light btn-small" href="" target="_blank" rel="noopener noreferrer"> {{ $t('tutorials') }}</a>
+                                            <a class="waves-effect waves-light btn-small" @click="$refs.passwdModal.open()"> {{ $t('change_password') }}</a>
+                                            <a class="waves-effect waves-light btn-small" @click="logout()">{{ $t('menu.logout') }}</a>
+                                            </ul>
                                         </div>
                                     </span>
                                 </li>
@@ -133,14 +134,15 @@
                         <div class="col l6 s12">
                             <h5 class="white-text">{{ $t("footer.collaborators") }}</h5>
                             <div class="contributors">
-                                <a class="grey-text text-lighten-2" href="https://lirdef.edu.umontpellier.fr"><img src="assets/img/logo-lirdef.png"></a>
-                                <a class="grey-text text-lighten-2" href="http://www.lirmm.fr"><img src="assets/img/logo-lirmm.png"></a>
-                                <a class="grey-text text-lighten-2" href="https://www.ac-montpellier.fr"><img src="assets/img/logo_acad_montpellier.png"></a>
-                                <a class="grey-text text-lighten-2" href="https://cartodebat.com"><img src="assets/img/logo-cartodebat.svg"></a>
-                                <a class="grey-text text-lighten-2" href="http://intactile.com"><img src="assets/img/logo-intactile.svg"></a>
-                                <a class="grey-text text-lighten-2" href="https://www.facebook.com/mezoa.software"><img src="assets/img/logo-mezoa.png"></a>
-                                <a class="grey-text text-lighten-2" href="http://forum-debats.fr/"><img src="assets/img/logo-forum-debate.png"></a>
-                                <a class="grey-text text-lighten-2" href="https://controversciences.org"><img src="assets/img/logo-controversciences.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="http://www.lirmm.fr"><img src="assets/img/logo-lirmm.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="https://lirdef.edu.umontpellier.fr"><img src="assets/img/logo-lirdef.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="https://www.ac-montpellier.fr"><img src="assets/img/logo_acad_montpellier.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/mezoa.software"><img src="assets/img/logo-mezoa.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="http://forum-debats.fr/"><img src="assets/img/logo-forum-debate.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="http://intactile.com"><img src="assets/img/logo-intactile.svg"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="https://www.caissedesdepots.fr/"><img src="assets/img/logo-cdc.jpg"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="https://cartodebat.com"><img src="assets/img/logo-cartodebat.png"></a>
+                                <a class="grey-text text-lighten-2" target="_blank" rel="noopener noreferrer" href="https://controversciences.org"><img src="assets/img/logo-controversciences.png"></a>
                             </div>
                         </div>
                         <div class="col l4 offset-l2 s12">
@@ -259,16 +261,10 @@
                 },
                 methods: {
                     logout() {
-                        ArenService.Users.logout({
-                            onSuccess: () => document.location.replace("")
-                        });
+                        ArenService.Users.logout();
                     },
                     login( ) {
-                        this.$refs.loginModal.open((returnVal) => {
-                            if (returnVal) {
-                                document.location.reload(true);
-                            }
-                        });
+                        this.$refs.loginModal.open();
                     },
                     signUp( ) {
                         this.$refs.createUserModal.open();

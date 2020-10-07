@@ -637,7 +637,7 @@ ApiService = function (anUrl, locale) {
     };
 
     let Listener;
-    if (!!window.Worker) {
+    if (!!window.SharedWorker) {
         Listener = function (aPath, className) {
             this.listen = ({ id, onMessage} = {}) => {
                 let sseWorker = new SharedWorker('assets/js/service/worker.js');
@@ -695,12 +695,24 @@ ApiService = function (anUrl, locale) {
         params.method = "POST";
         params.path = "/login";
         params.parsingClassName = false;
+        let onSuccess = params.onSuccess;
+        params.onSuccess = (token) => {
+            document.cookie = "Authorization=" + token + "; maxAge=" + (params.data.rememberMe ? (360 * 24 * 60 * 60) : -1) + "; path=/";
+            document.location.reload(true);
+            onSuccess ? onSuccess() : null;
+        }
         this.call(params);
     };
     this.Users.logout = function (params = {}) {
         params.method = "POST";
         params.path = "/logout";
         params.parsingClassName = false;
+        let onSuccess = params.onSuccess;
+        params.onSuccess = () => {
+            document.cookie = "Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.location.replace("");
+            onSuccess ? onSuccess() : null;
+        }
         this.call(params);
     };
     this.Users.passwd = function (params = {}) {
