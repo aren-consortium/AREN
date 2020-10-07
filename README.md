@@ -43,10 +43,12 @@ Fill the following line with the `db_user`, `db_password` and `db_name` previous
 
 ## Build
 Go to the source folder and run `mvn clean install`.
-A `target` folder is then created with the `war` file inside.
+A `target` folder is then created with the `aren.war` file inside.
 
 ## Deployement
-Copy the `war` file into the Java WebSever of your choice.
+Rename the `aren.war` file to `ROOT.war`then copy it into the Java WebSever of your choice [Tomcat 7 tested and functional].
+
+If you do not want the software to run at the root of your serveur, you'll need to change the `path` variable of the `context.xml` file according to the name of your `war` file
 
 ### First launch
 Go in your webserver folder, in the application folder.
