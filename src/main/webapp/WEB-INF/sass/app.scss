@@ -132,7 +132,7 @@ html {
                 margin: auto;
                 top: $navigation-height;
                 border-radius: none;
-                z-index: 10;
+                z-index: 5;
             }
             .current-view-wrapper {
                 display: flex;
@@ -634,17 +634,20 @@ nav {
     }
     .selection_popup {
         position: absolute;
-        border-radius: 2px;
-        line-height: 0px;
         cursor: pointer;
+        background: $secondary-color;
+        color: white;
+        border-radius: 5px;
+        padding: 0 5px;
         z-index: 10;
-        i {
-            color: $primary-color;
-            font-size: 48px;
-            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to left, #fff, #fff) no-repeat 12px 12px;
-            height: 28px;
-            width: 36px;
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -16px;
+            left: 10px;
+            border-width: 8px 5px;
+            border-style: solid;
+            border-color: $secondary-color transparent transparent transparent;
         }
     }
 
@@ -675,7 +678,7 @@ nav {
         .selection {
             cursor: pointer;
             &:hover, &.active {
-                background: lighten($grey-color-light, 50%);
+                background: lighten($grey-color-light, 5%);
                 border-left-color:  $grey-color-dark;
                 border-right-color:  $grey-color-dark;
                 &::before {
@@ -745,7 +748,7 @@ nav {
                 line-height: 10px;
                 font-size: 10px;
                 text-align: center;
-                z-index: 2;
+                z-index: 1;
                 font-weight: bold;
                 color: white;
                 transition: box-shadow .3s;
@@ -769,7 +772,6 @@ nav {
 
             }
             &:hover .bullets-drop-down {
-                position: fixed;
                 z-index: 9999;
                 background: $background-color !important;
                 width: 10px;
@@ -932,7 +934,7 @@ nav {
     &::after, &::before {
         position: absolute;
         content: "";
-        width: calc(100% - 12px);
+        width: 100%;
         height: 10px;
         background-image: linear-gradient(transparent, $grey-color-light);
         left: 0;

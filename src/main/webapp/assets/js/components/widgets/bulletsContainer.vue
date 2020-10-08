@@ -96,11 +96,11 @@
                         red++;
                     }
                 }
-                blue = Math.max(20, (blue / len) * 100);
-                red = Math.min(80, blue + ((red / len) * 100));
+                let bluePercent = blue > 0 ? Math.max(20, blue / len * 100) : 0;
+                let redPercent = (blue + red < len) ? Math.min(80, (red + blue) / len * 100) : 100;
 
-                return "linear-gradient(110deg, " + blueColor + " " + blue + "%, transparent " + blue + "%), \
-                        linear-gradient(110deg, " + redColor + " " + red + "%, " + greyColor + " " + red + "%)";
+                return "linear-gradient(110deg, " + blueColor + " " + bluePercent + "%, transparent " + bluePercent + "%), \
+                        linear-gradient(110deg, " + redColor + " " + redPercent + "%, " + greyColor + " " + redPercent + "%)";
             }
         }
     };

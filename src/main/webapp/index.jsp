@@ -77,6 +77,9 @@
                     </ul>
 
                     <ul class="right">
+                        <li>
+                            <a href="https://cartodebat.com/telechargement/Tutoriel-Pedagogique-Aren.pdf" target="_blank" rel="noopener noreferrer"> {{ $t('tutorials') }}</a>
+                        </li>
                         <template v-if="user.is('USER')">
                             <documented v-bind:value="$t('documentation.notification_panel')">
                                 <li id="notifications">
@@ -98,7 +101,6 @@
                                         </span>
                                         <div class="dropdown-content">
                                             <h4 class="dropdown-title"> {{ $root.user.fullName() }}</h4>
-                                            <a class="waves-effect waves-light btn-small" href="" target="_blank" rel="noopener noreferrer"> {{ $t('tutorials') }}</a>
                                             <a class="waves-effect waves-light btn-small" @click="$refs.passwdModal.open()"> {{ $t('change_password') }}</a>
                                             <a class="waves-effect waves-light btn-small" @click="logout()">{{ $t('menu.logout') }}</a>
                                             </ul>

@@ -6648,7 +6648,8 @@ input[type=range]::-ms-thumb {
     left: auto;
     right: 0;
     min-width: 250px;
-    width: min-content; }
+    width: min-content;
+    z-index: 10; }
     .dropdown-button .dropdown-content::before {
       content: "";
       position: absolute;
@@ -6990,7 +6991,7 @@ html body {
       margin: auto;
       top: 64px;
       border-radius: none;
-      z-index: 10; }
+      z-index: 5; }
     html body #app .current-view-wrapper {
       display: flex;
       flex-direction: column;
@@ -7342,17 +7343,20 @@ nav #notifications {
         float: left; }
 #debate .selection_popup {
   position: absolute;
-  border-radius: 2px;
-  line-height: 0px;
   cursor: pointer;
+  background: #4D9999;
+  color: white;
+  border-radius: 5px;
+  padding: 0 5px;
   z-index: 10; }
-  #debate .selection_popup i {
-    color: #B84000;
-    font-size: 48px;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(to left, #fff, #fff) no-repeat 12px 12px;
-    height: 28px;
-    width: 36px; }
+  #debate .selection_popup::before {
+    content: "";
+    position: absolute;
+    bottom: -16px;
+    left: 10px;
+    border-width: 8px 5px;
+    border-style: solid;
+    border-color: #4D9999 transparent transparent transparent; }
 #debate .comment-container.moderated::after {
   content: "";
   position: absolute;
@@ -7373,7 +7377,7 @@ nav #notifications {
 #debate .comment-body .selection, #debate .spaghetti-data .selection {
   cursor: pointer; }
   #debate .comment-body .selection:hover, #debate .comment-body .selection.active, #debate .spaghetti-data .selection:hover, #debate .spaghetti-data .selection.active {
-    background: white;
+    background: #ebecee;
     border-left-color: #808080;
     border-right-color: #808080; }
     #debate .comment-body .selection:hover::before, #debate .comment-body .selection.active::before, #debate .spaghetti-data .selection:hover::before, #debate .spaghetti-data .selection.active::before {
@@ -7421,7 +7425,7 @@ nav #notifications {
       line-height: 10px;
       font-size: 10px;
       text-align: center;
-      z-index: 2;
+      z-index: 1;
       font-weight: bold;
       color: white;
       transition: box-shadow .3s; }
@@ -7443,7 +7447,6 @@ nav #notifications {
       #debate .bullets-container .bullets-box:not(:hover) .bullets-drop-down > .body {
         height: 0 !important; }
     #debate .bullets-container .bullets-box:hover .bullets-drop-down {
-      position: fixed;
       z-index: 9999;
       background: white !important;
       width: 10px; }
@@ -7560,7 +7563,7 @@ nav #notifications {
   .selection::after, .selection::before {
     position: absolute;
     content: "";
-    width: calc(100% - 12px);
+    width: 100%;
     height: 10px;
     background-image: linear-gradient(transparent, #DDDFE2);
     left: 0;
