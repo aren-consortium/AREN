@@ -76,7 +76,7 @@ public abstract class AbstractRESTFacade<T extends AbstractEntity> {
      *
      * @param entity
      */
-    protected void safetyPreInsertion(AbstractEntity entity) {
+    protected void safetyPreInsertion(T entity) {
         if (entity instanceof AbstractOwnedEntity && !(entity instanceof Notification)) {
             if (!getUser().is("SUPERADMIN") || ((AbstractOwnedEntity) entity).getOwner() == null) {
                 ((AbstractOwnedEntity) entity).setOwner(getUser());
@@ -99,7 +99,7 @@ public abstract class AbstractRESTFacade<T extends AbstractEntity> {
      * @param entity
      * @param entityToEdit
      */
-    protected void safetyPreEdition(AbstractEntity entity, AbstractEntity entityToEdit) {
+    protected void safetyPreEdition(T entity, T entityToEdit) {
         if (!getUser().is("SUPERADMIN")) {
             if (!entityToEdit.isEditable()) {
                 throw AccessDeniedException.UNMUTABLE_OBJECT(entity.getClass(), entityToEdit.getId());
@@ -120,7 +120,7 @@ public abstract class AbstractRESTFacade<T extends AbstractEntity> {
      *
      * @param entity
      */
-    protected void safetyPreDeletion(AbstractEntity entity) {
+    protected void safetyPreDeletion(T entity) {
         if (!getUser().is("SUPERADMIN")) {
             if (!entity.isRemovable()) {
                 throw AccessDeniedException.UNERASABLE_OBJECT(entity.getClass(), entity.getId());

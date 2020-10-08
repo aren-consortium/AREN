@@ -10,7 +10,6 @@ import javax.ws.rs.QueryParam;
 import fr.lirmm.aren.service.InstitutionService;
 import fr.lirmm.aren.service.UserService;
 import fr.lirmm.aren.exception.AccessDeniedException;
-import fr.lirmm.aren.model.AbstractEntity;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.model.ws.ChangePassword;
 import fr.lirmm.aren.model.ws.UserCredentials;
@@ -159,6 +158,36 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     }
 
     /**
+     * 
+     * @param id
+     * @param entity
+     * @return 
+     */
+    @Override
+    @RolesAllowed({"USER"})
+    public User edit(Long id, User entity) {
+        if (!(getUser().is("MODO") && getUser().hasSameOrMoreRightThan(entity)
+                || getUser().getId().equals(entity.getId()))) {
+            throw AccessDeniedException.PERMISSION_MISSING();
+        }
+
+        if (!getUser().is("SUPERADMIN")) {
+            User newUser = new User();
+            // The only alterable fields in User
+            if (getUser().is("MODO") || getUser().getId().equals(entity.getId())) {
+                newUser.setFirstName(entity.getFirstName());
+                newUser.setLastName(entity.getLastName());
+                newUser.setEmail(entity.getEmail());
+            }
+            if (getUser().is("MODO") && getUser().hasSameOrMoreRightThan(entity)) {
+                newUser.setAuthority(entity.getAuthority());
+            }
+            entity = newUser;
+        }
+        return super.edit(id, entity);
+    }
+
+    /**
      *
      * @param user
      * @return
@@ -179,7 +208,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
                 super.remove(user.getId());
                 throw new RuntimeException();
             }
-        } else if (getUser().hasMoreRightThan(user)) {
+        } else if (getUser().hasSameOrMoreRightThan(user)) {
             super.create(user);
         } else {
             throw AccessDeniedException.PERMISSION_MISSING();
@@ -274,27 +303,12 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
      */
     @DELETE
     @Path("{id}/permanent")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"SUPERADMIN"})
     public void permanentRemove(@PathParam("id") Long userId) {
         User entity = find(userId);
         safetyPreDeletion(entity);
         notificationService.removeAllByUser(userId);
         getService().remove(entity);
-    }
-
-    @Override
-    public void safetyPreEdition(AbstractEntity entity, AbstractEntity entityToEdit) {
-        super.safetyPreEdition(entity, entityToEdit);
-
-        // If a different user with less right try to edit
-        System.err.println(!getUser().is("MODO")
-                + " " + !getUser().hasMoreRightThan((User) entityToEdit)
-                + " " + !getUser().getId().equals(entityToEdit.getId()));
-        if (!getUser().is("MODO")
-                || !getUser().hasMoreRightThan((User) entityToEdit)
-                || !getUser().getId().equals(entityToEdit.getId())) {
-            throw AccessDeniedException.PERMISSION_MISSING();
-        }
     }
 
     /**

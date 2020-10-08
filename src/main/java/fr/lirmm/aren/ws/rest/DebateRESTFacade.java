@@ -54,6 +54,9 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
     private CommentService commentService;
 
     @Inject
+    private CommentRESTFacade commentFacade;
+
+    @Inject
     private BroadcasterService broadcasterService;
 
     @Inject
@@ -175,8 +178,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
             }
         }
 
-        safetyPreInsertion(comment);
-        commentService.create(comment);
+        commentFacade.create(comment);
 
         List<Notification> notifications = new ArrayList<Notification>();
         List<User> users = new ArrayList<User>();

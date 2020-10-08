@@ -18,9 +18,9 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import fr.lirmm.aren.model.ws.DataView;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -97,15 +97,16 @@ public class User extends AbstractEntEntity implements Serializable {
     @Column(name = "last_login")
     private ZonedDateTime lastLogin;
 
+    @JsonIgnore
     @Column(name = "token_validity")
     private ZonedDateTime tokenValidity = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
-    @JsonView(DataView.Internal.class)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
 
+    @JsonIgnore
     @Column(name = "is_active")
-    @JsonView(DataView.Internal.class)
     private boolean active = true;
 
     @ManyToMany(mappedBy = "guests")
@@ -403,7 +404,7 @@ public class User extends AbstractEntEntity implements Serializable {
      * @param other
      * @return
      */
-    public boolean hasMoreRightThan(User other) {
+    public boolean hasSameOrMoreRightThan(User other) {
         return authority.compareTo(other.getAuthority()) >= 0;
     }
 
