@@ -161,12 +161,14 @@
             </div>
         </div>
 
-        <div class="selection_popup"
-             v-bind:style="'top: ' + (popup.y - 44) + 'px; left: ' + (popup.x - 44) + 'px;'"
+        <div v-show="selectedRange"
+             class="selection_popup z-depth-2"
+             ref="arguePopup"
+             v-bind:style="'top: ' + popup.y + 'px; left: ' + popup.x + 'px;'"
              @click="createComment()"
              @mousedown.stop=""
              @mouseup.stop="">
-            <i class="material-icons">comment</i>
+            {{ $t('argue').toLowerCase() }}
         </div>
 
         <template v-slot:addons>
@@ -191,6 +193,7 @@
                 sortByPosition: false,
                 popup: {x: -9999, y: -9999},
                 displayableComments: {},
+                selectedRange: false,
                 search: "",
                 mountedChildren: 0,
                 leftDisplay: "document",
@@ -387,8 +390,7 @@
                 }
             },
             hidePopup() {
-                if (this.popup.x != -9999)
-                    this.popup = {x: -9999, y: -9999};
+                this.selectedRange = false;
             },
             clearSelection( ) {
                 if (this.$route.query.comment) {
@@ -417,9 +419,9 @@
                 if (!position && selection.anchorOffset > selection.focusOffset ||
                         position === Node.DOCUMENT_POSITION_PRECEDING)
                     backward = true;
-                let range = selection.getRangeAt(0);
                 if (!selection.isCollapsed) {
-                    range.affineToWord();
+                    this.selectedRange = selection.getRangeAt(0);
+                    this.selectedRange.affineToWord();
                     if (this.newComment === false) {
                         this.newComment = new Comment( );
                     }
@@ -428,23 +430,37 @@
                         this.newComment.hypostases = [];
                         this.newComment.tags = [];
                         this.newComment.parent = comment;
-                        this.newComment.selection = range.getHtml();
+                        this.newComment.selection = this.selectedRange.getHtml();
                         let container = this.getCommentContainer(this.newComment);
-                        this.newComment.startContainer = container.getChildPathTo(range.startContainer);
-                        this.newComment.endContainer = container.getChildPathTo(range.endContainer);
-                        this.newComment.startOffset = range.startOffset;
-                        this.newComment.endOffset = range.endOffset;
+                        this.newComment.startContainer = container.getChildPathTo(this.selectedRange.startContainer);
+                        this.newComment.endContainer = container.getChildPathTo(this.selectedRange.endContainer);
+                        this.newComment.startOffset = this.selectedRange.startOffset;
+                        this.newComment.endOffset = this.selectedRange.endOffset;
 
-                        let popupPos;
-                        let rects = range.getClientRects( );
-                        if (backward) {
-                            popupPos = {x: rects[0].x, y: rects[0].y};
-                        } else {
-                            popupPos = {x: rects[rects.length - 1].x + rects[rects.length - 1].width, y: rects[rects.length - 1].y};
-                        }
-                        this.popup.x = popupPos.x;
-                        this.popup.y = popupPos.y;
-
+                        this.popupPositionFromRange(backward);
+                    } else {
+                        this.hidePopup();
+                    }
+                }
+            },
+            popupPositionFromRange(backward) {
+                if (this.selectedRange) {
+                    backward = backward === undefined ? this.$refs.arguePopup.classList.contains('top') : backward;
+                    let top = mainContainer.offsetTop + 28;
+                    let bottom = mainContainer.offsetHeight - window.scrollY + top - 58;
+                    let rects = this.selectedRange.getClientRects( );
+                    let start = rects[0];
+                    let end = rects[rects.length - 1];
+                    if (backward && start.y > top || (end.y + end.height) > bottom) {
+                        this.popup.x = start.x + window.scrollX;
+                        this.popup.y = start.y + window.scrollY;
+                        this.$refs.arguePopup.classList.remove('bottom');
+                        this.$refs.arguePopup.classList.add('top');
+                    } else {
+                        this.popup.x = end.x + end.width + window.scrollX;
+                        this.popup.y = end.y + end.height + window.scrollY;
+                        this.$refs.arguePopup.classList.remove('top');
+                        this.$refs.arguePopup.classList.add('bottom');
                     }
                 }
             },
