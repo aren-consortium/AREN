@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBContext;
@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Florent Descroix {@literal <florentdescroix@posteo.net>}
  */
-@Dependent
+@ApplicationScoped
 public class AAFImportService {
 
     @Inject

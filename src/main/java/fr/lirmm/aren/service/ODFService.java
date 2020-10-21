@@ -48,7 +48,6 @@ public class ODFService {
     private OdfOfficeStyles stylesOfficeStyles;
     private OfficeTextElement officeText;
     private DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
-    private File file = new File("/tmp/aren_export.odt");
 
     private OdfStyleProcessor styleProcessor = new OdfStyleProcessor();
 
@@ -104,6 +103,7 @@ public class ODFService {
         });
         row.appendChild(commentsList);
 
+        File file = new File("/tmp/aren_export_" + System.currentTimeMillis() + ".odt");
         this.outputDocument.save(file);
         return file;
     }
