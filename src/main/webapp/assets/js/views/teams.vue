@@ -37,8 +37,7 @@
                     icon="delete">
                 </action-button>
                 <action-button
-                    class="primary-color"
-                    v-if="$root.user.is('SUPERADMIN')"
+                    v-if="$root.user.is('ADMIN')"
                     v-bind:tooltip="$t('helper.remove_permanent_user')"
                     v-bind:tooltip-disabled="$t('helper.cannot_remove_institution_user')"
                     v-bind:disabled="institution.id !== 0"

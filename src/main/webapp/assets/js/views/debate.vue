@@ -161,12 +161,12 @@
             </div>
         </div>
 
-        <div class="selection_popup z-depth-2"
-             v-bind:style="'top: ' + (popup.y - 30) + 'px; left: ' + (popup.x - 15) + 'px;'"
+        <div class="selection_popup"
+             v-bind:style="'top: ' + (popup.y - 44) + 'px; left: ' + (popup.x - 44) + 'px;'"
              @click="createComment()"
              @mousedown.stop=""
              @mouseup.stop="">
-            {{ $t('argue').toLowerCase() }}
+            <i class="material-icons">comment</i>
         </div>
 
         <template v-slot:addons>

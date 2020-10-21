@@ -122,7 +122,6 @@ const messages = {
         import: "Importer",
         not_connected: "Vous n'êtes pas connecté⋅e",
         tutorials: "Tutoriels",
-        argue: "Argumenter",
         helper: {
             welcome: "Bienvenue sur la plateforme AREN (Argumentation & Numérique)<br>Il s'agit d’un espace numérique de débat pour pratiquer l’argumentation.<br>Prendre en compte les arguments des autres et justifier son opinion pour mieux argumenter et exercer son esprit critique !",
             creating_user: "Création en cour, veuillez patienter...",
