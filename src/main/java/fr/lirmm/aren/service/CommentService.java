@@ -8,8 +8,10 @@ import fr.lirmm.aren.model.Comment;
 import fr.lirmm.aren.model.TagSet;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 /**
  * Service that provides operations for {link Comment}.
@@ -27,6 +29,14 @@ public class CommentService extends AbstractService<Comment> {
      */
     public CommentService() {
         super(Comment.class);
+    }
+
+    /**
+     *
+     * @param type
+     */
+    public CommentService(EntityManager em) {
+        super(Comment.class, em);
     }
 
     /**
@@ -147,5 +157,23 @@ public class CommentService extends AbstractService<Comment> {
      */
     public void updateTags(Comment comment) {
         updateTags(comment, false);
+    }
+
+    /**
+     *
+     */
+    public void updateAllTags() {
+        Set<Comment> comments = this.findAll();
+        System.out.println("Starting tags update on " + comments.size() + " comments");
+        int cpt = 0;
+        Iterator<Comment> it = comments.iterator();
+        while (it.hasNext()) {
+            Comment comment = it.next();
+            //this.updateTags(comment, true);
+            cpt++;
+            System.out.print(cpt + " ");
+        }
+        System.out.println();
+        System.out.println("Tags update done");
     }
 }

@@ -39,6 +39,16 @@ public abstract class AbstractService<T extends AbstractEntity> {
     }
 
     /**
+     * The injected EntityManager is RequestScoped
+     * This can be use instead for other contexts
+     * @param type
+     */
+    public AbstractService(Class<T> entityClass, EntityManager em) {
+        this(entityClass);
+        this.em = em;
+    }
+
+    /**
      *
      * @return
      */
