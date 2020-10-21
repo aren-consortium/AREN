@@ -169,7 +169,7 @@ public class CommentService extends AbstractService<Comment> {
         Iterator<Comment> it = comments.iterator();
         while (it.hasNext()) {
             Comment comment = it.next();
-            //this.updateTags(comment, true);
+            this.updateTags(comment, true);
             cpt++;
             System.out.print(cpt + " ");
         }
