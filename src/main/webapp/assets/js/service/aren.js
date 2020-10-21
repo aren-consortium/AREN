@@ -383,9 +383,6 @@ ApiService = function (anUrl, locale) {
                 if (obj[collection] !== undefined) {
                     if (obj[collection] && obj[collection].length > 0) {
                         that[collection].splice(0, that[collection].length);
-                        // Important to sort, so the firsts created are parse first
-                        // avoiding foreing link issues
-                        obj[collection].sort((a, b) => a.id - b.id);
                         let len = obj[collection].length;
                         for (let i = 0; i < len; i++) {
                             let foreignObj = this.createOrUpdate(obj[collection][i], oneToMany[collection][0]);
@@ -403,9 +400,6 @@ ApiService = function (anUrl, locale) {
                 if (obj[collection] !== undefined) {
                     if (obj[collection] && obj[collection].length > 0) {
                         that[collection].splice(0, that[collection].length);
-                        // Important to sort, so the firsts created are parse first
-                        // avoiding foreing link issues
-                        obj[collection].sort((a, b) => a.id - b.id);
                         let len = obj[collection].length;
                         for (let i = 0; i < len; i++) {
                             let foreignObj = this.createOrUpdate(obj[collection][i], manyToMany[collection][0]);

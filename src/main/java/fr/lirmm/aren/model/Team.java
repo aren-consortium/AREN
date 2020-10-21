@@ -1,16 +1,14 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.TreeSet;
+import java.util.SortedSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
@@ -18,6 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
 
 /**
@@ -27,9 +26,6 @@ import org.hibernate.annotations.Where;
  */
 @Entity
 @Table(name = "teams")
-@NamedQueries({
-    @NamedQuery(name = "Team.findByEntId", query = "SELECT t FROM Team t WHERE t.entId = :entId")})
-
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Team.class)
 public class Team extends AbstractEntEntity implements Serializable {
 
@@ -50,11 +46,13 @@ public class Team extends AbstractEntEntity implements Serializable {
     private Institution institution;
 
     @ManyToMany(mappedBy = "teams")
-    private Set<Debate> debates = new HashSet<>();
+    @SortNatural
+    private SortedSet<Debate> debates = new TreeSet<>();
 
     @ManyToMany(mappedBy = "teams")
     @Where(clause = "is_active = true")
-    private Set<User> users = new HashSet<>();
+    @SortNatural
+    private SortedSet<User> users = new TreeSet<>();
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "debates_count")
@@ -117,7 +115,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public Set<Debate> getDebates() {
+    public SortedSet<Debate> getDebates() {
         return debates;
     }
 
@@ -125,7 +123,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      *
      * @param debates
      */
-    public void setDebates(Set<Debate> debates) {
+    public void setDebates(SortedSet<Debate> debates) {
         this.debates = debates;
     }
 
@@ -134,7 +132,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public Set<User> getUsers() {
+    public SortedSet<User> getUsers() {
         return users;
     }
 
@@ -142,7 +140,7 @@ public class Team extends AbstractEntEntity implements Serializable {
      *
      * @param users
      */
-    public void setUsers(Set<User> users) {
+    public void setUsers(SortedSet<User> users) {
         this.users = users;
     }
 

@@ -1,13 +1,11 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.TreeSet;
+import java.util.SortedSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -15,6 +13,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
 
 /**
@@ -24,9 +23,6 @@ import org.hibernate.annotations.Where;
  */
 @Entity
 @Table(name = "institutions")
-@NamedQueries({
-    @NamedQuery(name = "Institution.findByEntId", query = "SELECT i FROM Institution i WHERE i.entId = :entId")})
-
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Institution.class)
 public class Institution extends AbstractEntEntity implements Serializable {
 
@@ -49,10 +45,12 @@ public class Institution extends AbstractEntEntity implements Serializable {
 
     @OneToMany(mappedBy = "institution")
     @Where(clause = "is_active = true")
-    private Set<User> users = new HashSet<User>();
+    @SortNatural
+    private SortedSet<User> users = new TreeSet<User>();
 
     @OneToMany(mappedBy = "institution")
-    private Set<Team> teams = new HashSet<Team>();
+    @SortNatural
+    private SortedSet<Team> teams = new TreeSet<Team>();
 
     /**
      *
@@ -107,7 +105,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public Set<User> getUsers() {
+    public SortedSet<User> getUsers() {
         return users;
     }
 
@@ -115,7 +113,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      *
      * @param users
      */
-    public void setUsers(Set<User> users) {
+    public void setUsers(SortedSet<User> users) {
         this.users = users;
     }
 
@@ -123,7 +121,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      *
      * @return
      */
-    public Set<Team> getTeams() {
+    public SortedSet<Team> getTeams() {
         return teams;
     }
 
@@ -131,7 +129,7 @@ public class Institution extends AbstractEntEntity implements Serializable {
      *
      * @param teams
      */
-    public void setTeams(Set<Team> teams) {
+    public void setTeams(SortedSet<Team> teams) {
         this.teams = teams;
     }
 

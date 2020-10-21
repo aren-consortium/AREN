@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author Florent Descroix {@literal <florentdescroix@posteo.net>}
  */
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Comparable<AbstractEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -115,7 +115,7 @@ public abstract class AbstractEntity {
                             }
                         } else if (value instanceof Map) {
                             Map myValue = (Map) getter.invoke(this);
-                            for (Map.Entry<Object, Object> obj : ((Map<Object, Object>) myValue).entrySet()) {
+                            for (Map.Entry<Object, Object> obj : ((Map<Object, Object>) myValue).entrySortedSet()) {
                                 ((Map) value).put(obj.getKey(), obj.getValue());
                             }
                         }*/
@@ -169,5 +169,10 @@ public abstract class AbstractEntity {
     @Override
     public String toString() {
         return "fr.lirmm.aren.model." + this.getClass().getName() + " [ id=" + id + " ]";
+    }
+
+    @Override
+    public int compareTo(AbstractEntity t) {
+        return (int) (this.getId() - t.getId());
     }
 }

@@ -26,20 +26,20 @@ public class CategoryService extends AbstractService<Category> {
     }
 
     private TypedQuery<Category> generateQuery(Long categoryId, User user, boolean withDocuments) {
-        boolean hasUser = user != null && user.is(User.Authority.USER) && !user.is(User.Authority.MODO);
+        boolean isUser = user != null && user.is(User.Authority.USER) && !user.is(User.Authority.ADMIN);
         boolean onlyPublic = user != null && user.getAuthority().equals(User.Authority.GUEST);
         TypedQuery<Category> query = getEntityManager().createQuery("SELECT c "
                 + "FROM Category c "
-                + (withDocuments || hasUser || onlyPublic
+                + (withDocuments || isUser || onlyPublic
                         ? "LEFT JOIN " + (withDocuments ? "FETCH" : "") + " c.documents do "
                         : "")
-                + (hasUser || onlyPublic
+                + (isUser || onlyPublic
                         ? "LEFT JOIN do.debates d "
                         : "")
                 + (categoryId != null
                         ? "WHERE c.id = :categoryId "
                         : "WHERE c.id IS NOT NULL ")
-                + (hasUser
+                + (isUser
                         ? "AND (d.openPublic IS TRUE "
                         + "OR :user = d.owner "
                         + "OR :user IN (SELECT u FROM d.guests u) "
@@ -51,7 +51,7 @@ public class CategoryService extends AbstractService<Category> {
         if (categoryId != null) {
             query.setParameter("categoryId", categoryId);
         }
-        if (hasUser) {
+        if (isUser) {
             query.setParameter("user", user);
         }
         return query;

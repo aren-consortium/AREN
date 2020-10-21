@@ -1,8 +1,8 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.TreeSet;
+import java.util.SortedSet;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,6 +23,7 @@ import fr.lirmm.aren.model.Comment.Hypostase;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.persistence.Convert;
+import org.hibernate.annotations.SortNatural;
 
 import org.hibernate.annotations.Type;
 
@@ -246,7 +247,8 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
     private boolean signaled = false;
 
     @OneToMany(mappedBy = "parent")
-    private Set<Comment> comments = new HashSet<>();
+    @SortNatural
+    private SortedSet<Comment> comments = new TreeSet<>();
 
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "parent_id", referencedColumnName = "id", updatable = false)
@@ -439,7 +441,7 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
      *
      * @return
      */
-    public Set<Comment> getComments() {
+    public SortedSet<Comment> getComments() {
         return comments;
     }
 
@@ -447,7 +449,7 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
      *
      * @param comments
      */
-    public void setComments(Set<Comment> comments) {
+    public void setComments(SortedSet<Comment> comments) {
         this.comments = comments;
     }
 
@@ -487,13 +489,13 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
      *
      * @return
      */
-    public Set<Hypostase> getHypostases() {
+    public SortedSet<Hypostase> getHypostases() {
         if (this.hypostases != null && this.hypostases.length() > 0) {
             return Arrays.stream(this.hypostases.split(","))
                     .map(Hypostase::valueOf)
-                    .collect(Collectors.toCollection(() -> new HashSet<Hypostase>()));
+                    .collect(Collectors.toCollection(() -> new TreeSet<Hypostase>()));
         } else {
-            return new HashSet<Hypostase>();
+            return new TreeSet<Hypostase>();
         }
 
     }
@@ -502,7 +504,7 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
      *
      * @param hypostases
      */
-    public void setHypostases(Set<Hypostase> hypostases) {
+    public void setHypostases(SortedSet<Hypostase> hypostases) {
         this.hypostases = hypostases.stream()
                 .map(Hypostase::name)
                 .collect(Collectors.joining(","));
