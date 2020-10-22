@@ -63,19 +63,21 @@ public class AafRESTFacade {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     public void importAaf(
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+            @FormDataParam("file") FormDataContentDisposition fileDetail,
+            @Context SseEventSink eventSink) {
 
         String realPath = servletContext.getRealPath("");
         String uploadedFileLocation = realPath + "/WEB-INF/AafImport/" + fileDetail.getFileName();
         writeToFile(uploadedInputStream, uploadedFileLocation);
 
-        // aafService.setDispatcher((Float progress) -> {
-        //    eventSink.send(sse.newEvent(progress + ""));
-        // });
+        aafService.setDispatcher((Float progress) -> {
+            eventSink.send(sse.newEvent(progress + ""));
+        });
         File file = new File(uploadedFileLocation);
         List<String> output = aafService.proceedImportation(file);
         //eventSink.send(sse.newEvent(parseMessage(output)));
-        //eventSink.close();
+        eventSink.send(sse.newEvent("1"));
+        eventSink.close();
         file.delete();
     }
 

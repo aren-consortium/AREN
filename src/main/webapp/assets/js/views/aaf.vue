@@ -4,7 +4,7 @@
         <div class="container">
 
             <div id="header">
-                <h1>Import AAF</h1>
+                <h1>{{ $t('aaf_import') }}</h1>
             </div>
 
             <div class="container">

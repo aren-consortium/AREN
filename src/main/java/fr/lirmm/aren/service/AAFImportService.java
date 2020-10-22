@@ -190,16 +190,20 @@ public class AAFImportService {
             for (Method method : new Method[]{Method.CREATE, Method.UPDATE, Method.DELETE}) {
                 for (AbstractEntEntity entity : toProcess.get(klass).get(method)) {
                     proceed(klass, method, entity, insertOnUpdate, updateOnInsert);
-                    newUsersId.add(entity.getId());
+                    if (klass == User.class) {
+                        newUsersId.add(entity.getId());
+                    }
                     this.dispatchProgression();
                 }
             }
         }
-        getEntityManager().createQuery("UPDATE Team t SET "
-                + "t.usersCount = (SELECT COUNT(u) from t.users u) "
-                + "WHERE t IN (SELECT t1 FROM User u LEFT JOIN u.teams t1 WHERE u.id IN :ids)")
-                .setParameter("ids", newUsersId)
-                .executeUpdate();
+        if (!newUsersId.isEmpty()) {
+            getEntityManager().createQuery("UPDATE Team t SET "
+                    + "t.usersCount = (SELECT COUNT(u) FROM t.users u) "
+                    + "WHERE t IN (SELECT t1 FROM User u LEFT JOIN u.teams t1 WHERE u.id IN :ids)")
+                    .setParameter("ids", newUsersId)
+                    .executeUpdate();
+        }
         getEntityManager().getTransaction().commit();
 
         return log;
