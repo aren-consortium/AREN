@@ -13,6 +13,9 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import fr.lirmm.aren.exception.InsertEntityException;
 import fr.lirmm.aren.model.AbstractEntity;
+import fr.lirmm.aren.producer.Scope;
+import static fr.lirmm.aren.producer.Scope.Type.APPLICATION;
+import static fr.lirmm.aren.producer.Scope.Type.REQUEST;
 import java.util.Set;
 import java.util.HashSet;
 import javax.inject.Inject;
@@ -26,7 +29,12 @@ import javax.inject.Inject;
 public abstract class AbstractService<T extends AbstractEntity> {
 
     @Inject
-    private EntityManager em;
+    @Scope(REQUEST)
+    private EntityManager emr;
+
+    @Inject
+    @Scope(APPLICATION)
+    private EntityManager ema;
 
     private final Class<T> entityClass;
 
@@ -39,21 +47,16 @@ public abstract class AbstractService<T extends AbstractEntity> {
     }
 
     /**
-     * The injected EntityManager is RequestScoped
-     * This can be use instead for other contexts
-     * @param type
-     */
-    public AbstractService(Class<T> entityClass, EntityManager em) {
-        this(entityClass);
-        this.em = em;
-    }
-
-    /**
      *
      * @return
      */
-    public EntityManager getEntityManager() {
-        return em;
+    protected EntityManager getEntityManager() {
+        try {
+            this.emr.getTransaction();
+            return emr;
+        } catch (Exception e) {
+            return this.ema;
+        }
     }
 
     // Wrapper so if there is multiple nested requests

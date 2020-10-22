@@ -5,14 +5,12 @@
  */
 package fr.lirmm.aren.servlet;
 
-import fr.lirmm.aren.producer.EntityManagerProducer;
 import fr.lirmm.aren.service.CommentService;
 import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -25,7 +23,7 @@ import javax.servlet.annotation.WebListener;
 public class BackgroundJobManager implements ServletContextListener {
 
     @Inject
-    private EntityManagerProducer emp;
+    private CommentService commentService;
 
     private ScheduledExecutorService scheduler;
 
@@ -39,17 +37,15 @@ public class BackgroundJobManager implements ServletContextListener {
         c.set(Calendar.MILLISECOND, 0);
         long untilMidnight = (c.getTimeInMillis() - System.currentTimeMillis());
         long millisInDay = 24 * 60 * 60 * 1000;
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> {
-            EntityManager em = emp.createEntityManager();
-            CommentService commentService = new CommentService(em);
-            commentService.updateAllTags();
-            em.close();
+
+        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        this.scheduler.scheduleAtFixedRate(() -> {
+            this.commentService.updateAllTags();
         }, untilMidnight, millisInDay, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
-        scheduler.shutdownNow();
+        this.scheduler.shutdownNow();
     }
 }

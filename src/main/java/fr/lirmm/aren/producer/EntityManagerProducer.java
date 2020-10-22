@@ -1,5 +1,7 @@
 package fr.lirmm.aren.producer;
 
+import static fr.lirmm.aren.producer.Scope.Type.APPLICATION;
+import static fr.lirmm.aren.producer.Scope.Type.REQUEST;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
@@ -37,8 +39,20 @@ public class EntityManagerProducer {
      */
     @Produces
     @Default
+    @Scope(REQUEST)
     @RequestScoped
-    public EntityManager createEntityManager() {
+    public EntityManager createRequestEntityManager() {
+        return factory.createEntityManager();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Produces
+    @Scope(APPLICATION)
+    @ApplicationScoped
+    public EntityManager createApplicationEntityManager() {
         return factory.createEntityManager();
     }
 
