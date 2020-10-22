@@ -36,15 +36,19 @@ import org.jsoup.nodes.Document;
  */
 @ApplicationScoped
 public class HttpRequestService {
-    
+
     @Inject
     @Configurable("idefix.url")
     private String idefixUrl;
-    
+
     @Inject
     @Configurable("scalar.url")
     private String scalarUrl;
-    
+
+    @Inject
+    @Configurable("plateform.id")
+    private String plateformId;
+
     @Inject
     @Configurable("theme.url")
     private String themeUrl;
@@ -64,25 +68,25 @@ public class HttpRequestService {
     public String getScalar(Comment comment) {
         String result = "";
         try {
-            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpClient httpClient = HttpClients.createSystem();
             HttpPost request = new HttpPost(scalarUrl);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(5000)
                     .setConnectTimeout(5000)
                     .setConnectionRequestTimeout(5000)
                     .build();
-            
+
             request.setConfig(requestConfig);
-            
+
             List< NameValuePair> params = new ArrayList<NameValuePair>(3);
             params.add(new BasicNameValuePair("ppl_name", "Complete"));
             params.add(new BasicNameValuePair("fragment1", comment.getSelection() + ""));
             params.add(new BasicNameValuePair("fragment2", comment.getReformulation()));
             request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            
+
             CloseableHttpResponse response = httpClient.execute(request);
             result = EntityUtils.toString(response.getEntity(), "UTF-8");
-            
+
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(HttpRequestService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -100,23 +104,23 @@ public class HttpRequestService {
     public String getTheme(Long debateId, String theme) {
         String result = "";
         try {
-            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpClient httpClient = HttpClients.createSystem();
             HttpPost request = new HttpPost(themeUrl);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(5000)
                     .setConnectTimeout(5000)
                     .setConnectionRequestTimeout(5000)
                     .build();
-            
+
             request.setConfig(requestConfig);
-            
+
             List< NameValuePair> params = new ArrayList<NameValuePair>(3);
             params.add(new BasicNameValuePair("ppl_name", "Complete"));
             params.add(new BasicNameValuePair("debate_id", debateId + ""));
-            params.add(new BasicNameValuePair("platform_id", "LIRMM"));
+            params.add(new BasicNameValuePair("platform_id", plateformId));
             params.add(new BasicNameValuePair("text", theme));
             request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            
+
             CloseableHttpResponse response = httpClient.execute(request);
             JsonNode node = new ObjectMapper().readTree(response.getEntity().getContent());
             ObjectNode obj = JsonNodeFactory.instance.objectNode();
@@ -127,7 +131,7 @@ public class HttpRequestService {
             obj.set("comments", arr);
             obj.set("theme", node.get("theme"));
             result = obj.toString();
-            
+
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(HttpRequestService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -145,7 +149,7 @@ public class HttpRequestService {
     public TagSet retrieveTags(String text, Comment comment) {
         TagSet tags = new TagSet();
         try {
-            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpClient httpClient = HttpClients.createSystem();
             HttpPost httppost = new HttpPost(idefixUrl);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(1 * 60 * 1000)
@@ -153,21 +157,21 @@ public class HttpRequestService {
                     .setConnectionRequestTimeout(1 * 60 * 1000)
                     .build();
             httppost.setConfig(requestConfig);
-            
+
             List< NameValuePair> params = new ArrayList<NameValuePair>(3);
             params.add(new BasicNameValuePair("extract_term_list", text));
             params.add(new BasicNameValuePair("extract_submit", "Extraire"));
             params.add(new BasicNameValuePair("number", "20"));
             httppost.setEntity(new UrlEncodedFormEntity(params, "windows-1252"));
-            
+
             CloseableHttpResponse response = httpClient.execute(httppost);
             String responseString = EntityUtils.toString(response.getEntity(), "windows-1252");
-            
+
             if (responseString.contains("Pas assez de termes, bye")) {
                 return null;
             }
             tags = this.parseTags(responseString);
-            
+
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(HttpRequestService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -185,7 +189,7 @@ public class HttpRequestService {
     public TagSet sendTag(TagSet tags, String text) {
         TagSet newTags = new TagSet();
         try {
-            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpClient httpClient = HttpClients.createSystem();
             HttpPost httppost = new HttpPost(idefixUrl);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(1 * 60 * 1000)
@@ -193,7 +197,7 @@ public class HttpRequestService {
                     .setConnectionRequestTimeout(1 * 60 * 1000)
                     .build();
             httppost.setConfig(requestConfig);
-            
+
             List< NameValuePair> params = new ArrayList<NameValuePair>(5);
             params.add(new BasicNameValuePair("linkit_add", "Valider"));
             params.add(new BasicNameValuePair("add_items", tags.toString()));
@@ -201,7 +205,7 @@ public class HttpRequestService {
             params.add(new BasicNameValuePair("extract_term_list", text));
             params.add(new BasicNameValuePair("extract_termid_list", ""));
             httppost.setEntity(new UrlEncodedFormEntity(params, "windows-1252"));
-            
+
             CloseableHttpResponse response = httpClient.execute(httppost);
             String responseString = EntityUtils.toString(response.getEntity(), "windows-1252");
             if (responseString.contains("Pas assez de termes, bye")) {
@@ -217,7 +221,7 @@ public class HttpRequestService {
         }
         return newTags;
     }
-    
+
     private TagSet parseTags(String string) throws IOException {
         TagSet tags = new TagSet();
         Document doc = Jsoup.parse(string, "windows-1252");
@@ -229,5 +233,4 @@ public class HttpRequestService {
         }
         return tags;
     }
-    
 }
