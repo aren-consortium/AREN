@@ -475,14 +475,25 @@ ApiService = function (anUrl, locale) {
                 }
             } else if (xhttp.readyState === 3) {
                 if (onProgress) {
-                    onProgress(xhttp.responseText);
+                    let newResponses = xhttp.responseText.split("\ndata: ");
+                    let response = newResponses[newResponses.length - 1];
+                    try {
+                        onProgress(JSON.parse(response));
+                    } catch (ex) {
+                        onProgress(response);
+                    }
                 }
             } else if (xhttp.readyState === 4) {
+                let response = xhttp.responseText;
                 let jsonResponse = {};
+                if (onProgress) {
+                    let newResponses = response.split("\ndata: ");
+                    response = newResponses[newResponses.length - 1];
+                }
                 try {
-                    jsonResponse = JSON.parse(xhttp.responseText);
+                    jsonResponse = JSON.parse(response);
                 } catch (e) {
-                    jsonResponse = xhttp.responseText;
+                    jsonResponse = response;
                 }
                 if (onError) {
                     onError(jsonResponse, xhttp);
@@ -516,21 +527,12 @@ ApiService = function (anUrl, locale) {
     };
 
     this.import = ({ data, onSuccess, onError, onProgress, loading } = {}) => {
-        let parseResponse = function (response) {
-            let newResponses = response.split("\ndata: ");
-            let lastResponse = newResponses[newResponses.length - 1];
-            try {
-                return JSON.parse(lastResponse);
-            } catch (ex) {
-                return lastResponse;
-            }
-        };
         ajaxCall({
             method: "POST",
             path: "aaf/import",
             data: data,
-            onProgress: (response) => onProgress(parseResponse(response)),
-            onSuccess: (response) => onSuccess(parseResponse(response)),
+            onProgress,
+            onSuccess,
             onError: onError,
             json: false,
             loading: loading
@@ -831,6 +833,19 @@ ApiService = function (anUrl, locale) {
         params.parsingClassName = false;
         this.call(params);
     };
+    this.Comments.updateTags = function (params = {}) {
+        params.method = "PUT";
+        params.path = "/" + params.id + "/updateTags";
+        params.parsingClassName = false;
+        this.call(params);
+    };
+    this.Comments.updateAllTags = function (params = {}) {
+        params.method = "PUT";
+        params.path = "/updateTags";
+        params.parsingClassName = false;
+        this.call(params);
+    };
+
     this.Notifications.readAll = function (params = {}) {
         params.method = "PUT";
         this.call(params);

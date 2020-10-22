@@ -34,7 +34,7 @@
                         <tooltiped v-if="!preview && comment.debate.idfixLink && comment.tags"
                                    v-bind:value="comment.tags.length > 0 ? $t('tags_edition') : $t('no_tags_yet')">
                             <span v-bind:class="{tags: true, disabled: comment.tags.length === 0}"
-                                  @click="comment.tags.length > 0 ? $emit('tag-edition', comment) : ''">
+                                  @click="(comment.tags.length > 0 || $root.user.is('ADMIN')) ? $emit('tag-edition', comment) : ''">
                                 <i class="material-icons">local_offer</i>
                             </span>
                         </tooltiped>

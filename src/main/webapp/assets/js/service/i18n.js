@@ -70,6 +70,7 @@ const messages = {
         position: "Position",
         creation_success: "Création réussie",
         import_success: "Importation réussie",
+        update_success: "Mise à jour réussie",
         display_team: "Afficher le groupe",
         new_team: "Nouveau groupe",
         new_user: "Nouvel⋅le utilisateur⋅rice",
@@ -123,6 +124,9 @@ const messages = {
         not_connected: "Vous n'êtes pas connecté⋅e",
         tutorials: "Tutoriels",
         argue: "Argumenter",
+        aaf_import: "Import AAF",
+        update_tags: "Mise à jour des tags",
+        start: "Lancer",
         helper: {
             welcome: "Bienvenue sur la plateforme AREN (Argumentation & Numérique)<br>Il s'agit d’un espace numérique de débat pour pratiquer l’argumentation.<br>Prendre en compte les arguments des autres et justifier son opinion pour mieux argumenter et exercer son esprit critique !",
             creating_user: "Création en cour, veuillez patienter...",
@@ -192,7 +196,9 @@ const messages = {
             reformulation_assist: "Affiche un smiley lors de la reformulation",
             idefix_link: "Ajoute des tags aux documents et arguments pour les utiliser avec IDFIX",
             with_hypostases: "Propose une selection d'hypostase pour les arguments",
-            aaf_import_success: "Les données AAF ont bien été importées, vous pouvez fermer cette fenêtre."
+            aaf_import_success: "Les données AAF ont bien été importées, vous pouvez fermer cette fenêtre.",
+            update_tags: "Veuillez patienter, ce processus peut-être très long.<br><b>Ne fermez pas cette fenêtre</b>",
+            tag_update_success: "La mise à jour des tags est un succès, vous pouvez fermer cette fenêtre."
         },
         notification: {
             team_added_to_debate: "Votre groupe {teamName} participe au débat {debateName}.",
@@ -217,7 +223,8 @@ const messages = {
             internal: "ERREUR INTERNE",
             expired_token: "Jeton d'authentification expiré",
             internal_message: "<p>Toutes nos excuses, une erreur s'est produite sur nos serveurs.</p><p>Veuillez réessayer ou contacter un administrateur⋅trice si l'erreur persiste.</p>",
-            aaf_import: "<p>Erreur lors de l'import AAF.</p><p>Il est probable que votre fichier soit corompu ou n'entre pas dans les standard de l'application.</p>"
+            aaf_import: "<p>Erreur lors de l'import AAF.</p><p>Il est probable que votre fichier soit corompu ou n'entre pas dans les standard de l'application.</p>",
+            tag_update_success: "<p>Erreur lors de la mise à jour des tags.</p><p>Contacter un développeur.</p>"
         },
         menu: {
             open: "Ouvrir un débat",

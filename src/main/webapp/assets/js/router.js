@@ -13,6 +13,7 @@ const router = new VueRouter({
         {path: '/debates/:id/restitution', component: vueLoader('views/restitution')},
         {path: '/debates/:id/print', component: vueLoader('views/debatePrint')},
         {path: '/aaf', component: vueLoader('views/aaf')},
+        {path: '/tags', component: vueLoader('views/updateTags')},
         {path: '*', component: vueLoader('views/404')}
     ]
 });

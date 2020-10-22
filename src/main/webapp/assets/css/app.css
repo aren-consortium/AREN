@@ -6761,6 +6761,8 @@ input[type=range]::-ms-thumb {
   z-index: 1005;
   width: 50vw;
   min-width: 500px; }
+  .modal-wrapper#confirmDialog .modal + .modal-overlay {
+    z-index: 1004; }
 
 .input-field:focus-within > label {
   color: #4D9999;

@@ -33,6 +33,7 @@
                 <button @click="close( );" class="waves-effect waves-green btn-flat">{{ $t('close') }}</button>
             </template>
             <template v-else>
+                <button v-if="$root.user.is('ADMIN')" @click="update( );" class="waves-effect waves-green btn left">{{ $t('update_tags') }}</button>
                 <button @click="close( );" class="waves-effect waves-green btn-flat">{{ $t('cancel') }}</button>
                 <button @click="close( comment );" class="waves-effect waves-green btn-flat">{{ $t('validate') }}</button>
             </template>
@@ -80,6 +81,26 @@
                     }
                     this.tagInput = "";
                 }
+            },
+            update() {
+                this.$confirm({
+                    title: this.$t('update_tags'),
+                    message: this.$t('helper.update_tags'),
+                    notCloseable: true
+                });
+                ArenService.Comments.updateTags({
+                    id: this.comment.id,
+                    onSuccess: (response) => {
+                        this.$closeConfirm();
+                    },
+                    onError: () => {
+                        this.$confirm({
+                            title: this.$t('error.Insertion error'),
+                            message: this.$t('error.tag_update'),
+                            isInfo: true
+                        });
+                    },
+                });
             },
             afterClose() {
                 this.comment = false;

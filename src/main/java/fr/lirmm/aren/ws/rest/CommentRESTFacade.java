@@ -11,9 +11,13 @@ import fr.lirmm.aren.model.Comment;
 import fr.lirmm.aren.model.TagSet;
 import fr.lirmm.aren.service.BroadcasterService;
 import fr.lirmm.aren.service.HttpRequestService;
-import java.util.Set;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.sse.Sse;
+import javax.ws.rs.sse.SseEventSink;
 
 /**
  * JAX-RS resource class for Comments managment
@@ -97,13 +101,15 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
      */
     @PUT
     @Path("updateTags")
-    @RolesAllowed({"SUPERADMIN"})
-    public void updateTags() {
-        Set<Comment> comments = this.findAll();
-        comments.forEach((Comment comment) -> {
-            commentService.updateTags(comment, true);
+    @RolesAllowed({"ADMIN"})
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    public void updateAllTags(@Context SseEventSink eventSink, @Context Sse sse) {
+        commentService.updateAllTags((Comment comment, Float progress) -> {
+            eventSink.send(sse.newEvent(progress + ""));
             broadcasterService.broadcastComment(comment);
         });
+        eventSink.send(sse.newEvent("1"));
+        eventSink.close();
     }
 
     /**
@@ -114,12 +120,11 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
      */
     @PUT
     @Path("{id}/updateTags")
-    @RolesAllowed({"SUPERADMIN"})
+    @RolesAllowed({"ADMIN"})
     public TagSet updateTag(@PathParam("id") Long id) {
         Comment comment = commentService.find(id);
         commentService.updateTags(comment);
         broadcasterService.broadcastComment(comment);
         return comment.getTags();
     }
-
 }
