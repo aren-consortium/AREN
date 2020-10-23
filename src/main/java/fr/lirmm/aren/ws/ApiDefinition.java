@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecuritySchemes;
         info = @Info(
                 title = "AREN API",
                 description = "API for the ARgumentation Et Numérique project",
-                version = "3.0.0",
+                version = "3.8.0",
                 license = @License(name = "MIT License", url = "https://github.com/aren-consortium/AREN/blob/master/LICENSE")
         ),
         security = {
