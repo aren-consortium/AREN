@@ -233,7 +233,7 @@ const messages = {
             documents: "Documents",
             my_debates: "Mes débats",
             public_debates: "Débats publics",
-            logout: "Déconnection",
+            logout: "Déconnexion",
             login: "Se connecter",
             signin: "S'enregistrer"
         },
