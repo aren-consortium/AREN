@@ -22,7 +22,7 @@
         <weld.version>3.1.1.Final</weld.version>
         <jbcrypt.version>0.4.1</jbcrypt.version>
         <hibernate.version>5.4.3.Final</hibernate.version>
-        <postgresql.version>42.2.6</postgresql.version>
+        <postgresql.version>42.2.25</postgresql.version>
     </properties>
 
     <dependencies>
