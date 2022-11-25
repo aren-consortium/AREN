@@ -103,6 +103,7 @@ const messages = {
         debates: "Débats",
         new_debate: "Nouveau débat",
         invite_in_debate: "Inviter au débat",
+        authority: "Status",
         SUPERADMIN: "Super administrateur⋅rice",
         SUPERADMIN: "Root",
         ADMIN: "Administrateur⋅rice",
