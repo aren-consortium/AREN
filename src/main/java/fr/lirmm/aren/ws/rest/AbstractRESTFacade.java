@@ -23,7 +23,7 @@ import fr.lirmm.aren.model.AbstractOwnedEntity;
 import fr.lirmm.aren.model.Notification;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.security.AuthenticatedUserDetails;
-;
+
 import java.time.ZonedDateTime;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
