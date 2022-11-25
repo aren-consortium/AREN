@@ -71,7 +71,7 @@ const messages = {
         creation_success: "Création réussie",
         import_success: "Importation réussie",
         update_success: "Mise à jour réussie",
-        display_team: "Afficher le groupe",
+        display_team: "Afficher et modifier le groupe",
         new_team: "Nouveau groupe",
         new_user: "Nouvel⋅le utilisateur⋅rice",
         add_user: "Ajouter un⋅e utilisateur⋅rice",
