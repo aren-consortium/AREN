@@ -1,10 +1,14 @@
 package fr.lirmm.aren.servlet;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +18,6 @@ import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.security.token.AuthenticationTokenService;
 import fr.lirmm.aren.service.CasAuthentificationService;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.servlet.http.Cookie;
 
 /**
  *
@@ -38,7 +39,7 @@ public class CasLogin extends HttpServlet {
 
     @Inject
     @Configurable("reverse-proxy")
-    private String proxyUrl;
+    private Provider<String> proxyUrl;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -71,10 +72,10 @@ public class CasLogin extends HttpServlet {
                 response.addCookie(cookie);
             } catch (MalformedURLException ex) {
             }
-            if (proxyUrl.isEmpty()) {
+            if (proxyUrl.get().isEmpty()) {
                 response.sendRedirect("/");
             } else {
-                response.sendRedirect(proxyUrl);
+                response.sendRedirect(proxyUrl.get());
             }
         } else {
             response.sendRedirect(casService.getRedirectionUrl());

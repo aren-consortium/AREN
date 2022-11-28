@@ -1,22 +1,17 @@
 package fr.lirmm.aren.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import fr.lirmm.aren.model.Comment;
-import fr.lirmm.aren.model.TagSet;
-import fr.lirmm.aren.producer.Configurable;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -29,6 +24,16 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import fr.lirmm.aren.model.Comment;
+import fr.lirmm.aren.model.TagSet;
+import fr.lirmm.aren.producer.Configurable;
+
 /**
  * Service that provides operations for AAF xml import
  *
@@ -39,19 +44,19 @@ public class HttpRequestService {
 
     @Inject
     @Configurable("idefix.url")
-    private String idefixUrl;
+    private Provider<String> idefixUrl;
 
     @Inject
     @Configurable("scalar.url")
-    private String scalarUrl;
+    private Provider<String> scalarUrl;
 
     @Inject
     @Configurable("plateform.id")
-    private String plateformId;
+    private Provider<String> plateformId;
 
     @Inject
     @Configurable("theme.url")
-    private String themeUrl;
+    private Provider<String> themeUrl;
 
     /**
      *
@@ -69,7 +74,7 @@ public class HttpRequestService {
         String result = "";
         try {
             CloseableHttpClient httpClient = HttpClients.createSystem();
-            HttpPost request = new HttpPost(scalarUrl);
+            HttpPost request = new HttpPost(scalarUrl.get());
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(5000)
                     .setConnectTimeout(5000)
@@ -105,7 +110,7 @@ public class HttpRequestService {
         String result = "";
         try {
             CloseableHttpClient httpClient = HttpClients.createSystem();
-            HttpPost request = new HttpPost(themeUrl);
+            HttpPost request = new HttpPost(themeUrl.get());
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(5000)
                     .setConnectTimeout(5000)
@@ -117,7 +122,7 @@ public class HttpRequestService {
             List< NameValuePair> params = new ArrayList<NameValuePair>(3);
             params.add(new BasicNameValuePair("ppl_name", "Complete"));
             params.add(new BasicNameValuePair("debate_id", debateId + ""));
-            params.add(new BasicNameValuePair("platform_id", plateformId));
+            params.add(new BasicNameValuePair("platform_id", plateformId.get()));
             params.add(new BasicNameValuePair("text", theme));
             request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 
@@ -150,7 +155,7 @@ public class HttpRequestService {
         TagSet tags = new TagSet();
         try {
             CloseableHttpClient httpClient = HttpClients.createSystem();
-            HttpPost httppost = new HttpPost(idefixUrl);
+            HttpPost httppost = new HttpPost(idefixUrl.get());
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(1 * 60 * 1000)
                     .setConnectTimeout(1 * 60 * 1000)
@@ -190,7 +195,7 @@ public class HttpRequestService {
         TagSet newTags = new TagSet();
         try {
             CloseableHttpClient httpClient = HttpClients.createSystem();
-            HttpPost httppost = new HttpPost(idefixUrl);
+            HttpPost httppost = new HttpPost(idefixUrl.get());
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(1 * 60 * 1000)
                     .setConnectTimeout(1 * 60 * 1000)

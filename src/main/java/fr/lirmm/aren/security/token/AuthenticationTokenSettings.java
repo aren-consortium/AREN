@@ -2,6 +2,7 @@ package fr.lirmm.aren.security.token;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import fr.lirmm.aren.producer.Configurable;
 
@@ -18,78 +19,75 @@ class AuthenticationTokenSettings {
      */
     @Inject
     @Configurable("authentication.jwt.secret")
-    private String secret;
+    private Provider<String> secret;
 
     /**
      * Allowed clock skew for verifying the token signature (in seconds).
      */
     @Inject
     @Configurable("authentication.jwt.clockSkew")
-    private Long clockSkew;
+    private Provider<Long> clockSkew;
 
     /**
      * Identifies the recipients that the JWT token is intended for.
      */
     @Inject
     @Configurable("authentication.jwt.audience")
-    private String audience;
+    private Provider<String> audience;
 
     /**
      * Identifies the JWT token issuer.
      */
     @Inject
     @Configurable("authentication.jwt.issuer")
-    private String issuer;
+    private Provider<String> issuer;
     /**
      * JWT claim for the authorities.
      */
     @Inject
     @Configurable("authentication.jwt.claimNames.authorities")
-    private String authorityClaimName;
+    private Provider<String> authorityClaimName;
     /**
      * JWT claim for the token refreshment count.
      */
     @Inject
     @Configurable("authentication.jwt.claimNames.refreshCount")
-    private String refreshCountClaimName;
+    private Provider<String> refreshCountClaimName;
     /**
      * JWT claim for the maximum times that a token can be refreshed.
      */
     @Inject
     @Configurable("authentication.jwt.claimNames.refreshLimit")
-    private String refreshLimitClaimName;
+    private Provider<String> refreshLimitClaimName;
 
     AuthenticationTokenSettings() {
-        this.authorityClaimName = "authorities";
-        this.refreshCountClaimName = "refreshCount";
-        this.refreshLimitClaimName = "refreshLimit";
     }
 
     public String getSecret() {
-        return secret;
+        return secret.get();
     }
 
     public Long getClockSkew() {
-        return clockSkew;
+        return clockSkew.get();
     }
 
     public String getAudience() {
-        return audience;
+        return audience.get();
     }
 
     public String getIssuer() {
-        return issuer;
+        return issuer.get();
     }
 
     public String getAuthorityClaimName() {
-        return authorityClaimName;
+        return authorityClaimName.get();
     }
 
     public String getRefreshCountClaimName() {
-        return refreshCountClaimName;
+        return refreshCountClaimName.get();
     }
 
     public String getRefreshLimitClaimName() {
-        return refreshLimitClaimName;
+        return refreshLimitClaimName.get();
     }
 }

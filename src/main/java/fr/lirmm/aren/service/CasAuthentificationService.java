@@ -8,7 +8,10 @@ import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,11 +20,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.exception.InvalidAuthenticationTokenException;
 import fr.lirmm.aren.model.User;
-import javax.enterprise.context.ApplicationScoped;
-import javax.servlet.http.HttpServletRequest;
+import fr.lirmm.aren.producer.Configurable;
 
 /**
  * Service that provides operations for CAS authentification
@@ -39,11 +40,11 @@ public class CasAuthentificationService {
 
     @Inject
     @Configurable("cas.url")
-    private String serverUrl;
+    private Provider<String> serverUrl;
 
     @Inject
     @Configurable("reverse-proxy")
-    private String proxyUrl;
+    private Provider<String> proxyUrl;
 
     @Inject
     private HttpServletRequest request;
@@ -70,10 +71,10 @@ public class CasAuthentificationService {
 
     private String getClientUrl() {
         String clientUrl;
-        if (proxyUrl.length() == 0) {
+        if (proxyUrl.get().length() == 0) {
             clientUrl = request.getRequestURL().toString();
         } else {
-            clientUrl = proxyUrl + "/caslogin";
+            clientUrl = proxyUrl.get() + "/caslogin";
         }
         return clientUrl;
     }
@@ -83,7 +84,7 @@ public class CasAuthentificationService {
      * @return
      */
     public String getRedirectionUrl() {
-        return (serverUrl + "/login?service=" + encodeUrl(getClientUrl()));
+        return (serverUrl.get() + "/login?service=" + encodeUrl(getClientUrl()));
     }
 
     /**
@@ -93,7 +94,7 @@ public class CasAuthentificationService {
      * @throws InvalidAuthenticationTokenException
      */
     public User getUserWithTicket(String ticket) throws InvalidAuthenticationTokenException {
-        URL casXml = genURL(serverUrl + "/p3/serviceValidate?service=" + encodeUrl(getClientUrl()) + "&ticket=" + ticket);
+        URL casXml = genURL(serverUrl.get() + "/p3/serviceValidate?service=" + encodeUrl(getClientUrl()) + "&ticket=" + ticket);
         Document doc = null;
 
         try {

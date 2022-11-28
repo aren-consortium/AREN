@@ -1,14 +1,15 @@
 package fr.lirmm.aren.security.token;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 
-import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.model.User;
-import java.time.temporal.ChronoUnit;
+import fr.lirmm.aren.producer.Configurable;
 
 /**
  * Service which provides operations for authentication tokens.
@@ -23,7 +24,7 @@ public class AuthenticationTokenService {
      */
     @Inject
     @Configurable("authentication.jwt.validFor")
-    private Long validFor;
+    private Provider<Long> validFor;
 
     @Inject
     private AuthenticationTokenIssuer tokenIssuer;
@@ -63,7 +64,7 @@ public class AuthenticationTokenService {
      */
     public String issueToken(User user) {
 
-        return issueToken(user, validFor);
+        return issueToken(user, validFor.get());
     }
 
     /**

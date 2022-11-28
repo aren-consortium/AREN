@@ -1,18 +1,20 @@
 package fr.lirmm.aren.service;
 
-import fr.lirmm.aren.producer.Configurable;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import fr.lirmm.aren.producer.Configurable;
 
 /**
  *
@@ -23,27 +25,27 @@ public class MailingService {
 
     @Inject
     @Configurable("smtp.server")
-    private String smtpServer;
+    private Provider<String> smtpServer;
 
     @Inject
     @Configurable("smtp.username")
-    private String smtpUsername;
+    private Provider<String> smtpUsername;
 
     @Inject
     @Configurable("smtp.password")
-    private String smtpPassword;
+    private Provider<String> smtpPassword;
 
     @Inject
     @Configurable("smtp.port")
-    private String smtpPort;
+    private Provider<String> smtpPort;
 
     @Inject
     @Configurable("smtp.tls")
-    private String smtpTls;
+    private Provider<String> smtpTls;
 
     @Inject
     @Configurable("smtp.auth")
-    private String smtpAuth;
+    private Provider<String> smtpAuth;
 
     /**
      *
@@ -55,17 +57,17 @@ public class MailingService {
     public void sendMail(String from, String to, String subject, String content) throws AddressException, MessagingException {
 
         Properties props = new Properties();
-        props.put("mail.smtp.auth", smtpAuth);
-        props.put("mail.smtp.starttls.enable", smtpTls);
-        props.put("mail.smtp.host", smtpServer);
-        props.put("mail.smtp.port", smtpPort);
+        props.put("mail.smtp.auth", smtpAuth.get());
+        props.put("mail.smtp.starttls.enable", smtpTls.get());
+        props.put("mail.smtp.host", smtpServer.get());
+        props.put("mail.smtp.port", smtpPort.get());
 
         // Get the Session object.
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(smtpUsername, smtpPassword);
+                return new PasswordAuthentication(smtpUsername.get(), smtpPassword.get());
             }
         });
 

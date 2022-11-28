@@ -1,14 +1,30 @@
 package fr.lirmm.aren.ws.rest;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.mail.MessagingException;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
 
-import fr.lirmm.aren.service.InstitutionService;
-import fr.lirmm.aren.service.UserService;
 import fr.lirmm.aren.exception.AccessDeniedException;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.model.ws.ChangePassword;
@@ -17,24 +33,10 @@ import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.security.token.AuthenticationTokenDetails;
 import fr.lirmm.aren.security.token.AuthenticationTokenService;
 import fr.lirmm.aren.service.AuthentificationService;
+import fr.lirmm.aren.service.InstitutionService;
 import fr.lirmm.aren.service.MailingService;
 import fr.lirmm.aren.service.NotificationService;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Set;
-import javax.annotation.security.PermitAll;
-import javax.mail.MessagingException;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import fr.lirmm.aren.service.UserService;
 
 /**
  * JAX-RS resource class for Users managment
@@ -65,7 +67,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
 
     @Inject
     @Configurable("reverse-proxy")
-    private String reverseProxy;
+    private Provider<String> reverseProxy;
 
     /**
      *
@@ -233,7 +235,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         String localSubject;
         String localBody;
 
-        String serverRoot = this.reverseProxy;
+        String serverRoot = this.reverseProxy.get();
         if (serverRoot.length() == 0) {
             serverRoot = request.getRequestURL().substring(0, request.getRequestURL().length() - "/ws/users".length());
         }

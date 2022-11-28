@@ -1,13 +1,14 @@
 package fr.lirmm.aren.producer;
 
-import static fr.lirmm.aren.producer.Scope.Type.APPLICATION;
-import static fr.lirmm.aren.producer.Scope.Type.REQUEST;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Initialized;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
@@ -23,66 +24,102 @@ import javax.persistence.Persistence;
 @ApplicationScoped
 public class EntityManagerProducer {
 
-    private EntityManagerFactory factory;
+  private EntityManagerFactory factory;
 
-    /**
-     *
-     */
-    @PostConstruct
-    public void init() {
-        factory = Persistence.createEntityManagerFactory("default");
-    }
+  private Properties credentials;
 
-    /**
-     *
-     * @return
-     */
-    @Produces
-    @Default
-    @Scope(REQUEST)
-    @RequestScoped
-    public EntityManager createRequestEntityManager() {
-        return factory.createEntityManager();
-    }
+  /**
+   *
+   */
+  @PostConstruct
+  public void init() {
+    this.loadCredentials();
+    this.loadFactory();
+  }
 
-    /**
-     *
-     * @return
-     */
-    @Produces
-    @Scope(APPLICATION)
-    @ApplicationScoped
-    public EntityManager createApplicationEntityManager() {
-        return factory.createEntityManager();
-    }
+  /**
+   * Loads credentioals in the ressources/applications.properties file
+   */
+  private void loadCredentials() {
+    if (credentials == null) {
+      this.credentials = new Properties();
 
-    /**
-     *
-     * @param entityManager
-     */
-    public void closeEntityManager(@Disposes EntityManager entityManager) {
-        if (entityManager.isOpen()) {
-            entityManager.close();
+      InputStream stream = EntityManagerProducer.class.getResourceAsStream("/database.properties");
+      if (stream != null) {
+        try {
+          this.credentials.load(stream);
+        } catch (final IOException e) {
+          throw new RuntimeException("Database configuration file cannot be loaded.");
         }
+      }
     }
+  }
 
-    /**
-     *
-     */
-    @PreDestroy
-    public void destroy() {
-        if (factory.isOpen()) {
-            factory.close();
-        }
+  /**
+   * Create a factory with the default options stored in
+   * resources/META-INF/persistence.xml
+   * and the current credentials
+   */
+  private void loadFactory() {
+    if (factory != null) {
+      factory.close();
     }
+    this.factory = Persistence.createEntityManagerFactory("default", credentials);
+  }
 
-    // Hack to force the EntityManager provider (Hibernate in this case) to create
-    // tables and populate the database when the application starts up
-    /**
-     *
-     * @param init
-     */
-    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        factory.createEntityManager().close();
+  /**
+   * Set and store the given credential for the database
+   * 
+   * @param server   : the url of the DB server
+   * @param port     : the port of the DB server
+   * @param name     : the name of the DB
+   * @param user     : the admin user of the DB
+   * @param password : the password of the admin user
+   */
+  public void setCredentials(String server, String port, String name, String user, String password) {
+    credentials = new Properties();
+    credentials.put("hibernate.connection.url", "jdbc:postgresql://" + server + ":" + port + "/" + name + "");
+    credentials.put("hibernate.connection.username", user);
+    credentials.put("hibernate.connection.password", password);
+    credentials.put("hibernate.hbm2ddl.auto", "update");
+
+    String path = EntityManagerProducer.class.getResource("/database.properties").getPath();
+    try {
+      credentials.store(new FileOutputStream(path), null);
+    } catch (IOException e) {
+      throw new RuntimeException("Cannot write database.properties configuration file.");
     }
+    this.loadFactory();
+  }
+
+  /**
+   *
+   * @return
+   */
+  @Produces
+  @Default
+  @Dependent
+  public EntityManager createRequestEntityManager() {
+    return factory.createEntityManager();
+  }
+
+  /**
+   *
+   * @param entityManager
+   */
+  public void closeEntityManager(@Disposes EntityManager entityManager) {
+    if (entityManager.isOpen()) {
+      entityManager.close();
+    }
+  }
+
+  /**
+   *
+   */
+  @PreDestroy
+  public void destroy() {
+    if (factory.isOpen()) {
+      factory.close();
+    }
+  }
 }

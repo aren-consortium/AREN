@@ -2,6 +2,7 @@ package fr.lirmm.aren.service;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -12,9 +13,9 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientProperties;
 
-import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.exception.AuthenticationException;
 import fr.lirmm.aren.model.User;
+import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.security.PasswordEncoder;
 
 /**
@@ -33,7 +34,7 @@ public class AuthentificationService {
 
     @Inject
     @Configurable("cas.server-login-rest")
-    private String casUrl;
+    private Provider<String> casUrl;
 
     /**
      * Validate username and password.
@@ -84,7 +85,7 @@ public class AuthentificationService {
         params.add("user", username);
         params.add("password", password);
 
-        Response response = client.target(casUrl)
+        Response response = client.target(casUrl.get())
                 .property(ClientProperties.FOLLOW_REDIRECTS, Boolean.FALSE)
                 .request(MediaType.APPLICATION_FORM_URLENCODED)
                 .post(Entity.form(params));
