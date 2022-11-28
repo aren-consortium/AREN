@@ -14,15 +14,22 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
+        <maven.compiler.version>3.10.1</maven.compiler.version>
+        <maven.war.version>3.2.2</maven.war.version>
         <javax.version>1.1</javax.version>
-        <jersey.version>2.31</jersey.version>
-        <jackson.version>2.11.0</jackson.version>
+
+        <!-- Usually non-critical updates -->
+        <jackson.version>2.14.1</jackson.version>
+        <postgresql.version>42.5.1</postgresql.version>
+        <jsoup.version>1.15.3</jsoup.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <weld.version>3.1.1.Final</weld.version>
-        <jbcrypt.version>0.4.1</jbcrypt.version>
-        <hibernate.version>5.4.3.Final</hibernate.version>
-        <postgresql.version>42.2.6</postgresql.version>
+        <jbcrypt.version>0.4.3</jbcrypt.version>
+        <swagger.version>2.2.7</swagger.version>
+        
+        <!-- Be careful! Critical updates to higher major version -->
+        <hibernate.version>5.6.14.Final</hibernate.version>
+        <jersey.version>2.37</jersey.version>
+        <weld.version>3.1.9.Final</weld.version>
     </properties>
 
     <dependencies>
@@ -31,12 +38,12 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-jaxrs2</artifactId>
-            <version>2.1.4</version>
+            <version>${swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.1.4</version>
+            <version>${swagger.version}</version>
             <type>jar</type>
         </dependency>
 
@@ -74,13 +81,13 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.13</version>
+            <version>4.4.15</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.9</version>
+            <version>4.5.13</version>
             <type>jar</type>
         </dependency>
 
@@ -93,7 +100,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>2.31</version>
+            <version>${jersey.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -223,7 +230,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.13.1</version>
+            <version>${jsoup.version}</version>
         </dependency>
     </dependencies>
 
@@ -233,15 +240,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>${maven.war.version}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <outputDirectory>/Volumes/Florent/Developpement/Serveurs/apache-tomcat-8.5.83/webapps/</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>${maven.compiler.version}</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                 </configuration>

@@ -1,8 +1,8 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.TreeSet;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,10 +14,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.SortNatural;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.SortNatural;
-import org.hibernate.annotations.Type;
 
 /**
  * Model for Documents with anotations for storage and serialization
@@ -44,8 +44,7 @@ public class Document extends AbstractDatedEntity implements Serializable {
     private String author;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition="text")
     private String content;
 
     @JoinColumn(name = "category_id", referencedColumnName = "id")

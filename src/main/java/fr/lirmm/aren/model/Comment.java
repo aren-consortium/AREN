@@ -1,11 +1,14 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.TreeSet;
+import java.util.Arrays;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,16 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SortNatural;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import fr.lirmm.aren.model.Comment.Hypostase;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-import javax.persistence.Convert;
-import org.hibernate.annotations.SortNatural;
-
-import org.hibernate.annotations.Type;
 
 /**
  * Model for Comments with anotations for storage and serialization
@@ -210,18 +208,15 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
     }
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "reformulation")
+    @Column(name = "reformulation", columnDefinition="text")
     private String reformulation;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "argumentation")
+    @Column(name = "argumentation", columnDefinition="text")
     private String argumentation;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "selection")
+    @Column(name = "selection", columnDefinition="text")
     private String selection;
 
     @Column(name = "start_container")
@@ -265,8 +260,7 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
     private Opinion opinion;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "hypostases")
+    @Column(name = "hypostases", columnDefinition="text")
     private String hypostases;
 
     @Column(name = "tags", length = 1023)
