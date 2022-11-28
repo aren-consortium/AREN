@@ -43,20 +43,20 @@ import fr.lirmm.aren.producer.Configurable;
 public class HttpRequestService {
 
     @Inject
-    @Configurable("idefix.url")
+    @Configurable("url.idefix")
     private Provider<String> idefixUrl;
 
     @Inject
-    @Configurable("scalar.url")
+    @Configurable("url.scalar")
     private Provider<String> scalarUrl;
+
+    @Inject
+    @Configurable("url.theme")
+    private Provider<String> themeUrl;
 
     @Inject
     @Configurable("plateform.id")
     private Provider<String> plateformId;
-
-    @Inject
-    @Configurable("theme.url")
-    private Provider<String> themeUrl;
 
     /**
      *

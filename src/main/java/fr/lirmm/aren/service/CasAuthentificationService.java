@@ -39,7 +39,7 @@ public class CasAuthentificationService {
     private InstitutionService institutionService;
 
     @Inject
-    @Configurable("cas.url")
+    @Configurable("url.cas")
     private Provider<String> serverUrl;
 
     @Inject
