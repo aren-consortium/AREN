@@ -45,10 +45,10 @@ public class NotificationService extends AbstractService<Notification> {
     /**
      *
      * @param userId
-     * @param readenLimit
+     * @param readLimit
      * @return
      */
-    public Set<Notification> findAllFirstsByUser(Long userId, int readenLimit) {
+    public Set<Notification> findAllFirstsByUser(Long userId, int readLimit) {
         return new HashSet<Notification>(getEntityManager().createQuery("SELECT n1 "
                 + "FROM Notification n1 "
                 + "WHERE n1.owner.id = :userId "
@@ -56,9 +56,9 @@ public class NotificationService extends AbstractService<Notification> {
                 + "OR (SELECT COUNT(id) "
                 + "    FROM Notification n2 "
                 + "    WHERE n2.owner.id = :userId "
-                + "    AND n2.created >= n1.created) <= :readenLimit)")
+                + "    AND n2.created >= n1.created) <= :readLimit)")
                 .setParameter("userId", userId)
-                .setParameter("readenLimit", Long.valueOf(readenLimit))
+                .setParameter("readLimit", Long.valueOf(readLimit))
                 .getResultList());
     }
 
