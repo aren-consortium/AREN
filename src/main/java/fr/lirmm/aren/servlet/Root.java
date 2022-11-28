@@ -73,7 +73,7 @@ public class Root implements Filter {
     } else {
       if (!path.startsWith("/caslogin") && !path.startsWith("/ws") && !path.startsWith("/assets")) {
         if (smtpServer.get().length() > 0)
-          request.setAttribute("canSingin", true);
+          request.setAttribute("canSignin", true);
         if (!isProduction.get())
           request.setAttribute("development", true);
 
