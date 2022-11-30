@@ -1,14 +1,17 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
-import java.util.TreeSet;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,17 +20,14 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.SortNatural;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-
-import javax.persistence.JoinTable;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.SortNatural;
 
 /**
  * Model for Users with anotations for storage and serialization
@@ -51,30 +51,11 @@ public class User extends AbstractEntEntity implements Serializable {
      *
      */
     public enum Authority {
-
-        /**
-         *
-         */
         DELETED,
-        /**
-         *
-         */
         GUEST,
-        /**
-         *
-         */
         USER,
-        /**
-         *
-         */
         MODO,
-        /**
-         *
-         */
         ADMIN,
-        /**
-         *
-         */
         SUPERADMIN
     }
 
@@ -135,7 +116,7 @@ public class User extends AbstractEntEntity implements Serializable {
     @SortNatural
     private SortedSet<Team> teams = new TreeSet<>();
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     @SortNatural
     private SortedSet<Notification> notifications = new TreeSet<>();
 

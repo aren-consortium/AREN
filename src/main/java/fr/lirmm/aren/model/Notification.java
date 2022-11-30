@@ -4,15 +4,19 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import fr.lirmm.aren.model.ws.Message;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 
 /**
  * Model for Notifications with anotations for storage and serialization
@@ -39,11 +43,13 @@ public class Notification extends AbstractOwnedEntity implements Serializable {
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "debate_id", referencedColumnName = "id", updatable = false)
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Debate debate;
 
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "comment_id", referencedColumnName = "id", updatable = false)
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
     /**
