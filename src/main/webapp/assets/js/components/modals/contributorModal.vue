@@ -1,7 +1,7 @@
 <template>
     <modal-layout>
 
-        <template v-slot:title>Inviter à débatre</template>
+        <template v-slot:title>{{ $t('invite_to_debate') }}</template>
 
         <contirbutors-widget v-if="debate">
             <template v-slot:team.side.actions="{ team }">
