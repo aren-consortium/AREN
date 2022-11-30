@@ -69,6 +69,10 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     @Configurable("reverse-proxy")
     private Provider<String> reverseProxy;
 
+    @Inject
+    @Configurable("default.institution.id")
+    private Provider<Long> noInstitutionId;
+
     /**
      *
      */
@@ -199,7 +203,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     public User create(User user) {
 
         if (user.getInstitution() == null || !getUser().is(User.Authority.SUPERADMIN)) {
-            user.setInstitution(institutionService.getReference(0L));
+            user.setInstitution(institutionService.getReference(noInstitutionId.get()));
         }
         if (getUser().getAuthority() == User.Authority.GUEST) {
             user.setActive(false);

@@ -1,19 +1,22 @@
 package fr.lirmm.aren.ws.rest;
 
+import java.util.Set;
+
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import fr.lirmm.aren.model.Team;
+import fr.lirmm.aren.producer.Configurable;
 import fr.lirmm.aren.service.InstitutionService;
 import fr.lirmm.aren.service.TeamService;
 import fr.lirmm.aren.service.UserService;
-import fr.lirmm.aren.model.Team;
-import java.util.Set;
 
 /**
  * JAX-RS resource class for Teams managment
@@ -32,6 +35,10 @@ public class TeamRESTFacade extends AbstractRESTFacade<Team> {
 
     @Inject
     private InstitutionService institutionService;
+
+    @Inject
+    @Configurable("default.institution.id")
+    private Provider<Long> noInstitutionId;
 
     /**
      *
@@ -58,7 +65,7 @@ public class TeamRESTFacade extends AbstractRESTFacade<Team> {
     public Team create(Team team) {
 
         if (team.getInstitution() == null) {
-            team.setInstitution(institutionService.getReference(0L));
+            team.setInstitution(institutionService.getReference(noInstitutionId.get()));
         }
 
         return super.create(team);

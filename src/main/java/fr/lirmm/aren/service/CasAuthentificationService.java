@@ -47,6 +47,10 @@ public class CasAuthentificationService {
     private Provider<String> proxyUrl;
 
     @Inject
+    @Configurable("default.institution.id")
+    private Provider<Long> noInstitutionId;
+
+    @Inject
     private HttpServletRequest request;
 
     private String encodeUrl(String url) {
@@ -122,7 +126,7 @@ public class CasAuthentificationService {
                 user = new User();
                 user.setUsername(username);
                 user.setAuthority(User.Authority.USER);
-                user.setInstitution(institutionService.getReference(0L));
+                user.setInstitution(institutionService.getReference(noInstitutionId.get()));
                 userService.create(user);
             }
             return user;

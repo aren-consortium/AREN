@@ -109,6 +109,9 @@ public class Initialize extends HttpServlet {
         em.persist(noInstitution);
         em.refresh(noInstitution);
 
+        Configuration instiId = new Configuration("default.institution.id", Long.toString(noInstitution.getId()));
+        em.persist(instiId);
+
         String adminMail = request.getParameter("adminMail");
         String adminUsername = request.getParameter("adminUsername");
         String hashedPassword = passwordEncoder.hashPassword(request.getParameter("adminPassword"));
