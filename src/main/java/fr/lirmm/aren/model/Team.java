@@ -177,23 +177,4 @@ public class Team extends AbstractEntEntity implements Serializable {
     public Integer getUsersCount() {
         return usersCount;
     }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isEditable() {
-        return getEntId() == null;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isRemovable() {
-        return getEntId() == null;
-    }
-
 }

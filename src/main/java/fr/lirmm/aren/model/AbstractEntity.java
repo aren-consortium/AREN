@@ -46,26 +46,6 @@ public abstract class AbstractEntity implements Comparable<AbstractEntity> {
      *
      * @return
      */
-    @XmlTransient
-    @JsonIgnore
-    public boolean isEditable() {
-        return true;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @XmlTransient
-    @JsonIgnore
-    public boolean isRemovable() {
-        return true;
-    }
-
-    /**
-     *
-     * @return
-     */
     public Long getId() {
         return id;
     }

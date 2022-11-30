@@ -154,22 +154,4 @@ public class Document extends AbstractDatedEntity implements Serializable {
     public void setDebatesCount(Integer debatesCount) {
         this.debatesCount = debatesCount;
     }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isEditable() {
-        return debates.isEmpty();
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isRemovable() {
-        return debates.isEmpty();
-    }
 }

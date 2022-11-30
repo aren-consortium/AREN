@@ -1,16 +1,17 @@
 package fr.lirmm.aren.ws.rest;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import fr.lirmm.aren.service.InstitutionService;
 import fr.lirmm.aren.model.Institution;
-import java.util.Set;
+import fr.lirmm.aren.producer.Configurable;
+import fr.lirmm.aren.service.InstitutionService;
 
 /**
  * JAX-RS resource class for Institutions managment
@@ -23,6 +24,10 @@ public class InstitutionRESTFacade extends AbstractRESTFacade<Institution> {
 
     @Inject
     private InstitutionService institutionService;
+    
+    @Inject
+    @Configurable("default.institution.id")
+    private Provider<Long> noInstitutionId;
 
     /**
      *
@@ -31,6 +36,15 @@ public class InstitutionRESTFacade extends AbstractRESTFacade<Institution> {
     @Override
     protected InstitutionService getService() {
         return institutionService;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isRemovable(Institution institution) {
+      return (institution.getId() != noInstitutionId.get());
     }
 
     /**

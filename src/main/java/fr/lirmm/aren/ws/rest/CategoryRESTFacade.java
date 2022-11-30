@@ -1,13 +1,16 @@
 package fr.lirmm.aren.ws.rest;
 
+import java.util.HashSet;
+
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.ws.rs.Path;
 
-import fr.lirmm.aren.service.CategoryService;
 import fr.lirmm.aren.model.Category;
-import java.util.HashSet;
+import fr.lirmm.aren.producer.Configurable;
+import fr.lirmm.aren.service.CategoryService;
 
 /**
  * JAX-RS resource class for Categories managment
@@ -21,6 +24,11 @@ public class CategoryRESTFacade extends AbstractRESTFacade<Category> {
     @Inject
     private CategoryService categoryService;
 
+    @Inject
+    @Configurable("rules.remove.categoryWithDocuments")
+    private Provider<Boolean> canRemoveWithDocuments;
+  
+
     /**
      *
      * @return
@@ -28,6 +36,16 @@ public class CategoryRESTFacade extends AbstractRESTFacade<Category> {
     @Override
     protected CategoryService getService() {
         return categoryService;
+    }
+
+    /**
+     * 
+     * @param entity
+     * @return
+     */
+    @Override
+    protected boolean isRemovable(Category category) {
+      return (canRemoveWithDocuments.get() || category.getDocumentsCount() == 0);
     }
 
     /**

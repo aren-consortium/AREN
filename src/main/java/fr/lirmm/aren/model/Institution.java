@@ -142,23 +142,4 @@ public class Institution extends AbstractEntEntity implements Serializable {
         this.teams.add(team);
 
     }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isEditable() {
-        return true;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isRemovable() {
-        return true;
-    }
-
 }

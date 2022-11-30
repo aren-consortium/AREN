@@ -1,5 +1,6 @@
 package fr.lirmm.aren.ws.rest;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,20 +9,17 @@ import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
-import fr.lirmm.aren.service.BroadcasterService;
-import fr.lirmm.aren.service.CommentService;
-import fr.lirmm.aren.service.DebateService;
-import fr.lirmm.aren.service.NotificationService;
-import fr.lirmm.aren.service.TeamService;
-import fr.lirmm.aren.service.UserService;
 import fr.lirmm.aren.exception.InsertEntityException;
 import fr.lirmm.aren.model.Comment;
 import fr.lirmm.aren.model.Debate;
@@ -29,11 +27,15 @@ import fr.lirmm.aren.model.Notification;
 import fr.lirmm.aren.model.Team;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.model.ws.Scrap;
+import fr.lirmm.aren.producer.Configurable;
+import fr.lirmm.aren.service.BroadcasterService;
+import fr.lirmm.aren.service.CommentService;
+import fr.lirmm.aren.service.DebateService;
 import fr.lirmm.aren.service.HttpRequestService;
+import fr.lirmm.aren.service.NotificationService;
 import fr.lirmm.aren.service.ODFService;
-import java.io.File;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
+import fr.lirmm.aren.service.TeamService;
+import fr.lirmm.aren.service.UserService;
 
 /**
  * JAX-RS resource class for Debates managment
@@ -71,6 +73,10 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
     @Inject
     private HttpRequestService httpRequestService;
 
+    @Inject
+    @Configurable("rules.remove.debateWithComments")
+    private Provider<Boolean> canRemoveWithComments;
+
     /**
      *
      */
@@ -84,6 +90,15 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
     @Override
     protected DebateService getService() {
         return debateService;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isRemovable(Debate debate) {
+      return (canRemoveWithComments.get() || debate.getComments().isEmpty());
     }
 
     /**

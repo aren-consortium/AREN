@@ -93,6 +93,24 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     protected UserService getService() {
         return userService;
     }
+    
+    /**
+    *
+    * @return
+    */
+   @Override
+   public boolean isEditable(User user) {
+     return (user.getEntId() == null);
+   }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isRemovable(User user) {
+      return (user.getEntId() == null && user.getComments().isEmpty());
+    }
 
     /**
      * Create a token for the User matching the credentials

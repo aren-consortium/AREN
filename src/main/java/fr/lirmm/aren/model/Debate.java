@@ -1,9 +1,13 @@
 package fr.lirmm.aren.model;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -13,14 +17,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.time.ZonedDateTime;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import javax.persistence.FetchType;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * Model for Debates with anotations for storage and serialization
@@ -344,15 +345,6 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      */
     public void setOpenPublic(boolean openPublic) {
         this.openPublic = openPublic;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isRemovable() {
-        return comments.isEmpty();
     }
 
 }

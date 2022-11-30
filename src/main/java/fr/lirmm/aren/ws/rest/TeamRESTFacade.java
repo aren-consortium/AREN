@@ -54,6 +54,24 @@ public class TeamRESTFacade extends AbstractRESTFacade<Team> {
     protected TeamService getService() {
         return teamService;
     }
+    
+    /**
+    *
+    * @return
+    */
+   @Override
+   public boolean isEditable(Team team) {
+     return (team.getEntId() == null);
+   }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isRemovable(Team team) {
+      return (team.getEntId() == null);
+    }
 
     /**
      *

@@ -416,24 +416,6 @@ public class User extends AbstractEntEntity implements Serializable {
 
     /**
      *
-     * @return
-     */
-    @Override
-    public boolean isEditable() {
-        return institution == null;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isRemovable() {
-        return this.getInstitution().getId() == 0L && this.getComments().size() == 0;
-    }
-
-    /**
-     *
      * @param auth
      * @return
      */

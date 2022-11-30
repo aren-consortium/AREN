@@ -2,8 +2,8 @@ package fr.lirmm.aren.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.TreeSet;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +12,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.SortNatural;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.SortNatural;
 
 /**
  * Model for Categories with anotations for storage and serialization
@@ -148,15 +149,6 @@ public class Category extends AbstractEntity implements Serializable {
      */
     public void setDocumentsCount(Integer documentsCount) {
         this.documentsCount = documentsCount;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public boolean isRemovable() {
-        return documentsCount == 0;
     }
 
 }

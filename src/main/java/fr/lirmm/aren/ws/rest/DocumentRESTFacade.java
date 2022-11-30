@@ -1,15 +1,18 @@
 package fr.lirmm.aren.ws.rest;
 
+import java.util.Set;
+
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import fr.lirmm.aren.service.DocumentService;
 import fr.lirmm.aren.model.Document;
-import java.util.Set;
+import fr.lirmm.aren.producer.Configurable;
+import fr.lirmm.aren.service.DocumentService;
 
 /**
  * JAX-RS resource class for Documents managment
@@ -22,6 +25,10 @@ public class DocumentRESTFacade extends AbstractRESTFacade<Document> {
 
     @Inject
     private DocumentService documentService;
+    
+    @Inject
+    @Configurable("rules.remove.documentWithDebates")
+    private Provider<Boolean> canRemoveWithDebates;
 
     /**
      *
@@ -30,6 +37,15 @@ public class DocumentRESTFacade extends AbstractRESTFacade<Document> {
     @Override
     protected DocumentService getService() {
         return documentService;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isRemovable(Document document) {
+      return (canRemoveWithDebates.get() || document.getDebates().isEmpty());
     }
 
     /**

@@ -1,6 +1,10 @@
 package fr.lirmm.aren.ws.rest;
 
+import java.time.ZonedDateTime;
+import java.util.Set;
+
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,7 +18,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
-import fr.lirmm.aren.service.AbstractService;
 import fr.lirmm.aren.exception.AccessDeniedException;
 import fr.lirmm.aren.model.AbstractDatedEntity;
 import fr.lirmm.aren.model.AbstractEntEntity;
@@ -23,10 +26,7 @@ import fr.lirmm.aren.model.AbstractOwnedEntity;
 import fr.lirmm.aren.model.Notification;
 import fr.lirmm.aren.model.User;
 import fr.lirmm.aren.security.AuthenticatedUserDetails;
-
-import java.time.ZonedDateTime;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
+import fr.lirmm.aren.service.AbstractService;
 
 /**
  * JAX-RS resource class for Abstract Model objects
@@ -73,6 +73,24 @@ public abstract class AbstractRESTFacade<T extends AbstractEntity> {
     }
 
     /**
+     * 
+     * @param entity
+     * @return
+     */
+    protected boolean isEditable(T entity) {
+      return true;
+    }
+
+    /**
+     * 
+     * @param entity
+     * @return
+     */
+    protected boolean isRemovable(T entity) {
+      return true;
+    }
+
+    /**
      *
      * @param entity
      */
@@ -101,7 +119,7 @@ public abstract class AbstractRESTFacade<T extends AbstractEntity> {
      */
     protected void safetyPreEdition(T entity, T entityToEdit) {
         if (!getUser().is("SUPERADMIN")) {
-            if (!entityToEdit.isEditable()) {
+            if (!this.isEditable(entity)) {
                 throw AccessDeniedException.UNMUTABLE_OBJECT(entity.getClass(), entityToEdit.getId());
             }
             if (entity instanceof AbstractOwnedEntity && !(entity instanceof Notification)) {
@@ -122,7 +140,7 @@ public abstract class AbstractRESTFacade<T extends AbstractEntity> {
      */
     protected void safetyPreDeletion(T entity) {
         if (!getUser().is("SUPERADMIN")) {
-            if (!entity.isRemovable()) {
+            if (!this.isRemovable(entity)) {
                 throw AccessDeniedException.UNERASABLE_OBJECT(entity.getClass(), entity.getId());
             }
         }
