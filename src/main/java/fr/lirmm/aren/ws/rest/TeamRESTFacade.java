@@ -37,7 +37,7 @@ public class TeamRESTFacade extends AbstractRESTFacade<Team> {
     private InstitutionService institutionService;
 
     @Inject
-    @Configurable("default.institution.id")
+    @Configurable("default.institution-id")
     private Provider<Long> noInstitutionId;
 
     /**

@@ -55,7 +55,7 @@ public class HttpRequestService {
     private Provider<String> themeUrl;
 
     @Inject
-    @Configurable("plateform.id")
+    @Configurable("platform")
     private Provider<String> plateformId;
 
     /**

@@ -44,23 +44,20 @@ class AuthenticationTokenSettings {
     /**
      * JWT claim for the authorities.
      */
-    @Inject
-    @Configurable("authentication.jwt.claimNames.authorities")
-    private Provider<String> authorityClaimName;
+    private String authorityClaimName;
     /**
      * JWT claim for the token refreshment count.
      */
-    @Inject
-    @Configurable("authentication.jwt.claimNames.refreshCount")
-    private Provider<String> refreshCountClaimName;
+    private String refreshCountClaimName;
     /**
      * JWT claim for the maximum times that a token can be refreshed.
      */
-    @Inject
-    @Configurable("authentication.jwt.claimNames.refreshLimit")
-    private Provider<String> refreshLimitClaimName;
+    private String refreshLimitClaimName;
 
     AuthenticationTokenSettings() {
+      this.authorityClaimName = "authorities";
+      this.refreshCountClaimName = "refreshCount";
+      this.refreshLimitClaimName = "refreshLimit";
     }
 
     public String getSecret() {
@@ -80,14 +77,14 @@ class AuthenticationTokenSettings {
     }
 
     public String getAuthorityClaimName() {
-        return authorityClaimName.get();
+        return authorityClaimName;
     }
 
     public String getRefreshCountClaimName() {
-        return refreshCountClaimName.get();
+        return refreshCountClaimName;
     }
 
     public String getRefreshLimitClaimName() {
-        return refreshLimitClaimName.get();
+        return refreshLimitClaimName;
     }
 }

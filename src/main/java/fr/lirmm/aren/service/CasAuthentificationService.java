@@ -47,7 +47,7 @@ public class CasAuthentificationService {
     private Provider<String> proxyUrl;
 
     @Inject
-    @Configurable("default.institution.id")
+    @Configurable("default.institution-id")
     private Provider<Long> noInstitutionId;
 
     @Inject

@@ -109,7 +109,7 @@ public class Initialize extends HttpServlet {
         em.persist(noInstitution);
         em.refresh(noInstitution);
 
-        Configuration instiId = new Configuration("default.institution.id", Long.toString(noInstitution.getId()));
+        Configuration instiId = new Configuration("default.institution-id", Long.toString(noInstitution.getId()));
         em.persist(instiId);
 
         String adminMail = request.getParameter("adminMail");
@@ -135,7 +135,7 @@ public class Initialize extends HttpServlet {
         URL whatismyip = new URL("http://checkip.amazonaws.com");
         BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
         String ip = in.readLine();
-        Configuration platform = new Configuration("platform.id", ip);
+        Configuration platform = new Configuration("platform", ip);
         em.persist(platform);
 
         String proxy = request.getRequestURL().toString();

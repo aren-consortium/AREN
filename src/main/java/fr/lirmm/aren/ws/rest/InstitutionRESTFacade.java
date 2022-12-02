@@ -26,7 +26,7 @@ public class InstitutionRESTFacade extends AbstractRESTFacade<Institution> {
     private InstitutionService institutionService;
     
     @Inject
-    @Configurable("default.institution.id")
+    @Configurable("default.institution-id")
     private Provider<Long> noInstitutionId;
 
     /**
