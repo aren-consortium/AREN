@@ -19,7 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SortNatural;
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -209,14 +212,17 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
 
     @Lob
     @Column(name = "reformulation", columnDefinition="text")
+    @Type(type = "org.hibernate.type.TextType")
     private String reformulation;
 
     @Lob
     @Column(name = "argumentation", columnDefinition="text")
+    @Type(type = "org.hibernate.type.TextType")
     private String argumentation;
 
     @Lob
     @Column(name = "selection", columnDefinition="text")
+    @Type(type = "org.hibernate.type.TextType")
     private String selection;
 
     @Column(name = "start_container")
@@ -241,18 +247,20 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
     @Column(name = "signaled")
     private boolean signaled = false;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
     @SortNatural
     private SortedSet<Comment> comments = new TreeSet<>();
 
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "parent_id", referencedColumnName = "id", updatable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment parent;
 
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "debate_id", referencedColumnName = "id", updatable = false)
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Debate debate;
 
     @Enumerated(EnumType.STRING)
@@ -261,6 +269,7 @@ public class Comment extends AbstractOwnedEntity implements Serializable {
 
     @Lob
     @Column(name = "hypostases", columnDefinition="text")
+    @Type(type = "org.hibernate.type.TextType")
     private String hypostases;
 
     @Column(name = "tags", length = 1023)

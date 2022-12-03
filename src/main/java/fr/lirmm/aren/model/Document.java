@@ -14,7 +14,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SortNatural;
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -45,13 +48,15 @@ public class Document extends AbstractDatedEntity implements Serializable {
 
     @Lob
     @Column(name = "content", columnDefinition="text")
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
 
-    @OneToMany(mappedBy = "document")
+    @OneToMany(mappedBy = "document", orphanRemoval = true)
     @SortNatural
     private SortedSet<Debate> debates = new TreeSet<>();
 

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
 
@@ -68,12 +70,13 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
     @SortNatural
     private SortedSet<User> guests = new TreeSet<>();
 
-    @OneToMany(mappedBy = "debate")
+    @OneToMany(mappedBy = "debate", orphanRemoval = true)
     @SortNatural
     private SortedSet<Comment> comments = new TreeSet<>();
 
     @JoinColumn(name = "document_id", referencedColumnName = "id", updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Document document;
 
     @Column(name = "comments_count")

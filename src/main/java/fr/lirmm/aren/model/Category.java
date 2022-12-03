@@ -41,7 +41,7 @@ public class Category extends AbstractEntity implements Serializable {
     @Column(name = "picture")
     private String picture;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
     @SortNatural
     private SortedSet<Document> documents = new TreeSet<>();
 

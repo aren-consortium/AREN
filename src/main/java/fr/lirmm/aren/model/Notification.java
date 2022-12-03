@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -35,6 +36,8 @@ public class Notification extends AbstractOwnedEntity implements Serializable {
     private static final long serialVersionUID = 6593370506138662915L;
 
     @Lob
+    @Column(name = "content", columnDefinition="text")
+    @Type(type = "org.hibernate.type.TextType")
     private Message content;
 
     @Column(name = "is_unread")
@@ -42,13 +45,13 @@ public class Notification extends AbstractOwnedEntity implements Serializable {
 
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "debate_id", referencedColumnName = "id", updatable = false)
-    @ManyToOne()
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Debate debate;
 
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "comment_id", referencedColumnName = "id", updatable = false)
-    @ManyToOne()
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
