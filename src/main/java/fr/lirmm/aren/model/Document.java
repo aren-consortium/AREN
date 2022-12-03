@@ -141,7 +141,8 @@ public class Document extends AbstractDatedEntity implements Serializable {
      * @param debates
      */
     public void setDebates(SortedSet<Debate> debates) {
-        this.debates = debates;
+        this.debates.clear();
+        this.debates.addAll(debates);
     }
 
     /**

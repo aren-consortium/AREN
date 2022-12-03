@@ -367,7 +367,8 @@ public class User extends AbstractEntEntity implements Serializable {
      * @param notifications
      */
     public void setNotifications(SortedSet<Notification> notifications) {
-        this.notifications = notifications;
+        this.notifications.clear();
+        this.notifications.addAll(notifications);
     }
 
     /**

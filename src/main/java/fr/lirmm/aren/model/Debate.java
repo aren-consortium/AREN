@@ -235,7 +235,8 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
      * @param comments
      */
     public void setComments(SortedSet<Comment> comments) {
-        this.comments = comments;
+        this.comments.clear();
+        this.comments.addAll(comments);
     }
 
     /**

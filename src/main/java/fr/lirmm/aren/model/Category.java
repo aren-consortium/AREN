@@ -100,7 +100,8 @@ public class Category extends AbstractEntity implements Serializable {
      * @param documents
      */
     public void setDocuments(SortedSet<Document> documents) {
-        this.documents = documents;
+        this.documents.clear();
+        this.documents.addAll(documents);
     }
 
     /**
