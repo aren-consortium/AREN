@@ -137,8 +137,8 @@ html {
             .current-view-wrapper {
                 display: flex;
                 flex-direction: column;
-                min-height: calc(100vh - #{$navigation-height});
                 padding-bottom: 30px;
+                flex: 1;
                 .current-view {
                     display: flex;
                     flex-direction: column;
@@ -971,6 +971,12 @@ nav {
             margin-bottom: 0;
         }
     }
+}
+
+#configurationModal {
+  h2 {
+    margin-top: 2em;
+  }
 }
 
 #commentModal {

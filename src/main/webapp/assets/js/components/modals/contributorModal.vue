@@ -20,7 +20,7 @@
         </contirbutors-widget>
 
         <template v-slot:footer>
-            <button @click="close()" class="waves-effect waves-green btn-flat">Fermer</button>
+            <button @click="close()" class="waves-effect waves-green btn-flat">{{ $t('close')}}</button>
         </template>
 
     </modal-layout>

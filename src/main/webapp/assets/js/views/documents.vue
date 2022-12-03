@@ -30,7 +30,7 @@
                 <action-button
                     v-bind:tooltip="$t('helper.remove_category')"
                     v-bind:tooltip-disabled="$t('helper.cannot_remove_category')"
-                    v-bind:disabled="category.documents.length !== 0"
+                    v-bind:disabled="canRemoveCat(category)"
                     @press="deleteCategory(category)"
                     icon="delete">
                 </action-button>
@@ -45,7 +45,7 @@
                 <action-button
                     v-bind:tooltip="$t('helper.remove_document')"
                     v-bind:tooltip-disabled="$t('helper.cannot_remove_document')"
-                    v-bind:disabled="document.debatesCount !== 0"
+                    v-bind:disabled="canRemoveDoc(document)"
                     @press="deleteDocument(document)"
                     icon="delete">
                 </action-button>
@@ -108,7 +108,7 @@
             deleteDocument(document) {
                 this.$confirm({
                     title: this.$t("helper.delete_document", {documentName: document.name}),
-                    message: this.$t('helper.do_continue'),
+                    message: this.$t('helper.delete_document_warning') + '<br><br>' + this.$t('helper.not_cancelable') + '<br>' + this.$t('helper.do_continue'),
                     callback: (returnValue) => {
                         if (returnValue) {
                             ArenService.Documents.remove({
@@ -121,7 +121,7 @@
             deleteCategory(category) {
                 this.$confirm({
                     title: this.$t("helper.delete_category", {debateName: category.name}),
-                    message: this.$t('helper.do_continue'),
+                    message: this.$t('helper.delete_category_warning') + '<br><br>' + this.$t('helper.not_cancelable') + '<br>' + this.$t('helper.do_continue'),
                     callback: (returnValue) => {
                         if (returnValue) {
                             ArenService.Categories.remove({
@@ -130,6 +130,12 @@
                         }
                     }
                 });
+            },
+            canRemoveCat(category) {
+              return !ArenService.Configs['rules.remove.categoryWithDocuments'] && category.documentsCount != 0;
+            },
+            canRemoveDoc(document) {
+              return !ArenService.Configs['rules.remove.documentWithDebates'] && document.debatesCount != 0;
             }
         },
         components: {

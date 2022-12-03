@@ -30,7 +30,7 @@
                    @input="$emit('input', $event.target.value)">
         </template>
 
-        <label v-if="label" v-bind:class="{active: active}" v-bind:for="id">{{ label }}</label>
+        <label v-if="label" v-bind:class="{active: active}" v-bind:for="id" v-html="label"></label>
         <span v-if="(helper+errorHelper+successHelper).length > 0" v-bind:class="{'helper-text': true, flash: flashHelper}" v-bind:data-error="errorHelper" v-bind:data-success="successHelper">{{ helper }}</span>
 
         <slot></slot>

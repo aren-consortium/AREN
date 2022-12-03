@@ -101,8 +101,11 @@
                     </span>
                     <div class="dropdown-content">
                       <h4 class="dropdown-title"> {{ $root.user.fullName() }}</h4>
-                      <a class="waves-effect waves-light btn-small" href="" target="_blank" rel="noopener noreferrer">
-                        {{ $t('tutorials') }}</a>
+                      <!--a class="waves-effect waves-light btn-small" href="" target="_blank" rel="noopener noreferrer">
+                        {{ $t('tutorials') }}</a-->
+                      <a v-if="user.is('SUPERADMIN')" class="waves-effect waves-light btn-small"
+                        @click="$refs.configurationModal.open()"> {{
+                        $t('application_settings') }}</a>
                       <a class="waves-effect waves-light btn-small" @click="$refs.passwdModal.open()"> {{
                         $t('change_password') }}</a>
                       <a class="waves-effect waves-light btn-small" @click="logout()">{{ $t('menu.logout') }}</a>
@@ -187,6 +190,9 @@
 
     <password-modal ref="passwdModal"></password-modal>
 
+    <configuration-modal v-if="user.is('SUPERADMIN')" id="configurationModal" ref="configurationModal">
+    </configuration-modal>
+
     <toaster></toaster>
     <tooltip></tooltip>
     <documentation @display="help=$event">
@@ -196,7 +202,7 @@
 
     <script>
       BrowserNotification.requestPermission();
-      const ArenService = new ApiService(document.baseURI + "ws", "FR-fr");
+      const ArenService = new ApiService("${serverRoot}ws", "FR-fr");
       let styles = window.getComputedStyle(document.documentElement);
       const redColor = styles.getPropertyValue('--red-color');
       const blueColor = styles.getPropertyValue('--blue-color');
@@ -270,6 +276,7 @@
                   }
                 });
               }
+              ArenService.Configurations.getAll();
               this.mounted = true;
             }
           }, 100);
@@ -301,6 +308,7 @@
           "create-user-modal": vueLoader('components/modals/createUserModal'),
           "password-modal": vueLoader('components/modals/passwordModal'),
           "reset-password-modal": vueLoader('components/modals/resetPasswordModal'),
+          "configuration-modal": vueLoader('components/modals/configurationModal'),
           "toaster": vueLoader('components/singletons/toaster'),
           "confirm-dialog": vueLoader('components/singletons/confirm'),
           "tooltip": vueLoader('components/singletons/tooltip'),
@@ -310,4 +318,4 @@
     </script>
   </body>
 
-  </html>Œ
+  </html>

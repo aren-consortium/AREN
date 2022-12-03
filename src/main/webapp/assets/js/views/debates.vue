@@ -20,7 +20,7 @@
                 <action-button
                     v-bind:tooltip="$t('helper.remove_debate')"
                     v-bind:tooltip-disabled="$t('helper.cannot_remove_debate')"
-                    v-bind:disabled="debate.commentsCount !== 0"
+                    v-bind:disabled="canRemove(debate)"
                     @press="deleteDebate(debate)"
                     icon="delete">
                 </action-button>
@@ -72,7 +72,7 @@
             deleteDebate(debate) {
                 this.$confirm({
                     title: this.$t("helper.delete_debate", {debateName: debate.document.name}),
-                    message: this.$t('helper.do_continue'),
+                    message: this.$t('helper.delete_debate_warning') + '<br><br>' + this.$t('helper.not_cancelable') + '<br>' + this.$t('helper.do_continue'),
                     callback: (returnValue) => {
                         if (returnValue) {
                             ArenService.Debates.remove({
@@ -81,6 +81,9 @@
                         }
                     }
                 });
+            },
+            canRemove(debate) {
+              return !ArenService.Configs['rules.remove.debatesWithComments'] && debate.commentsCount !== 0;
             }
         },
         components: {

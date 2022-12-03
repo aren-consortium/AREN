@@ -42,7 +42,7 @@
             </text-input>
 
             <div v-if="$root.user && $root.user.is('MODO')" class="col s6">
-                <label>$t('authority')</label>
+                <label>{{ $t('authority') }}</label>
                 <select class="browser-default" v-model="user.authority">
                     <option value="USER">{{ $t('USER') }}</option>
                     <option v-if="$root.user.is('MODO')" value="MODO">{{ $t('MODO') }}</option>
