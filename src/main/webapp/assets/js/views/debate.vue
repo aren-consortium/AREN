@@ -19,6 +19,7 @@
             <div class="col s6">
                 <documented v-bind:value="$t('documentation.debate_display')">
                     <div id="leftDisplay">
+                        <div v-if="leftDisplay === 'document'" id="collapser" onclick="debate.classList.toggle('collasped')"></div>
                         <label>{{ $t('display') }} : </label>
                         <label>
                             <input class="browser-default" name="leftDisplay" type="radio"
@@ -39,7 +40,6 @@
                 </documented>
             </div>
             <div class="col s6">
-                <search-box v-model="search"></search-box>
                 <documented v-bind:value="$t('documentation.debate_sort')">
                     <div id="sortCommentsBy">
                         <label>{{ $t('sort_by') }} : </label>
@@ -55,6 +55,7 @@
                         </label>
                     </div>
                 </documented>
+                <search-box v-model="search"></search-box>
             </div>
         </div>
 
@@ -236,6 +237,7 @@
                 this.debate.comments.forEach((comment) => Vue.set(this.displayableComments, comment.id, true));
             },
             leftDisplay(val) {
+                debate.classList.remove('collasped')
                 if (val === 'scraps') {
                     this.fetchScraps();
                 }

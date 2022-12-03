@@ -92,7 +92,7 @@ img {
 }
 
 $navigation-height: 64px;
-$header-height: 60px;
+$header-height: 45px;
 
 html {
     body {
@@ -523,6 +523,7 @@ nav {
 
     #options {
         position: sticky;
+        height: 20px;
         padding: 0 17px;
         top: ($navigation-height + $header-height);
         background: $background-color;
@@ -545,21 +546,59 @@ nav {
         }
         .search-box {
             margin: 0;
+            > i {
+              top: 0;
+              font-size: 1.5em;
+            }
             > input {
+                height: 100%;
                 margin-bottom: 5px;
                 margin-top: -5px;
             }
         }
     }
 
+    #collapser {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 12px;
+        float: left;
+        margin-left: -17px;
+        cursor: w-resize;
+        &:hover {
+            background: lighten($grey-color-light, 5%);
+        }
+        &::before {
+            content: "«";
+        }
+    }
+    &.collasped {
+        #collapser {
+            cursor: e-resize;
+            &::before {
+                content: "»";
+            }
+        }
+        #documentContainer {
+            margin-left: -50%;
+        }
+        #commentsContainer {
+            width: 100%;
+        }
+    }
+
     #mainContainer {
-        height: calc(100vh - #{($navigation-height + $header-height) + 46px});
+        height: calc(100vh - #{($navigation-height + $header-height) + 20px});
+        overflow: hidden;
     }
 
     #documentContainer, #commentsContainer {
         width: 50%;
         height: 100%;
         float: left;
+        transition: all .5s;
         .scroll-area {
             height: 100%;
             overflow-y: scroll;
@@ -813,7 +852,7 @@ nav {
     }
 
     svg.spaghettis {
-        position: fixed;
+        position: absolute;
         pointer-events: none;
         top: 0;
         left: 0;
@@ -1199,9 +1238,10 @@ nav {
 
 #createDebate {
     .steps {
+        margin-top: 15px;
         > .tabs {
             position: sticky;
-            top: 75px;
+            top: $navigation-height + 15px;
             z-index: 9;
             display: block;
             margin-top: -50px;

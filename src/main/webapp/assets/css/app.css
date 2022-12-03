@@ -8836,7 +8836,7 @@ html body #app .current-view-wrapper .current-view > .container > #header {
   display: grid;
   grid-template-columns: 1fr -webkit-max-content;
   grid-template-columns: 1fr max-content;
-  height: 60px;
+  height: 45px;
   align-items: center;
   z-index: 4;
 }
@@ -8879,7 +8879,7 @@ html body #app .current-view-wrapper .current-view > .container > .grid {
 html body #app .current-view-wrapper .current-view > .container > .grid > .ghead .gh {
   position: -webkit-sticky;
   position: sticky;
-  top: 124px;
+  top: 109px;
   background: white;
   z-index: 8;
 }
@@ -9184,8 +9184,9 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 #debate #options {
   position: -webkit-sticky;
   position: sticky;
+  height: 20px;
   padding: 0 17px;
-  top: 124px;
+  top: 109px;
   background: white;
   z-index: 2;
   text-align: right;
@@ -9206,17 +9207,52 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 #debate #options .search-box {
   margin: 0;
 }
+#debate #options .search-box > i {
+  top: 0;
+  font-size: 1.5em;
+}
 #debate #options .search-box > input {
+  height: 100%;
   margin-bottom: 5px;
   margin-top: -5px;
 }
+#debate #collapser {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 12px;
+  float: left;
+  margin-left: -17px;
+  cursor: w-resize;
+}
+#debate #collapser:hover {
+  background: #ebecee;
+}
+#debate #collapser::before {
+  content: "«";
+}
+#debate.collasped #collapser {
+  cursor: e-resize;
+}
+#debate.collasped #collapser::before {
+  content: "»";
+}
+#debate.collasped #documentContainer {
+  margin-left: -50%;
+}
+#debate.collasped #commentsContainer {
+  width: 100%;
+}
 #debate #mainContainer {
-  height: calc(100vh - 170px);
+  height: calc(100vh - 129px);
+  overflow: hidden;
 }
 #debate #documentContainer, #debate #commentsContainer {
   width: 50%;
   height: 100%;
   float: left;
+  transition: all 0.5s;
 }
 #debate #documentContainer .scroll-area, #debate #commentsContainer .scroll-area {
   height: 100%;
@@ -9458,7 +9494,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   margin-bottom: 10px;
 }
 #debate svg.spaghettis {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   top: 0;
   left: 0;
@@ -9783,7 +9819,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 #document .ql-toolbar {
   position: -webkit-sticky;
   position: sticky;
-  top: 124px;
+  top: 109px;
   background: white;
   z-index: 10;
   height: 42px;
@@ -9808,10 +9844,13 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   border-bottom-width: 0;
 }
 
+#createDebate .steps {
+  margin-top: 15px;
+}
 #createDebate .steps > .tabs {
   position: -webkit-sticky;
   position: sticky;
-  top: 75px;
+  top: 79px;
   z-index: 9;
   display: block;
   margin-top: -50px;
