@@ -878,7 +878,6 @@ ApiService = function (anUrl, locale) {
 
   this.Configurations.editAll = function (params = {}) {
     params.method = "PUT";
-    params.data = Object.entries(params.data).map(e => ({key: e[0], value: e[1]}));
     let onSuccess = params.onSuccess;
     params.onSuccess = function (result) {
       self.Configs = {}
