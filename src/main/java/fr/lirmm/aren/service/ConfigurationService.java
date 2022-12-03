@@ -1,11 +1,12 @@
 package fr.lirmm.aren.service;
 
+import java.io.ObjectInputFilter.Config;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.PersistenceException;
 
 import fr.lirmm.aren.model.Configuration;
 import fr.lirmm.aren.model.User;
@@ -59,8 +60,15 @@ public class ConfigurationService extends AbstractService<Configuration> {
     if (config == null) {
       this.create(new Configuration(key, value));
     } else {
-      config.setValue(value);
-      this.edit(config);
+      super.transactionBegin();
+      getEntityManager().createQuery("UPDATE Configuration "
+          + "SET value = :value "
+          + "WHERE key = :key")
+          .setParameter("key", key)
+          .setParameter("value", value)
+          .executeUpdate();
+      super.commit();
+      getEntityManager().refresh(config);
     }
     if (reload) {
       configurationproducer.loadDB();
@@ -68,14 +76,15 @@ public class ConfigurationService extends AbstractService<Configuration> {
   }
 
   private Configuration findByKey(String key) {
-    try {
-      return getEntityManager().createQuery("SELECT c "
-          + "FROM Configuration c "
-          + "WHERE c.key = :key", Configuration.class)
-          .setParameter("key", key)
-          .getSingleResult();
-    } catch (PersistenceException ex) {
+    List<Configuration> results = getEntityManager().createQuery("SELECT c "
+        + "FROM Configuration c "
+        + "WHERE c.key = :key", Configuration.class)
+        .setParameter("key", key)
+        .getResultList();
+
+    if (results.isEmpty()) {
       return null;
     }
+    return results.get(0);
   }
 }

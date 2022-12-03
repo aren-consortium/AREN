@@ -66,7 +66,7 @@ public class Configuration extends AbstractEntity implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (key != null ? key.hashCode() : 0);
+    hash += key.hashCode() + value.hashCode();
     return hash;
   }
 
