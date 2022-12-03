@@ -20,16 +20,16 @@
             <property name="hibernate.jdbc.batch_versioned_data" value="true"/>
 
             <!-- Pool configuration -->
-            <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+            <!-- <property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
             <property name="hibernate.c3p0.acquire_increment" value="5"/>
-            <property name="hibernate.c3p0.idle_test_period" value="60"/>
             <property name="hibernate.c3p0.min_size" value="5"/>
             <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
             <property name="hibernate.c3p0.max_statements" value="50"/>
-            <property name="hibernate.c3p0.timeout" value="0"/>
-            <property name="hibernate.c3p0.acquireRetryAttempts" value="1"/>
-            <property name="hibernate.c3p0.acquireRetryDelay" value="250"/>
+            <property name="hibernate.c3p0.idle_test_period" value="60"/>
             <property name="hibernate.c3p0.maxIdleTime" value="3000"/>
+            <property name="hibernate.c3p0.acquireRetryAttempts" value="3"/>
+            <property name="hibernate.c3p0.acquireRetryDelay" value="250"/> -->
         </properties>
     </persistence-unit>
 </persistence>

@@ -8,7 +8,7 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
@@ -34,7 +34,10 @@ public class EntityManagerProducer {
   @PostConstruct
   public void init() {
     this.loadCredentials();
-    this.loadFactory();
+    try {
+      this.loadFactory();
+    } catch (Throwable ex) {
+    }
   }
 
   /**
@@ -98,7 +101,7 @@ public class EntityManagerProducer {
    */
   @Produces
   @Default
-  @Dependent
+  @RequestScoped
   public EntityManager createRequestEntityManager() {
     return factory.createEntityManager();
   }
