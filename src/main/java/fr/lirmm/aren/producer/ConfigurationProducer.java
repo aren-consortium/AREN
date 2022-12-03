@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
@@ -63,6 +64,15 @@ public class ConfigurationProducer {
     this.configService.findAll().forEach(config -> {
       dbProperties.setProperty(config.getKey(), config.getValue());
     });
+  }
+
+  @Produces
+  @Default
+  public Properties getAll() {
+    Properties result = new Properties();
+    result.putAll(properties);
+    result.putAll(dbProperties);
+    return result;
   }
 
   /**

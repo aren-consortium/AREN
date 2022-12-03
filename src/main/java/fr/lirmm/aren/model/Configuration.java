@@ -59,4 +59,31 @@ public class Configuration extends AbstractEntity implements Serializable {
     this.value = value;
   }
 
+  /**
+   *
+   * @return
+   */
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (key != null ? key.hashCode() : 0);
+    return hash;
+  }
+
+  /**
+   *
+   * @param object
+   * @return
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (object == null || this == null) {
+      return false;
+    }
+    if (object.getClass() != this.getClass()) {
+      return false;
+    }
+    Configuration other = ((Configuration) object);
+    return this.key.equals(other.getKey()) && this.value.equals(other.getValue());
+  }
 }
