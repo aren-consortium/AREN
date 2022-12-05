@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -57,9 +58,8 @@ public class ConfigurationRESTFacade extends AbstractRESTFacade<Configuration> {
    *
    * @return a set of entity
    */
-  @GET
-  @RolesAllowed({ "GUEST" })
   @Override
+  @RolesAllowed({ "GUEST" })
   public Set<Configuration> findAll() {
     Set<Configuration> configs = new HashSet<>();
     properties.get().forEach((key, value) -> {
