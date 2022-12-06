@@ -12,11 +12,11 @@
         </template>
 
         <template v-slot:column.1="{ value: user }">
-            {{ user.lastName }}
+            {{ user.firstName }}
         </template>
 
         <template v-slot:column.2="{ value: user }">
-            {{ user.firstName }}
+            {{ user.lastName }}
         </template>
 
         <template v-slot:column.3="{ value: user }">
@@ -58,7 +58,7 @@
             },
             filter(user) {
                 if (this.search) {
-                    return user.authority !== Authority.DELETED && user.fullName().toLowerCase().includes(this.search.toLowerCase());
+                    return user.authority !== Authority.DELETED && (user.fullName()  + " " + user.authority).toLowerCase().includes(this.search.toLowerCase());
                 }
                 return user.authority !== Authority.DELETED;
             },

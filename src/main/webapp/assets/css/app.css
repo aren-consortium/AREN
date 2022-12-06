@@ -8801,7 +8801,7 @@ html body #app > nav {
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 20;
 }
 html body #app #loading {
   position: fixed;
@@ -8838,7 +8838,7 @@ html body #app .current-view-wrapper .current-view > .container > #header {
   grid-template-columns: 1fr max-content;
   height: 45px;
   align-items: center;
-  z-index: 4;
+  z-index: 10;
 }
 html body #app .current-view-wrapper .current-view > .container > #header > div {
   display: grid;
@@ -9844,16 +9844,20 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   border-bottom-width: 0;
 }
 
+#createDebate #header {
+  background: none !important;
+}
 #createDebate .steps {
   margin-top: 15px;
 }
 #createDebate .steps > .tabs {
   position: -webkit-sticky;
   position: sticky;
-  top: 79px;
+  top: 64px;
   z-index: 9;
   display: block;
-  margin-top: -50px;
+  margin-top: -60px;
+  padding-top: 10px;
   text-align: center;
   border: none;
   height: auto;

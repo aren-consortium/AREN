@@ -41,7 +41,11 @@ public class MailingService {
 
     @Inject
     @Configurable("smtp.tls")
-    private Provider<String> smtpTls;
+    private Provider<String> smtpTLS;
+
+    @Inject
+    @Configurable("smtp.ssl")
+    private Provider<String> smtpSSL;
 
     @Inject
     @Configurable("smtp.auth")
@@ -58,7 +62,8 @@ public class MailingService {
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", smtpAuth.get());
-        props.put("mail.smtp.starttls.enable", smtpTls.get());
+        props.put("mail.smtp.starttls.enable", smtpTLS.get());
+        props.put("mail.smtp.ssl.enable", smtpSSL.get());
         props.put("mail.smtp.host", smtpServer.get());
         props.put("mail.smtp.port", smtpPort.get());
 

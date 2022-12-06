@@ -125,7 +125,7 @@ html {
                 width: 100%;
                 top: 0;
                 left: 0;
-                z-index: 10;
+                z-index: 20;
             }
             #loading {
                 position: fixed;
@@ -157,7 +157,7 @@ html {
                             grid-template-columns: 1fr max-content;
                             height: $header-height;
                             align-items: center;
-                            z-index: 4;
+                            z-index: 10;
                             > div {
                                 display: grid;
                                 grid-column-gap: 0.25em;
@@ -1237,14 +1237,18 @@ nav {
 }
 
 #createDebate {
+    #header {
+      background: none !important;
+    }
     .steps {
         margin-top: 15px;
         > .tabs {
             position: sticky;
-            top: $navigation-height + 15px;
+            top: $navigation-height;
             z-index: 9;
             display: block;
-            margin-top: -50px;
+            margin-top: -60px;
+            padding-top: 10px;
             text-align: center;
             border: none;
             height: auto;

@@ -86,15 +86,27 @@
         data: function ( ) {
             return {
                 institution: false,
-                manageUsers: false,
-                search: ""
+                search: this.$route.query.search || ""
             };
         },
         created() {
             if (!this.$root.user.is('MODO')) {
                 this.$router.push("/404");
-                return;
             }
+        },
+        computed: {
+          manageUsers: {
+            get () {
+              return this.$route.path == "/users";
+            },
+            set(value) {
+              if (value) {
+                this.$router.replace( {path: "/users" })
+              } else {
+                this.$router.replace( {path: "/teams"})
+              }
+            }
+          },
         },
         methods: {
             institutionChanged(institution) {

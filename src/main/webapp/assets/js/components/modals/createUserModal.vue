@@ -41,6 +41,8 @@
                         v-bind:error-helper="$t('helper.different_passwords')">
             </text-input>
 
+            <toggle-action-button v-if="$root.user && $root.user.is('GUEST')" v-model="modoRequest" :off-label="$t(`modo_request`)"/>
+
             <div v-if="$root.user && $root.user.is('MODO')" class="col s6">
                 <label>{{ $t('authority') }}</label>
                 <select class="browser-default" v-model="user.authority">
@@ -71,6 +73,7 @@
                 passwordCheck: "",
                 exists: {username: false, email: false},
                 checkExistsTimeout: -1,
+                modoRequest: false,
                 loading: false
             };
         },
@@ -107,7 +110,10 @@
                 this.loading = true;
                 ArenService.Users.create({
                     data: this.user,
-                    query: {returnUrl: "?activation=true&token={token}"},
+                    query: {
+                      returnUrl: "?activation=true&token={token}",
+                      ...(this.modoRequest && {modoRequest:  1})
+                    },
                     onSuccess: () => {
                         this.close();
                         this.$confirm({

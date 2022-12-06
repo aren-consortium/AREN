@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -27,6 +28,7 @@ import javax.ws.rs.core.Response;
 
 import fr.lirmm.aren.exception.AccessDeniedException;
 import fr.lirmm.aren.model.User;
+import fr.lirmm.aren.model.User.Authority;
 import fr.lirmm.aren.model.ws.ChangePassword;
 import fr.lirmm.aren.model.ws.UserCredentials;
 import fr.lirmm.aren.producer.Configurable;
@@ -73,6 +75,10 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     @Configurable("default.institution-id")
     private Provider<Long> noInstitutionId;
 
+    @Inject
+    @Configurable("admin-mail")
+    private Provider<String> adminMail;
+
     /**
      *
      */
@@ -84,6 +90,12 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
      */
     @QueryParam("returnUrl")
     protected String returnUrl;
+
+    /**
+     *
+     */
+    @QueryParam("modoRequest")
+    protected String modoRequest;
 
     /**
      *
@@ -228,8 +240,12 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
             super.create(user);
             try {
                 sendLink(user, "mail_new_user_subject", "mail_new_user_body");
-            } catch (MessagingException ex) {
+                if (modoRequest != null) {
+                  sendModoRequest(user);
+                }
+            } catch (Throwable ex) {
                 super.remove(user.getId());
+                ex.printStackTrace();
                 throw new RuntimeException();
             }
         } else if (getUser().hasSameOrMoreRightThan(user)) {
@@ -238,6 +254,25 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
             throw AccessDeniedException.PERMISSION_MISSING();
         }
         return user;
+    }
+
+    /**
+     * 
+     * @param user
+     */
+    private void sendModoRequest(User user) throws MessagingException {
+
+        Locale currentLocale = request.getLocale();
+        ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
+
+        String serverRoot = this.reverseProxy.get();
+
+        String activationLink = serverRoot + "users?search=" + user.getFirstName() + "%20" + user.getLastName();
+
+        String localSubject = messages.getString("mail_request_modo_subject");
+        String localBody = MessageFormat.format(messages.getString("mail_request_modo_body"), user.getFirstName() + " " + user.getLastName(), activationLink);
+
+        mailingService.sendMail("noreply@aren.fr", adminMail.get(), localSubject, localBody);
     }
 
     /**
@@ -252,7 +287,6 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
 
         String token = authenticationTokenService.issueToken(user, 24L * 60 * 60);
-        System.out.println(authenticationTokenService.parseToken(token).getIssuedDate());
         String activationLink;
         String localSubject;
         String localBody;
