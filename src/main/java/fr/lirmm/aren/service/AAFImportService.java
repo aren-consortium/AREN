@@ -1,19 +1,15 @@
 package fr.lirmm.aren.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -30,6 +26,9 @@ import fr.lirmm.aren.model.aaf.DeleteRequest;
 import fr.lirmm.aren.model.aaf.FicAlimMENESR;
 import fr.lirmm.aren.model.aaf.ModifyRequest;
 import fr.lirmm.aren.security.PasswordEncoder;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Service that provides operations for AAF xml import
@@ -43,9 +42,7 @@ public class AAFImportService {
     private PasswordEncoder passwordEncoder;
 
     @Inject
-    private Provider<EntityManager> emProducer;
-  
-    private EntityManager localEntityManager;
+    private EntityManager em;
 
     /**
      * Object storing the parsed AAF xml file
@@ -91,10 +88,8 @@ public class AAFImportService {
      * @return
      */
     protected EntityManager getEntityManager() {
-      if (localEntityManager == null || !localEntityManager.isOpen())
-          localEntityManager = emProducer.get();
-      return localEntityManager;
-  }
+        return em;
+    }
 
     /**
      *

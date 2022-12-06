@@ -1,14 +1,15 @@
 package fr.lirmm.aren.service;
 
+import static fr.lirmm.aren.producer.Scope.Type.APPLICATION;
+import static fr.lirmm.aren.producer.Scope.Type.REQUEST;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,6 +19,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import fr.lirmm.aren.exception.InsertEntityException;
 import fr.lirmm.aren.model.AbstractEntity;
+import fr.lirmm.aren.producer.Scope;
 
 /**
  * Service that provides abstract operations for the models
@@ -28,9 +30,12 @@ import fr.lirmm.aren.model.AbstractEntity;
 public abstract class AbstractService<T extends AbstractEntity> {
 
   @Inject
-  private Provider<EntityManager> emProducer;
+  @Scope(REQUEST)
+  private EntityManager emr;
 
-  private EntityManager localEntityManager;
+  @Inject
+  @Scope(APPLICATION)
+  private EntityManager ema;
 
   private final Class<T> entityClass;
 
@@ -42,22 +47,17 @@ public abstract class AbstractService<T extends AbstractEntity> {
     this.entityClass = entityClass;
   }
 
-  /**
-   *
-   * @return EntityManager
-   */
-  protected EntityManager getEntityManager() {
-    if (localEntityManager == null || !localEntityManager.isOpen())
-      localEntityManager = emProducer.get();
-    return localEntityManager;
-  }
-
-  /**
-   * Safety close localEntityManager on Bean destroy
-   */
-  @PreDestroy
-  protected void close() {
-    localEntityManager.close();
+    /**
+     *
+     * @return
+     */
+    protected EntityManager getEntityManager() {
+      try {
+          this.emr.getTransaction();
+          return emr;
+      } catch (Exception e) {
+          return this.ema;
+      }
   }
 
   // Wrapper so if there is multiple nested requests

@@ -1,5 +1,8 @@
 package fr.lirmm.aren.producer;
 
+import static fr.lirmm.aren.producer.Scope.Type.APPLICATION;
+import static fr.lirmm.aren.producer.Scope.Type.REQUEST;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,8 +104,20 @@ public class EntityManagerProducer {
    */
   @Produces
   @Default
+  @Scope(REQUEST)
   @RequestScoped
   public EntityManager createRequestEntityManager() {
+    return factory.createEntityManager();
+  }
+
+  /**
+   *
+   * @return
+   */
+  @Produces
+  @Scope(APPLICATION)
+  @ApplicationScoped
+  public EntityManager createApplicationEntityManager() {
     return factory.createEntityManager();
   }
 
