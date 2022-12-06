@@ -113,13 +113,16 @@ public class Initialize extends HttpServlet {
         em.persist(instiId);
 
         String adminMail = request.getParameter("adminMail");
+
+        Configuration cfgMail = new Configuration("admin-mail", adminMail);
+        em.persist(cfgMail);
+
         String adminUsername = request.getParameter("adminUsername");
         String hashedPassword = passwordEncoder.hashPassword(request.getParameter("adminPassword"));
 
         User superAdmin = new User();
         superAdmin.setFirstName("Super");
         superAdmin.setLastName("Admin");
-        superAdmin.setEmail(adminMail);
         superAdmin.setUsername(adminUsername);
         superAdmin.setPassword(hashedPassword);
         superAdmin.setActive(true);

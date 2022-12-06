@@ -16,7 +16,7 @@
           </h2>
           <toggle-action-button v-if="isBool(prop.value)" v-model="prop.value"
             :off-label="$t(`configuration.${prop.key}`)"></toggle-action-button>
-          <text-input v-else type="text" v-model="prop.value" :label="$t(`configuration.${prop.key}`)">
+          <text-input v-else :type="prop.key.includes('password') ? 'password' : 'text'" v-model="prop.value" :label="$t(`configuration.${prop.key}`)">
           </text-input>
         </template>
       </template>
@@ -38,6 +38,7 @@ module.exports = {
     return {
       properties: [
         { key: "production", value: "" },
+        { key: "admin-mail", value: "" },
         { key: "reverse-proxy", value: "" },
         { key: "platform", value: "" },
         { key: "rules.remove.categoryWithDocuments", value: "" },
@@ -46,6 +47,7 @@ module.exports = {
         { key: "smtp.server", value: "" },
         { key: "smtp.port", value: "" },
         { key: "smtp.tls", value: "" },
+        { key: "smtp.ssl", value: "" },
         { key: "smtp.auth", value: "" },
         { key: "smtp.username", value: "" },
         { key: "smtp.password", value: "" },
