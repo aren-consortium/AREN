@@ -1,6 +1,5 @@
 package fr.lirmm.aren.service;
 
-import java.io.ObjectInputFilter.Config;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
