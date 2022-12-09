@@ -28,53 +28,35 @@ Create the database, Replace `[db_name]` by your own choice.
 `CREATE DATABASE [db_name] OWNER [db_user];`
 
 ### Configuration
-Download and extracte the sources in the repository of your choice.
-
-**Copy** the `application.properties` file from the `config` folder to the  `src/main/resources` folder.
-Fill the empty properties, the documentation is in the file itself.
-
-**Copy** the `persistence.xml` file from the `config` forlder to the  `src/main/resources/META-INF` folder.
-Fill the following line with the `db_user`, `db_password` and `db_name` previously set.
-
-    <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/db_name"/>
-    <property name="hibernate.connection.username" value="db_user"/>
-    <property name="hibernate.connection.password" value="db_password"/>
-
+Download and extract the sources in the repository of your choice.
 
 ## Build
 Go to the source folder and run `mvn clean install`.
 A `target` folder is then created with the `aren.war` file inside.
 
 ## Deployement
-Rename the `aren.war` file to `ROOT.war`then copy it into the Java WebSever of your choice [Tomcat 7 tested and functional].
-
-If you do not want the software to run at the root of your serveur, you'll need to change the `path` variable of the `context.xml` file according to the name of your `war` file
+Deploy the `aren.war` on the Java WebSever of your choice [Tomcat 7 tested and functional].
 
 ### First launch
-Go in your webserver folder, in the application folder.
-Edit the `persistence.xml` in the `WEB-INF/classes/META-INF` folder.
-Uncomment the two following lines to allow the application to build the whole database.
+On the first launche, the application will ask you for DB creentials, then the admin informations.
+Once done, the context will reload so the loading of the first page may be a bit long.
 
-    <!--property name="hibernate.hbm2ddl.auto" value="drop-and-create"/-->
-    <!--property name="hibernate.hbm2ddl.import_files" value="META-INF/init.sql"/-->
-Restart your webserver.
-
-**! WARNING !**
-**To avoid any data loss  yous have to re-comment those previous lines. Otherwise the full database will be rebuilt at every restart of the application !**
-
-## API super-admin credentials
-The default credentials for the super-admin are **admin:password** 
-Those can be easily change throught the web interface or with an API call.
+### Update from 3.9.x to 3.10.x
+Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db_name] > dump.sql`
+Drop the DB with `dropdb -U [db_user] [db_name]`
+Recreate the database with  `createdb -U [db_user] [db_name]`
+Start the application like for a first deployment.
+Execute the following SQL code `DELETE FROM users; DELETE FROM institutions; ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`
+Import your old datas with `psql -h [db_server] -p [db_port] -a -U [db_user] -f dump.sql [db_name]` and correct the errors.
+(the notifications were not being remove, so some foreign key error may arrive, they can be ignored)
+Execute the following SQL code `ALTER TABLE documents REMOVE COLUMN tags text; ALTER TABLE documents REMOVE COLUMN proposed_tags text;`
 
 ## Documentation
 The web interface is shiped with an useful *help* button. Use it if you have any issues.
 The REST API documentation can be found [here](https://app.swaggerhub.com/apis-docs/aren-consortium/aren-api/3.0.0).
 You can access the openapi desc directly through the application with the url `/ws/openapi.[json|yaml]`
 
-
-
 ## Running the tests
-
 @TODO
 
 ## Built With
