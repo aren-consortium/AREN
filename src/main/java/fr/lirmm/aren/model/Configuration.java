@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.SQLInsert;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @Entity
 @Table(name = "configurations")
+@SQLInsert(sql="INSERT INTO configurations(key, value) VALUES (?, ?) ON CONFLICT (key) DO UPDATE SET value = $2")
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Configuration.class)
 public class Configuration extends AbstractEntity implements Serializable {

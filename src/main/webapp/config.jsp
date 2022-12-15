@@ -67,20 +67,6 @@
 </style>
 
 <body>
-
-  <% if (request.getAttribute("dbExists") !=null) { %>
-
-    <div>
-      The database already exists and has been link to.<br>
-      Contact your sysadmin to know who is the AREN superadmin.<br>
-      You need to empty the database to recreate a superadmin.<br>
-      If you need to connect to another database, change the settings in
-      WEB-INF/classes/database.properties<br><br>
-      <a href="<%=request.getContextPath()%>">Got to home page</a>
-    </div>
-
-  <% } else { %>
-    
     <form method="POST" action="">
 
       <% if (request.getAttribute("error") !=null) { %>
@@ -89,9 +75,14 @@
           <details>${errorDetails}</details>
         </div>
       <% } %>
-      
-      <% if (request.getAttribute("setAdmin") !=null) { %>
-
+      <% if (request.getAttribute("setParams") !=null) { %>
+        <h1>Global Configuration</h1>
+        <table>
+          <tr>
+            <td>Root URL of the application</td>
+            <td><input type="text" name="reverseProxy" value="" required /></td>
+          </tr>
+        </table>
         <h1>Super Admin Configuration</h1>
         <table>
           <tr>
@@ -111,10 +102,7 @@
             <td><input type="password" name="adminPasswordBis" value="" placeholder="" required /></td>
           </tr>
         </table>
-        <input type="hidden" name="setAdmin" value="1" placeholder="" />
-
       <% } else { %>
-
         <h1>PSQL Database Configuration</h1>
         <table>
           <tr>
@@ -138,14 +126,9 @@
             <td><input type="password" name="password" value="" required /></td>
           </tr>
         </table>
-        <input type="hidden" name="setDatabase" value="1" placeholder="" />
-
       <% } %>
 
-      <input type="submit" value="Submit" />
+      <input type="submit" name="submitInitialization" value="Submit" />
     </form>
-
-  <% } %>
-
 </body>
 </html>
