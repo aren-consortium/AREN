@@ -46,10 +46,13 @@ Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db
 Drop the DB with `dropdb -U [db_user] [db_name]`  
 Recreate the database with  `createdb -U [db_user] [db_name]`  
 Start the application like for a first deployment.  
+Open the application in your browser and set the DB credentials as asked. Do not pursue much further on the browser !  
+* The database schema is now created.  
 Execute the following SQL code `ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`  
 Import your old datas with `psql -h [db_server] -p [db_port] -a -U [db_user] -f dump.sql [db_name]` and correct the errors.  
-(the notifications were not being remove, so some foreign key error may arrive, they can be ignored).  
-Execute the following SQL code `ALTER TABLE documents REMOVE COLUMN tags text; ALTER TABLE documents REMOVE COLUMN proposed_tags text;`
+* the notifications were not being remove, so some foreign key error may arrive, they can be ignored.  
+Execute the following SQL code `ALTER TABLE documents DROP COLUMN tags; ALTER TABLE documents DROP COLUMN proposed_tags;`  
+Finish the configuration in your browser.
 
 ## Documentation
 The web interface is shiped with an useful *help* button. Use it if you have any issues.
