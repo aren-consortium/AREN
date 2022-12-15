@@ -43,13 +43,13 @@ Once done, the context will reload so the loading of the first page may be a bit
 
 ### Update from 3.9.x to 3.10.x
 Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db_name] > dump.sql`  
-Drop the DB with `dropdb -U [db_user] [db_name]`. 
-Recreate the database with  `createdb -U [db_user] [db_name]`. 
+Drop the DB with `dropdb -U [db_user] [db_name]`.  
+Recreate the database with  `createdb -U [db_user] [db_name]`.  
 Start the application like for a first deployment.  
-Execute the following SQL code `DELETE FROM users; DELETE FROM institutions; ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`. 
+Execute the following SQL code `DELETE FROM users; DELETE FROM institutions; ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`.  
 Import your old datas with `psql -h [db_server] -p [db_port] -a -U [db_user] -f dump.sql [db_name]` and correct the errors.  
-(the notifications were not being remove, so some foreign key error may arrive, they can be ignored). 
-Execute the following SQL code `ALTER TABLE documents REMOVE COLUMN tags text; ALTER TABLE documents REMOVE COLUMN proposed_tags text;`. 
+(the notifications were not being remove, so some foreign key error may arrive, they can be ignored).  
+Execute the following SQL code `ALTER TABLE documents REMOVE COLUMN tags text; ALTER TABLE documents REMOVE COLUMN proposed_tags text;`.
 
 ## Documentation
 The web interface is shiped with an useful *help* button. Use it if you have any issues.
