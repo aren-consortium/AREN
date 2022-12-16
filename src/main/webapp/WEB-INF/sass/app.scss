@@ -161,7 +161,7 @@ html {
                             > div {
                                 display: grid;
                                 grid-column-gap: 0.25em;
-                                grid-template-columns: max-content 1fr max-content max-content;
+                                grid-template-columns: max-content max-content 1fr max-content max-content;
                                 align-items: center;
                                 margin-right: 15px;
                                 width: fit-content;

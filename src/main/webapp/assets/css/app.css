@@ -8843,8 +8843,8 @@ html body #app .current-view-wrapper .current-view > .container > #header {
 html body #app .current-view-wrapper .current-view > .container > #header > div {
   display: grid;
   grid-column-gap: 0.25em;
-  grid-template-columns: -webkit-max-content 1fr -webkit-max-content -webkit-max-content;
-  grid-template-columns: max-content 1fr max-content max-content;
+  grid-template-columns: -webkit-max-content -webkit-max-content 1fr -webkit-max-content -webkit-max-content;
+  grid-template-columns: max-content max-content 1fr max-content max-content;
   align-items: center;
   margin-right: 15px;
   width: -webkit-fit-content;
