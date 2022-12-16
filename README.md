@@ -1,5 +1,6 @@
 
 
+
 # AREN (ARgumentation Et Numérique)
 
 The AREN project (in French, ARgumentation Et Numérique ; argumentation and digital) aims to develop a digital platform for online debates that promotes the development of people' argumentative skills and their critical thinking, through a citizenship education perspective. This platform allows the simultaneous participation of a large number of people in a debate, offers time to build arguments and allows to keep track of exchanges, support for reflective work. 
@@ -42,17 +43,28 @@ On the first launche, the application will ask you for DB creentials, then the a
 Once done, the context will reload so the loading of the first page may be a bit long.
 
 ### Update from 3.9.x to 3.10.x
-Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db_name] > dump.sql`  
-Drop the DB with `dropdb -U [db_user] [db_name]`  
-Recreate the database with  `createdb -U [db_user] [db_name]`  
-Start the application like for a first deployment.  
-Open the application in your browser and set the DB credentials as asked. Do not pursue much further on the browser !  
-* The database schema is now created.  
-Execute the following SQL code `ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`  
-Import your old datas with `psql -h [db_server] -p [db_port] -a -U [db_user] -f dump.sql [db_name]` and correct the errors.  
-* the notifications were not being remove, so some foreign key error may arrive, they can be ignored.  
-Execute the following SQL code `ALTER TABLE documents DROP COLUMN tags; ALTER TABLE documents DROP COLUMN proposed_tags;`  
-Finish the configuration in your browser.
+* Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db_name] > dump.sql`  
+* Drop the DB with `dropdb -U [db_user] [db_name]`  
+* Recreate the database with  `createdb -U [db_user] [db_name]`  
+* Start the application like for a first deployment.  
+* Open the application in your browser and set the DB credentials as asked. Do not pursue much further on the browser !  
+  * The database schema is now created.  
+* Execute the following SQL code `ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`  
+* Import your old datas with `psql -h [db_server] -p [db_port] -a -U [db_user] -f dump.sql [db_name]` and correct the errors.  
+  * The notifications were not being remove, so some foreign key error may arrive, they can be ignored.  
+* Execute the following SQL code `ALTER TABLE documents DROP COLUMN tags; ALTER TABLE documents DROP COLUMN proposed_tags;`  
+* Update the database serials with those lines : 
+```
+SELECT setval('comments_id_seq', (SELECT MAX(id) FROM comments));
+SELECT setval('configurations_id_seq', (SELECT MAX(id) FROM configurations));
+SELECT setval('debates_id_seq', (SELECT MAX(id) FROM debates));
+SELECT setval('documents_id_seq', (SELECT MAX(id) FROM documents));
+SELECT setval('institutions_id_seq', (SELECT MAX(id) FROM institutions));
+SELECT setval('notifications_id_seq', (SELECT MAX(id) FROM notifications));
+SELECT setval('teams_id_seq', (SELECT MAX(id)  FROM teams));
+SELECT setval('users_id_seq', (SELECT MAX(id)  FROM users));
+```
+* Finish the configuration in your browser.
 
 ## Documentation
 The web interface is shiped with an useful *help* button. Use it if you have any issues.
