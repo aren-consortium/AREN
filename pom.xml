@@ -248,7 +248,7 @@
   </dependencies>
 
   <build>
-    <finalName>ROOT</finalName>
+    <finalName>aren</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
