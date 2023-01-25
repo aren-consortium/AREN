@@ -162,7 +162,7 @@ public class CommentService extends AbstractService<Comment> {
         Iterator<Comment> it = comments.iterator();
         while (it.hasNext()) {
             Comment comment = it.next();
-            if (comment.getDebate().isIdfixLink()) {
+            if (comment.getDebate().isIdefixLink()) {
                 this.updateTags(comment, true);
             }
             if (callback != null) {

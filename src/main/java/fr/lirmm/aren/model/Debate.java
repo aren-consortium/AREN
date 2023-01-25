@@ -97,8 +97,11 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
     @Column(name = "reformulation_check")
     private boolean reformulationCheck = true;
 
+    @Column(name = "reformulation_mandatory")
+    private boolean reformulationMandatory = true;
+
     @Column(name = "idfix_link")
-    private boolean idfixLink = false;
+    private boolean idefixLink = false;
 
     @Column(name = "open_public")
     private boolean openPublic = false;
@@ -320,19 +323,35 @@ public class Debate extends AbstractOwnedEntity implements Serializable {
     }
 
     /**
-     *
+     * 
      * @return
      */
-    public boolean isIdfixLink() {
-        return idfixLink;
+    public boolean isReformulationMandatory() {
+      return reformulationMandatory;
+    }
+
+    /**
+     * 
+     * @param reformulationMandatory
+     */
+    public void setReformulationMandatory(boolean reformulationMandatory) {
+      this.reformulationMandatory = reformulationMandatory;
     }
 
     /**
      *
-     * @param idfixLink
+     * @return
      */
-    public void setIdfixLink(boolean idfixLink) {
-        this.idfixLink = idfixLink;
+    public boolean isIdefixLink() {
+        return idefixLink;
+    }
+
+    /**
+     *
+     * @param idefixLink
+     */
+    public void setIdefixLink(boolean idefixLink) {
+        this.idefixLink = idefixLink;
     }
 
     /**

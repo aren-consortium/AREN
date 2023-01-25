@@ -8162,6 +8162,7 @@ input[type=range]::-ms-thumb {
   direction: ltr;
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
+  vertical-align: bottom;
 }
 
 .btn.disabled, .disabled.btn-large, .disabled.btn-small {
@@ -8259,7 +8260,7 @@ input[type=range]::-ms-thumb {
   position: fixed;
   pointer-events: none;
   transform: translate(-50%, -100%);
-  max-width: 120px;
+  max-width: 200px;
   width: 120px;
   background-color: black;
   color: #fff;
@@ -8623,35 +8624,35 @@ input[type=range]::-ms-thumb {
 
 /** alternative modals
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  height: 100vh;
-  width: 100vw;
-  overflow-y: scroll;
+position: fixed;
+top: 0;
+left: 0;
+background-color: rgba(0, 0, 0, 0.5);
+height: 100vh;
+width: 100vw;
+overflow-y: scroll;
 }
 
 .modal::before, .modal::after {
-  content: "";
-  display: block;
-  height: 20px;
-  width: 100%;
+content: "";
+display: block;
+height: 20px;
+width: 100%;
 }
 
 
 .modal .modal-content {
-  background: #fafafa;
-  width: 60%;
-  margin: auto;
+background: #fafafa;
+width: 60%;
+margin: auto;
 }
 
 .modal .modal-footer {
-  position: sticky;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  text-align: center;
+position: sticky;
+bottom: 20px;
+left: 0;
+right: 0;
+text-align: center;
 }
 **/
 ::-webkit-scrollbar {
@@ -8840,7 +8841,7 @@ html body #app .current-view-wrapper .current-view > .container > #header {
   align-items: center;
   z-index: 10;
 }
-html body #app .current-view-wrapper .current-view > .container > #header > div {
+html body #app .current-view-wrapper .current-view > .container > #header > div:first-child {
   display: grid;
   grid-column-gap: 0.25em;
   grid-template-columns: -webkit-max-content -webkit-max-content 1fr -webkit-max-content -webkit-max-content;
@@ -8851,21 +8852,21 @@ html body #app .current-view-wrapper .current-view > .container > #header > div 
   width: -moz-fit-content;
   width: fit-content;
 }
-html body #app .current-view-wrapper .current-view > .container > #header > div > h1 {
+html body #app .current-view-wrapper .current-view > .container > #header > div:first-child > h1 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
 }
-html body #app .current-view-wrapper .current-view > .container > #header > div .author {
+html body #app .current-view-wrapper .current-view > .container > #header > div:first-child .author {
   color: #B84000;
   font-size: 14px;
 }
-html body #app .current-view-wrapper .current-view > .container > #header > div .details {
+html body #app .current-view-wrapper .current-view > .container > #header > div:first-child .details {
   margin: 0;
   line-height: 1em;
 }
-html body #app .current-view-wrapper .current-view > .container > #header > div .details p {
+html body #app .current-view-wrapper .current-view > .container > #header > div:first-child .details p {
   margin: 0;
 }
 html body #app .current-view-wrapper .current-view > .container > #header #backTo {
@@ -9162,6 +9163,13 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 
 #debate .comment-mark, .comment .comment-mark {
   display: inline;
+}
+
+#debateOptionsModal {
+  display: flex;
+}
+#debateOptionsModal > * {
+  flex: 1;
 }
 
 @media only print {

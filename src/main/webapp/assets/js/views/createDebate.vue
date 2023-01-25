@@ -118,7 +118,7 @@
                                         <h2 class="valign-wrapper"><i class="material-icons">group</i>{{ $t('public_debate') }}<i class="material-icons">person</i></h2>
                                     </li>
                                     <li class="collection-item">
-                                        {{ $t('helper.public_debate') }}
+                                        {{ $t('helper.open_public') }}
                                     </li>
                                 </ul>
                             </div>
@@ -146,32 +146,8 @@
                                     </h2>
                                 </li>
                                 <li id="advancedOptionsBody">
-                                    <ul ref="advancedOptions" v-bind:style="'marginTop: ' + (-46 * 4) + 'px;'">
-                                        <li class="collection-item">
-                                            <tooltiped tag="label" v-bind:value="$t('helper.reformulation_assist')">
-                                                <label>
-                                                    <input type="checkbox" v-model="debate.reformulationCheck" />
-                                                    <span>{{ $t('reformulation_assist') }}</span>
-                                                </label>
-                                            </tooltiped>
-                                        </li>
-                                        <li class="collection-item">
-                                            <tooltiped tag="label" v-bind:value="$t('helper.idefix_link')">
-                                                <label>
-                                                    <input type="checkbox" v-model="debate.idfixLink"/>
-                                                    <span>{{ $t('idefix_link') }}</span>
-                                                </label>
-                                            </tooltiped>
-                                        </li>
-                                        <li class="collection-item">
-                                            <tooltiped tag="label" v-bind:value="$t('helper.with_hypostases')">
-                                                <label>
-                                                    <input type="checkbox" v-model="debate.withHypostases"/>
-                                                    <span>{{ $t('with_hypostases') }}</span>
-                                                </label>
-                                            </tooltiped>
-                                        </li>
-                                    </ul>
+                                  <debate-options ref="advancedOptions" :debate="debate" v-bind:style="'marginTop: ' + (-46 * 4) + 'px;'">
+                                  </debate-options>
                                 </li>
                             </ul>
                         </div>
@@ -195,7 +171,7 @@
     module.exports = {
         data( ) {
             return {
-                debate: new Debate( ),
+                debate: false,
                 categories: ArenService.Store.Category,
                 institution: new Institution( ),
                 search: "",
@@ -209,7 +185,7 @@
                 return;
             }
             this.fetchData( );
-            this.debate.reformulationCheck = true;
+            this.reinit();
         },
         methods: {
             fetchData( ) {
@@ -218,7 +194,11 @@
             reinit() {
                 this.debate = new Debate( );
                 this.debate.reformulationCheck = true;
-                this.$refs.mainTabs.activeIndex = 0;
+                this.debate.reformulationMandatory = true;
+                this.debate.withHypostases = false;
+                this.debate.idefixLink = false;
+                if (this.$refs.mainTabs)
+                  this.$refs.mainTabs.activeIndex = 0;
             },
             institutionChanged(institution) {
                 this.institution = institution;
@@ -240,16 +220,13 @@
             toggleAdvancedOptions(value) {
                 value = typeof value === "undefined" ? !this.displayAdvancedOptions : value;
                 if (value) {
-                    this.$refs.advancedOptions.style.marginTop = 0;
+                    this.$refs.advancedOptions.$el.style.marginTop = 0;
                 } else {
-                    this.$refs.advancedOptions.style.marginTop = (-46 * 4) + "px";
+                    this.$refs.advancedOptions.$el.style.marginTop = (-46 * 4) + "px";
                 }
                 this.displayAdvancedOptions = value;
             },
             createDebate( ) {
-                if (this.debate.teams.length === 0 && this.debate.guests.length === 0) {
-                    this.debate.openPublic = true;
-                }
                 ArenService.Debates.create({
                     data: this.debate,
                     onSuccess: (debate) => {
@@ -277,7 +254,8 @@
         },
         components: {
             'contirbutors-widget': vueLoader('components/widgets/contributors'),
-            'documents-grid': vueLoader('components/grids/documentsGrid')
+            'documents-grid': vueLoader('components/grids/documentsGrid'),
+            'debate-options': vueLoader('components/widgets/debateOptions'),
         }
     };
 </script>

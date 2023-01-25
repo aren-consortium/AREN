@@ -513,4 +513,44 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
                 .header("Content-length", export.length())
                 .build();
     }
+
+    /**
+     * 
+     * @param id
+     * @param option
+     * @param value
+     * 
+     * Uptade an option of th debate
+     */
+    @PUT
+    @Path("{id}/option/{name}")
+    @RolesAllowed({"MODO"})
+    public void updateOption(@PathParam("id") Long id, @PathParam("name") String option, Boolean value) {
+
+        Debate debate = this.find(id);
+        
+        switch(option) {
+          case "withHypostases":
+            debate.setWithHypostases(value);
+            break;
+          case "reformulationCheck":
+            debate.setReformulationCheck(value);
+            break;
+          case "reformulationMandatory":
+            debate.setReformulationMandatory(value);
+            break;
+          case "idefixLink":
+            debate.setIdefixLink(value);
+            break;
+          case "active":
+            debate.setActive(value);
+            break;
+          case "openPublic":
+            debate.setOpenPublic(value);
+            break;
+          default:
+            return;
+        }
+        debateService.edit(debate);
+    }
 }

@@ -21,7 +21,7 @@
             {id: 'tree', label:$t('debate_tree')},
             {id: 'pie', label:$t('comment_repartition')},
             {id: 'sunburst', label:$t('debate_sunburst')},
-            {id: 'tags', label:$t('tags'), hidden: !debate.idfixLink},
+            {id: 'tags', label:$t('tags'), hidden: !debate.idefixLink},
             {id: 'export', label:$t('odt_export'), href:'ws/debates/'+debate.id+'/export'},
             ]"
             v-bind:with-link="true">

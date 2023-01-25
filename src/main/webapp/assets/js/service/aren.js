@@ -134,7 +134,8 @@ Debate.prototype.attrs = {
   lastCommentDate: Date,
   withHypostases: Boolean,
   reformulationCheck: Boolean,
-  idfixLink: Boolean,
+  reformulationMandatory: Boolean,
+  idefixLink: Boolean,
   openPublic: Boolean
 };
 Debate.prototype.oneToMany = {
@@ -815,6 +816,12 @@ ApiService = function (anUrl, locale) {
     params.method = "GET";
     params.path = "/" + params.id + "/theme";
     params.parsingClassName = false;
+    this.call(params);
+  };
+  this.Debates.updateOption = function (params = {}) {
+    params.method = "PUT";
+    params.path = "/" + params.id + "/option/" + params.data.option;
+    params.data = params.data.value
     this.call(params);
   };
   this.Teams.addUser = function (params = {}) {
