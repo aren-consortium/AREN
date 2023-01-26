@@ -42,7 +42,7 @@ Deploy the `aren.war` on the Java WebSever of your choice [Tomcat 7 tested and f
 On the first launche, the application will ask you for DB creentials, then the admin informations.
 Once done, the context will reload so the loading of the first page may be a bit long.
 
-### Update from 3.9.x to 3.10.x
+### Update from 3.9.x to 3.11.x
 * Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db_name] > dump.sql`  
 * Drop the DB with `dropdb -U [db_user] [db_name]`  
 * Recreate the database with  `createdb -U [db_user] [db_name]`  
@@ -52,9 +52,11 @@ Once done, the context will reload so the loading of the first page may be a bit
 * Execute the following SQL code `ALTER TABLE documents ADD COLUMN tags text; ALTER TABLE documents ADD COLUMN proposed_tags text;`  
 * Import your old datas with `psql -h [db_server] -p [db_port] -a -U [db_user] -f dump.sql [db_name]` and correct the errors.  
   * The notifications were not being remove, so some foreign key error may arrive, they can be ignored.  
-* Execute the following SQL code `ALTER TABLE documents DROP COLUMN tags; ALTER TABLE documents DROP COLUMN proposed_tags;`  
+* Execute the following SQL code `ALTER TABLE documents DROP COLUMN tags; ALTER TABLE documents DROP COLUMN proposed_tags;`
 * Update the database serials with those lines : 
 ```
+ALTER TABLE debates ADD reformulation_mandatory BOOLEAN;
+UPDATE debates SET reformulation_mandatory = TRUE;
 SELECT setval('comments_id_seq', (SELECT MAX(id) FROM comments));
 SELECT setval('configurations_id_seq', (SELECT MAX(id) FROM configurations));
 SELECT setval('debates_id_seq', (SELECT MAX(id) FROM debates));
