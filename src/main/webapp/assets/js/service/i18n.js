@@ -159,6 +159,7 @@ const messages = {
       smtp: {
         title: "Paramètres SMTP",
         server: "Serveur",
+        sender: "Adresse d'envoie",
         auth: "Authentification requise",
         port: "Port",
         tls: "Connexion TLS",

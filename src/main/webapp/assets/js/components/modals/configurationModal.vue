@@ -10,7 +10,7 @@
     <div>
       <template v-for="(prop, i) in properties">
         <template
-          v-if="(getGroupName(prop) == 'base' || displayAdvanced) && ((prop.key != 'smtp.username' && prop.key != 'smtp.password' && prop.key != 'smtp.sender') || smtpNeedAuth)">
+          v-if="(getGroupName(prop) == 'base' || displayAdvanced) && ((prop.key != 'smtp.username' && prop.key != 'smtp.password') || smtpNeedAuth)">
           <h2 v-if="i == 0 || getGroupName(properties[i]) != getGroupName(properties[i - 1])">
             {{ ($t(`configuration.${getGroupName(prop)}.title`)) }}
           </h2>
@@ -48,10 +48,10 @@ module.exports = {
         { key: "smtp.port", value: "" },
         { key: "smtp.tls", value: "" },
         { key: "smtp.ssl", value: "" },
+        { key: "smtp.sender", value: "" },
         { key: "smtp.auth", value: "" },
         { key: "smtp.username", value: "" },
         { key: "smtp.password", value: "" },
-        { key: "smtp.sender", value: "" },
         { key: "url.cas", value: "" },
         { key: "url.scalar", value: "" },
         { key: "url.theme", value: "" },

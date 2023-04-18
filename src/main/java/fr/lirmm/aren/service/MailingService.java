@@ -28,6 +28,10 @@ public class MailingService {
     private Provider<String> smtpServer;
 
     @Inject
+    @Configurable("smtp.sender")
+    private Provider<String> smtpSender;
+
+    @Inject
     @Configurable("smtp.username")
     private Provider<String> smtpUsername;
 
@@ -58,7 +62,7 @@ public class MailingService {
      * @param subject
      * @param content
      */
-    public void sendMail(String from, String to, String subject, String content) throws AddressException, MessagingException {
+    public void sendMail(String to, String subject, String content) throws AddressException, MessagingException {
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", smtpAuth.get());
@@ -80,7 +84,7 @@ public class MailingService {
         Message message = new MimeMessage(session);
 
         // Set From: header field of the header.
-        message.setFrom(new InternetAddress(from));
+        message.setFrom(new InternetAddress(smtpSender.get()));
 
         // Set To: header field of the header.
         message.setRecipients(Message.RecipientType.TO,

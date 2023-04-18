@@ -6,7 +6,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -28,7 +27,6 @@ import javax.ws.rs.core.Response;
 
 import fr.lirmm.aren.exception.AccessDeniedException;
 import fr.lirmm.aren.model.User;
-import fr.lirmm.aren.model.User.Authority;
 import fr.lirmm.aren.model.ws.ChangePassword;
 import fr.lirmm.aren.model.ws.UserCredentials;
 import fr.lirmm.aren.producer.Configurable;
@@ -272,7 +270,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         String localSubject = messages.getString("mail_request_modo_subject");
         String localBody = MessageFormat.format(messages.getString("mail_request_modo_body"), user.getFirstName() + " " + user.getLastName(), activationLink);
 
-        mailingService.sendMail("noreply@aren.fr", adminMail.get(), localSubject, localBody);
+        mailingService.sendMail(adminMail.get(), localSubject, localBody);
     }
 
     /**
@@ -305,7 +303,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
             localBody = token;
         }
 
-        mailingService.sendMail("noreply@aren.fr", user.getEmail(), localSubject, localBody);
+        mailingService.sendMail(user.getEmail(), localSubject, localBody);
     }
 
     /**
