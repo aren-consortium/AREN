@@ -203,6 +203,9 @@ public class Root implements Filter {
     em.persist(init);
 
     String proxy = request.getParameter("reverseProxy");
+    while (proxy.endsWith("/")) {
+      proxy = proxy.substring(0, proxy.length() - 1);
+    }
     Configuration configProxy = new Configuration("reverse-proxy", proxy + "/");
     em.persist(configProxy);
 
