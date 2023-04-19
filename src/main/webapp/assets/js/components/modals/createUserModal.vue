@@ -111,7 +111,6 @@
                 ArenService.Users.create({
                     data: this.user,
                     query: {
-                      returnUrl: "?activation=true&token={token}",
                       ...(this.modoRequest && {modoRequest:  1})
                     },
                     onSuccess: () => {

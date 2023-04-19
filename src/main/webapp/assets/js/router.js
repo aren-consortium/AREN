@@ -3,6 +3,8 @@ const router = new VueRouter({
     mode: "history",
     routes: [
         {path: '/', component: vueLoader('views/home')},
+        {path: '/activation', component: vueLoader('views/home')},
+        {path: '/resetPassword', component: vueLoader('views/home')},
         {path: '/createDebate', component: vueLoader('views/createDebate')},
         {path: '/teams', component: vueLoader('views/teams')},
         {path: '/users', component: vueLoader('views/teams')},

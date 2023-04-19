@@ -29,14 +29,14 @@
         methods: {
             resetPasswd() {
                 ArenService.Users.resetPasswd({
-                    data: this.username,
-                    query: {returnUrl: "?resetPassword=true&token={token}"},
-                    onSuccess: () => this.$confirm({
-                            title: this.$t('password_forgotten'),
-                            message: this.$t('helper.password_forgotten_email'),
-                            isInfo: true
-                        })
+                    data: this.username
                 });
+                this.$root.loading = false;
+                this.$confirm({
+                    title: this.$t('password_forgotten'),
+                    message: this.$t('helper.password_forgotten_email'),
+                    isInfo: true
+                })
             }
         }
     };

@@ -86,12 +86,6 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     /**
      *
      */
-    @QueryParam("returnUrl")
-    protected String returnUrl;
-
-    /**
-     *
-     */
     @QueryParam("modoRequest")
     protected String modoRequest;
 
@@ -237,9 +231,13 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
             user.setActive(false);
             super.create(user);
             try {
-                sendLink(user, "mail_new_user_subject", "mail_new_user_body");
+                // sendLink(user, "new_user");
+                String token = authenticationTokenService.issueToken(user, 24L * 60 * 60);
+                String link = "activation?token=" + token;
+                this.sendMail(user.getEmail(), "new_user", link);
                 if (modoRequest != null) {
-                  sendModoRequest(user);
+                  String adminLink =  "users?search=" + user.getFirstName() + "%20" + user.getLastName();
+                  this.sendMail(adminMail.get(), "request_modo", adminLink, user.getFirstName() + " " + user.getLastName());
                 }
             } catch (Throwable ex) {
                 super.remove(user.getId());
@@ -254,56 +252,18 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         return user;
     }
 
-    /**
-     * 
-     * @param user
-     */
-    private void sendModoRequest(User user) throws MessagingException {
+    private void sendMail(String to, String which, String link, String... args) throws MessagingException {
+      Locale currentLocale = request.getLocale();
+      ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
 
-        Locale currentLocale = request.getLocale();
-        ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
+      String localSubject = messages.getString("mail_" + which +"_subject");
 
-        String serverRoot = this.reverseProxy.get();
+      String serverRoot = this.reverseProxy.get();
+      String localButton = messages.getString("mail_" + which +"_button");
+      String localMain = MessageFormat.format(messages.getString("mail_" + which +"_body"), args);
+      String localBody = MessageFormat.format(messages.getString("mail_template"), serverRoot, localMain, link, localButton);
 
-        String activationLink = serverRoot + "users?search=" + user.getFirstName() + "%20" + user.getLastName();
-
-        String localSubject = messages.getString("mail_request_modo_subject");
-        String localBody = MessageFormat.format(messages.getString("mail_request_modo_body"), user.getFirstName() + " " + user.getLastName(), activationLink);
-
-        mailingService.sendMail(adminMail.get(), localSubject, localBody);
-    }
-
-    /**
-     *
-     * @param user
-     * @param subject
-     * @param body
-     * @param defautReturnUrl
-     */
-    private void sendLink(User user, String subject, String body) throws MessagingException {
-        Locale currentLocale = request.getLocale();
-        ResourceBundle messages = ResourceBundle.getBundle("messages", currentLocale);
-
-        String token = authenticationTokenService.issueToken(user, 24L * 60 * 60);
-        String activationLink;
-        String localSubject;
-        String localBody;
-
-        String serverRoot = this.reverseProxy.get();
-        if (serverRoot.length() == 0) {
-            serverRoot = request.getRequestURL().substring(0, request.getRequestURL().length() - "/ws/users".length());
-        }
-
-        if (returnUrl != null && !returnUrl.isEmpty()) {
-            activationLink = serverRoot + returnUrl.replace("{token}", token);
-            localSubject = messages.getString(subject);
-            localBody = MessageFormat.format(messages.getString(body), activationLink, activationLink);
-        } else {
-            localSubject = "AREN API token";
-            localBody = token;
-        }
-
-        mailingService.sendMail(user.getEmail(), localSubject, localBody);
+      mailingService.sendMail(to, localSubject, localBody);
     }
 
     /**
@@ -317,6 +277,7 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         getUser().setActive(true);
         getService().edit(getUser());
         getService().invalidateToken(getUser());
+
     }
 
     /**
@@ -331,7 +292,9 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
         User user = getService().findByUsernameOrEmail(identifier);
         if (user != null && user.isActive()) {
             try {
-                sendLink(user, "mail_reset_password_subject", "mail_reset_password_body");
+                String token = authenticationTokenService.issueToken(user, 24L * 60 * 60);
+                String link = "resetPassword?token=" + token;
+                this.sendMail(user.getEmail(), "reset_password", link);
             } catch (MessagingException ex) {
                 throw new RuntimeException();
             }

@@ -1,9 +1,9 @@
 <template>
-    <modal-layout>
+    <modal-layout @hook:mounted="mounted">
 
         <template v-slot:title>{{ $t('connection') }}</template>
 
-        <text-input v-if="!$route.query.resetPassword"
+        <text-input v-if="!reseting"
                     type="password"
                     v-model="oldPassword"
                     v-bind:label="$t('old_password')">
@@ -40,19 +40,26 @@
                 passwordCheck: ""
             };
         },
-        mounted() {
-            this.$nextTick(() => {
-                if (this.$route.query.resetPassword && this.$route.query.token) {
-                    this.open();
-                }
-            });
-        },
         computed: {
+            reseting() {
+              return this.$route.path == '/resetPassword'
+            },
             samePasswords( ) {
                 return this.newPassword === this.passwordCheck;
             }
         },
         methods: {
+            mounted() {
+                this.$nextTick(() => {
+                    if (this.reseting) {
+                        if(this.$route.query.token) {
+                            this.open();
+                        } else {
+                            this.$router.push('/')
+                        }
+                    }
+                });
+            },
             changePasswd() {
                 ArenService.Users.passwd({
                     query: this.$route.query.token ? {token: this.$route.query.token} : {},
@@ -63,11 +70,11 @@
                             message: this.$t('helper.password_changed_loged_out'),
                             isInfo: true,
                             callback: () => {
-                                if (!this.$route.query.resetPassword && !this.$route.query.token) {
+                                if (!this.reseting && !this.$route.query.token) {
                                     this.$router.replace({query: null});
                                     this.$root.logout();
                                 } else {
-                                    this.$router.replace({query: null});
+                                    this.$router.push('/')
                                 }
                             }
                         });

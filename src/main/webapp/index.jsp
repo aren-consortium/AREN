@@ -263,18 +263,22 @@
             if (this.$confirm) {
               clearInterval(interval);
 
-              if (this.$route.query.activation && this.$route.query.token) {
-                ArenService.Users.activate({
-                  query: { token: this.$route.query.token },
-                  onSuccess: () => {
-                    this.$confirm({
-                      title: this.$t('user_activated'),
-                      message: this.$t('helper.user_activated'),
-                      isInfo: true
-                    });
-                    this.$router.replace({ query: null });
-                  }
-                });
+              if (this.$route.path == '/activation') {
+                if (this.$route.query.token) {
+                  ArenService.Users.activate({
+                    query: { token: this.$route.query.token },
+                    onSuccess: () => {
+                      this.$confirm({
+                        title: this.$t('user_activated'),
+                        message: this.$t('helper.user_activated'),
+                        isInfo: true
+                      });
+                      this.$router.push('/')
+                    }
+                  });
+                } else {
+                  this.$route.push('/')
+                }
               }
               ArenService.Configurations.getAll();
               this.mounted = true;
