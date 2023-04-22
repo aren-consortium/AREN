@@ -25,6 +25,11 @@
     background-color: #1b6acb;
 }
 
+* {
+  overscroll-behavior: contain;
+  -ms-scroll-chaining: none;
+}
+
 h1 { color: $primary-color }
 h2 { color: $primary-color }
 h3 { color: #000000 }
@@ -765,8 +770,10 @@ nav {
             align-items: center;
             justify-content: space-evenly;
             .bullet {
+                cursor: pointer;
                 height: 10px;
                 width: 10px;
+                box-sizing: border-box;
                 &::before {
                     content: "";
                     display: block;
@@ -785,11 +792,8 @@ nav {
                     background: $red-color;
                 }
                 &:hover {
-                    cursor: pointer;
                     z-index: 2;
-                    width: 8px;
-                    height: 8px;
-                    margin: 1px;
+                    border: 1px solid transparent;
                 }
 
             }

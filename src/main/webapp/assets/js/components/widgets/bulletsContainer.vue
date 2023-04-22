@@ -7,6 +7,7 @@
                 <div v-for="bullet in bullets"
                      v-bind:class="'bullet ' + bullet.comment.opinion.toLowerCase()"
                      @mouseover="$emit('over-bullet', bullet.comment)"
+                     @mouseout="$emit('out-bullet', bullet.comment)"
                      @click="$emit('click-bullet', bullet.comment)">
                 </div>
             </template>
@@ -19,6 +20,7 @@
                     <div v-for="bullet in bullets"
                          v-bind:class="'bullet ' + bullet.comment.opinion.toLowerCase()"
                          @mouseover="$emit('over-bullet', bullet.comment)"
+                         @mouseout="$emit('out-bullet', bullet.comment)"
                          @click="$emit('click-bullet', bullet.comment)">
                     </div>
                 </div>

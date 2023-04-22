@@ -43,10 +43,11 @@
                     <div class="argumentation-wrapper">
                         <i class="material-icons" >chat_bubble_outline</i>
                         <div class="argumentation"
-                             @mouseup="$emit('selection-end', comment)"
+                             @selectstart="$emit('selectstart', comment)"
                              v-html="highlightedArgumentation"></div>
                         <bullets-container
                             v-if="!preview"
+                            @out-bullet="$emit('leave-me', $event)"
                             @over-bullet="$emit('select-me', $event)"
                             @click-bullet="$emit('focus-me', $event)"
                             v-bind:displayable-comments="displayableComments"
@@ -73,9 +74,10 @@
                         v-bind:comment="child"
                         v-bind:search="search"
                         v-bind:hide-on-scroll="hideOnScroll"
+                        @selectstart="$emit('selectstart', $event)"
                         @tag-edition="$emit('tag-edition', $event)"
-                        @selection-end="$emit('selection-end', $event)"
                         @select-me="$emit('select-me', $event)"
+                        @leave-me="$emit('leave-me', $event)"
                         @focus-me="$emit('focus-me', $event)"
                         @highlight-me="$emit('highlight-me', $event)"
                         @mounted="$emit('mounted', $event)"

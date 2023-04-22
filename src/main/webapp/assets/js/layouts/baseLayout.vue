@@ -1,6 +1,5 @@
 <template>
-    <div v-bind:id="id"
-         @mousedown="$emit('mousedown', $event)">
+    <div v-bind="$attrs" v-on="$listeners">
         <div class="container">
 
             <div id="header">
@@ -24,6 +23,6 @@
 
 <script>
     module.exports = {
-        props: ['id', 'backTo']
+        props: ['backTo']
     }
 </script>

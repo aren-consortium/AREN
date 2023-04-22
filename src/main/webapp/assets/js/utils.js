@@ -154,7 +154,7 @@ Range.prototype.affineToWord = function () {
     while (this.startOffset > 0 && regExp.test(this.toString().charAt(0))) {
         this.setStart(this.startContainer, this.startOffset - 1);
     }
-    if (this.startOffset !== 0) {
+    if (this.startOffset !== 0 && this.startOffset < this.startContainer.length) {
         this.setStart(this.startContainer, this.startOffset + 1);
     }
     while (this.endOffset < this.endContainer.length && regExp.test(this.toString().slice(-1))) {

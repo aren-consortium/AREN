@@ -1,7 +1,8 @@
 <template>
   <base-layout v-if="debate"
                id="debate"
-               @mousedown="clearSelection(); hidePopup()">
+               @mousedown="clearSelection();"
+               @mouseup="selectionHandler" >
       <template v-slot:title>
           <h1>{{ $t('debate') }} - </h1><h1>{{ debate.document.name }}</h1>
           <label>{{ $t("by").toLowerCase() }}</label>
@@ -66,13 +67,13 @@
                       <documented v-bind:value="$t('documentation.debate_document')">
                           <div id="documentDisplay"
                                ref="documentDisplay"
-                               @mouseup="selectionHandler()"
                                v-html="debate.document.content">
                           </div>
                       </documented>
                       <documented v-bind:value="$t('documentation.debate_bulets')">
                           <bullets-container
                               @over-bullet="selectComment($event)"
+                              @out-bullet="clearSelection()"
                               @click-bullet="selectComment($event); scrollToComment($event)"
                               v-bind:displayable-comments="displayableComments"
                               v-bind:comments="filteredComments">
@@ -149,9 +150,9 @@
                       v-bind:search="search"
                       v-bind:hide-on-scroll="true"
                       @tag-edition="editTags($event)"
-                      @selection-end="selectionHandler($event)"
                       @focus-me="selectComment($event); scrollToComment($event)"
                       @select-me="selectComment($event)"
+                      @leave-me="clearSelection()"
                       @highlight-me="highlight($event)"
                       @mounted="mountChild($event)"
                       @report="reportComment($event)"
@@ -161,7 +162,7 @@
           </div>
       </div>
 
-      <div v-show="selectedRange"
+      <div v-if="this.$root.user.is('USER')" v-show="selectedRange"
            class="selection_popup z-depth-2"
            ref="arguePopup"
            v-bind:style="'top: ' + popup.y + 'px; left: ' + popup.x + 'px;'"
@@ -194,6 +195,7 @@
               debate: false,
               newComment: false,
               sortByPosition: false,
+              selectedParent: undefined,
               popup: {x: -9999, y: -9999},
               displayableComments: {},
               selectedRange: false,
@@ -400,7 +402,11 @@
               if (this.$route.query.comment) {
                   this.$router.replace({'query': null});
               }
-              clearSelection( );
+              this.hidePopup();
+              clearSelection();
+              if (this.$refs.commentModal.isOpen()) {
+                this.selectComment(this.newComment)
+              }
           },
           editTags(comment) {
               this.$refs.tagModal.comment = comment;
@@ -416,38 +422,39 @@
                   }
               });
           },
-          selectionHandler(comment) {
-              let selection = getSelection( );
-              let position = selection.anchorNode.compareDocumentPosition(selection.focusNode);
-              let backward = false;
-              if (!position && selection.anchorOffset > selection.focusOffset ||
-                      position === Node.DOCUMENT_POSITION_PRECEDING)
-                  backward = true;
-              if (!selection.isCollapsed) {
-                  this.selectedRange = selection.getRangeAt(0);
-                  this.selectedRange.affineToWord();
-                  if (this.newComment === false) {
-                      this.newComment = new Comment( );
-                  }
-                  if (!this.$refs.commentModal.isOpen()) {
-                      this.newComment.debate = this.debate;
-                      this.newComment.hypostases = [];
-                      this.newComment.tags = [];
-                      this.newComment.parent = comment;
-                      this.newComment.selection = this.selectedRange.getHtml();
-                      let container = this.getCommentContainer(this.newComment);
-                      this.newComment.startContainer = container.getChildPathTo(this.selectedRange.startContainer);
-                      this.newComment.endContainer = container.getChildPathTo(this.selectedRange.endContainer);
-                      this.newComment.startOffset = this.selectedRange.startOffset;
-                      this.newComment.endOffset = this.selectedRange.endOffset;
+          selectionHandler() {
+              if (!this.$root.user.is('USER')) 
+                  return
 
-                      this.popupPositionFromRange(backward);
-                  } else {
-                      this.hidePopup();
-                  }
+              const selection = getSelection( );
+              if (selection.isCollapsed)
+                return 
+                
+              const range = selection.getRangeAt(0)
+              let parent = range.commonAncestorContainer
+              parent = parent.nodeType == Node.TEXT_NODE ? parent.parentElement : parent
+              if (parent.closest('#documentDisplay')) {
+                this.selectedParent = undefined
+              } else if (parent.closest('.argumentation')) {
+                this.selectedParent = parent.closest('.comment-container').__vue__.comment
+              } else {
+                return
+              }
+
+              const position = selection?.anchorNode?.compareDocumentPosition(selection?.focusNode);
+              const backward = !position && selection.anchorOffset > selection.focusOffset 
+                                 || position === Node.DOCUMENT_POSITION_PRECEDING
+              range.affineToWord();
+              
+              if (!selection.isCollapsed && !this.$refs.commentModal.isOpen()) {
+                  // To be sure all selectionchanges are done
+                  setTimeout(() => {
+                      this.selectedRange = range.cloneRange();
+                      this.updatePopup(backward);
+                  })
               }
           },
-          popupPositionFromRange(backward) {
+          updatePopup(backward) {
               if (this.selectedRange) {
                   backward = backward === undefined ? this.$refs.arguePopup.classList.contains('top') : backward;
                   let top = mainContainer.offsetTop + 28;
@@ -481,6 +488,18 @@
                       isInfo: true
                   });
               } else {
+                  this.newComment = new Comment();
+                  this.newComment.debate = this.debate;
+                  this.newComment.hypostases = [];
+                  this.newComment.tags = [];
+                  this.newComment.parent = this.selectedParent;
+                  this.newComment.selection = this.selectedRange.getHtml();
+                  let container = this.getCommentContainer(this.newComment);
+                  this.newComment.startContainer = container.getChildPathTo(this.selectedRange.startContainer);
+                  this.newComment.endContainer = container.getChildPathTo(this.selectedRange.endContainer);
+                  this.newComment.startOffset = this.selectedRange.startOffset;
+                  this.newComment.endOffset = this.selectedRange.endOffset;
+
                   this.$refs.commentModal.open((returnValue) => {
                       if (returnValue) {
                           ArenService.Debates.addComment({
@@ -490,12 +509,12 @@
                           });
                       }
                   });
-                  this.hidePopup( );
                   // For the selected text to stay
                   this.highlight(this.newComment);
               }
           },
           selectComment(comment) {
+              this.hidePopup();
               let range = new Range( );
               let container = comment.parent
                       ? document.querySelector("#comment_" + comment.parent.id + " .argumentation")
