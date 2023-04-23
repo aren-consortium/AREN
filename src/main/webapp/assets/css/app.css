@@ -9060,6 +9060,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 #debate #documentContainer .scroll-area, #debate #commentsContainer .scroll-area {
   height: 100%;
   overflow-y: scroll;
+  position: relative;
 }
 #debate #commentsContainer.loading {
   position: relative;
@@ -9128,6 +9129,13 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   color: white;
   border-radius: 5px;
   padding: 0 5px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  pointer-events: none;
+}
+#debate .selection_popup > span {
+  pointer-events: all;
 }
 #debate .selection_popup::before {
   content: "";

@@ -149,22 +149,6 @@ Range.prototype.getHtml = function () {
     return div.innerHTML;
 }
 
-Range.prototype.affineToWord = function () {
-    let regExp = new RegExp('[A-Za-zÀ-ÖØ-öø-ÿ\'\.\n\t]');
-    while (this.startOffset > 0 && regExp.test(this.toString().charAt(0))) {
-        this.setStart(this.startContainer, this.startOffset - 1);
-    }
-    if (this.startOffset !== 0 && this.startOffset < this.startContainer.length) {
-        this.setStart(this.startContainer, this.startOffset + 1);
-    }
-    while (this.endOffset < this.endContainer.length && regExp.test(this.toString().slice(-1))) {
-        this.setEnd(this.endContainer, this.endOffset + 1);
-    }
-    if (!regExp.test(this.toString().slice(-1)) && this.endOffset !== 0) {
-        this.setEnd(this.endContainer, this.endOffset - 1);
-    }
-}
-
 function clearSelection() {
     if (window.getSelection) {
         window.getSelection().removeAllRanges();
@@ -173,9 +157,56 @@ function clearSelection() {
     }
 }
 
+function snapSelectionToWord() {
+  let sel;
+
+  // Check for existence of window.getSelection() and that it has a
+  // modify() method. IE 9 has both selection APIs but no modify() method.
+  if (window.getSelection && (sel = window.getSelection()).modify) {
+      sel = window.getSelection();
+      if (!sel.isCollapsed) {
+
+          // Detect if selection is backwards
+          const range = document.createRange();
+          range.setStart(sel.anchorNode, sel.anchorOffset);
+          range.setEnd(sel.focusNode, sel.focusOffset);
+          const backwards = range.collapsed;
+          range.detach();
+
+          // modify() works on the focus of the selection
+          const endNode = sel.focusNode, endOffset = sel.focusOffset;
+          sel.collapse(sel.anchorNode, sel.anchorOffset);
+
+          let direction = [];
+          if (backwards) {
+              direction = ['backward', 'forward'];
+          } else {
+              direction = ['forward', 'backward'];
+          }
+
+          sel.modify("move", direction[0], "character");
+          sel.modify("move", direction[1], "word");
+          sel.extend(endNode, endOffset);
+          sel.modify("extend", direction[1], "character");
+          sel.modify("extend", direction[0], "word");
+      }
+  } else if ( (sel = document.selection) && sel.type != "Control") {
+      const textRange = sel.createRange();
+      if (textRange.text) {
+          textRange.expand("word");
+          // Move the end back to not include the word's trailing space(s),
+          // if necessary
+          while (/\s$/.test(textRange.text)) {
+              textRange.moveEnd("character", -1);
+          }
+          textRange.select();
+      }
+  }
+}
+
 
 /***** Smooth Scroll *****/
-var scrollProcess = [];
+let scrollProcess = [];
 
 Math.easeOutExpo = function (time, origin, delta, duration) {
     return delta * (-Math.pow(2, -10 * time / duration) + 1) + origin;
@@ -185,7 +216,7 @@ function clearAllSmoothScroll(container) {
     let index = scrollProcess.findIndex((s) => s.container === container);
     if (index !== -1) {
         let len = scrollProcess[index].intervals.length;
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             clearInterval(scrollProcess[index].intervals[i]);
         }
         scrollProcess.splice(index, 1);

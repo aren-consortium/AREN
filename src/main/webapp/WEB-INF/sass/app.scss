@@ -614,6 +614,7 @@ nav {
         .scroll-area {
             height: 100%;
             overflow-y: scroll;
+            position: relative;
         }
     }
 
@@ -690,6 +691,11 @@ nav {
         color: white;
         border-radius: 5px;
         padding: 0 5px;
+        user-select: none;
+        pointer-events: none;
+        > span {
+          pointer-events: all;
+        }
         &::before {
             content: "";
             position: absolute;

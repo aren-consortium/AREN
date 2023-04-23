@@ -1,8 +1,7 @@
 <template>
   <base-layout v-if="debate"
                id="debate"
-               @mousedown="clearSelection();"
-               @mouseup="selectionHandler" >
+               @mouseup="selectionEnd" >
       <template v-slot:title>
           <h1>{{ $t('debate') }} - </h1><h1>{{ debate.document.name }}</h1>
           <label>{{ $t("by").toLowerCase() }}</label>
@@ -61,7 +60,7 @@
 
       <div id="mainContainer">
           <div id="documentContainer">
-              <div class="scroll-area" @scroll="hidePopup(); updateSpaghettis();"
+              <div class="scroll-area" @scroll="updatePopup(); updateSpaghettis();"
                    ref="documentContainer">
                   <div v-if="leftDisplay === 'document'" class="wrap">
                       <documented v-bind:value="$t('documentation.debate_document')">
@@ -73,7 +72,7 @@
                       <documented v-bind:value="$t('documentation.debate_bulets')">
                           <bullets-container
                               @over-bullet="selectComment($event)"
-                              @out-bullet="clearSelection()"
+                              @out-bullet="revertSelection()"
                               @click-bullet="selectComment($event); scrollToComment($event)"
                               v-bind:displayable-comments="displayableComments"
                               v-bind:comments="filteredComments">
@@ -139,7 +138,7 @@
           </div>
 
           <div id="commentsContainer" v-bind:class="{loading: mountedChildren < debate.commentsCount}">
-              <div class="scroll-area"  @scroll="hidePopup(); updateSpaghettis();"
+              <div class="scroll-area"  @scroll="updatePopup(); updateSpaghettis();"
                    ref="commentsContainer">
                   <comment-widget
                       v-for="comment in filteredComments"
@@ -152,7 +151,7 @@
                       @tag-edition="editTags($event)"
                       @focus-me="selectComment($event); scrollToComment($event)"
                       @select-me="selectComment($event)"
-                      @leave-me="clearSelection()"
+                      @leave-me="revertSelection()"
                       @highlight-me="highlight($event)"
                       @mounted="mountChild($event)"
                       @report="reportComment($event)"
@@ -162,14 +161,14 @@
           </div>
       </div>
 
-      <div v-if="this.$root.user.is('USER')" v-show="selectedRange"
-           class="selection_popup z-depth-2"
+      <div v-if="this.$root.user.is('USER') && selectedParent !== false && !$refs.commentModal.isOpen()"
+           :class="{'selection_popup': true, 'z-depth-2': true, top: popup.top, bottom: !popup.top}"
            ref="arguePopup"
-           v-bind:style="'top: ' + popup.y + 'px; left: ' + popup.x + 'px;'"
+           :style="{top: popup.y+'px', left: popup.x+'px'}"
            @click="createComment()"
            @mousedown.stop=""
            @mouseup.stop="">
-          {{ $t('argue').toLowerCase() }}
+          <span>{{ $t('argue').toLowerCase() }}</span>
       </div>
 
       <template v-slot:addons>
@@ -195,10 +194,10 @@
               debate: false,
               newComment: false,
               sortByPosition: false,
-              selectedParent: undefined,
-              popup: {x: -9999, y: -9999},
-              displayableComments: {},
+              selectedParent: false,
               selectedRange: false,
+              popup: {x: -9999, y: -9999, top: true},
+              displayableComments: {},
               search: "",
               mountedChildren: 0,
               leftDisplay: "document",
@@ -284,8 +283,74 @@
                   Vue.set(this.displayableComments, comment.id, true);
               }
           });
+          document.addEventListener('selectionchange', this.selectionChange)
+      },
+      beforeDestroy() {
+          document.removeEventListener('selectionchange', this.selectionChange)
       },
       methods: {
+          selectionChange() {
+              if (this.$route.query.comment) {
+                  this.$router.replace({'query': null});
+              }
+              if (!this.$root.user.is('USER')) 
+                  return
+
+              const selection = getSelection( );
+              if (selection.isCollapsed) {
+                this.selectedParent = false
+                return
+              }
+                
+              const range = selection.getRangeAt(0)
+              let parent = range.commonAncestorContainer
+              parent = parent.nodeType == Node.TEXT_NODE ? parent.parentElement : parent
+              if (parent.closest('#documentDisplay')) {
+                this.selectedParent = undefined
+                this.selectedRange = range.cloneRange()
+              } else if (parent.closest('.argumentation')) {
+                this.selectedParent = parent.closest('.comment-container').__vue__.comment
+                this.selectedRange = range.cloneRange()
+              } else {
+                this.selectedParent = false
+                this.selectedRange = false
+                return
+              }
+
+              this.updatePopup();
+          },
+          selectionEnd() {
+              if (!this.$root.user.is('USER')) 
+                  return
+              if (this.$refs.commentModal.isOpen()) 
+                  this.revertSelection()
+              else
+                  snapSelectionToWord()
+          },
+          updatePopup() {
+              const selection = getSelection();
+              if (selection.isCollapsed)
+                return
+              const range = selection.getRangeAt(0);
+              const position = selection?.anchorNode?.compareDocumentPosition(selection?.focusNode);
+              const backward = !position && selection.anchorOffset > selection.focusOffset 
+                              || position === Node.DOCUMENT_POSITION_PRECEDING
+          
+              let top = mainContainer.offsetTop + 28;
+              let bottom = mainContainer.offsetHeight - window.scrollY + top - 58;
+              let rects = range.getClientRects( );
+              let start = rects[0];
+              let end = rects[rects.length - 1];
+              if (backward && start.y > top || (end.y + end.height) > bottom) {
+                  this.popup.x = start.x + window.scrollX;
+                  this.popup.y = start.y + window.scrollY;
+                  this.popup.top = true;
+              } else {
+                  this.popup.x = end.x + end.width + window.scrollX;
+                  this.popup.y = end.y + end.height + window.scrollY;
+                  this.popup.top = false;
+              }
+          },
           fetchData( ) {
               ArenService.Debates.get({
                   id: this.$route.params.id,
@@ -395,17 +460,9 @@
                   });
               }
           },
-          hidePopup() {
-              this.selectedRange = false;
-          },
-          clearSelection( ) {
-              if (this.$route.query.comment) {
-                  this.$router.replace({'query': null});
-              }
-              this.hidePopup();
-              clearSelection();
+          revertSelection( ) {
               if (this.$refs.commentModal.isOpen()) {
-                this.selectComment(this.newComment)
+                this.selectComment(this.newComment, false)
               }
           },
           editTags(comment) {
@@ -422,59 +479,6 @@
                   }
               });
           },
-          selectionHandler() {
-              if (!this.$root.user.is('USER')) 
-                  return
-
-              const selection = getSelection( );
-              if (selection.isCollapsed)
-                return 
-                
-              const range = selection.getRangeAt(0)
-              let parent = range.commonAncestorContainer
-              parent = parent.nodeType == Node.TEXT_NODE ? parent.parentElement : parent
-              if (parent.closest('#documentDisplay')) {
-                this.selectedParent = undefined
-              } else if (parent.closest('.argumentation')) {
-                this.selectedParent = parent.closest('.comment-container').__vue__.comment
-              } else {
-                return
-              }
-
-              const position = selection?.anchorNode?.compareDocumentPosition(selection?.focusNode);
-              const backward = !position && selection.anchorOffset > selection.focusOffset 
-                                 || position === Node.DOCUMENT_POSITION_PRECEDING
-              range.affineToWord();
-              
-              if (!selection.isCollapsed && !this.$refs.commentModal.isOpen()) {
-                  // To be sure all selectionchanges are done
-                  setTimeout(() => {
-                      this.selectedRange = range.cloneRange();
-                      this.updatePopup(backward);
-                  })
-              }
-          },
-          updatePopup(backward) {
-              if (this.selectedRange) {
-                  backward = backward === undefined ? this.$refs.arguePopup.classList.contains('top') : backward;
-                  let top = mainContainer.offsetTop + 28;
-                  let bottom = mainContainer.offsetHeight - window.scrollY + top - 58;
-                  let rects = this.selectedRange.getClientRects( );
-                  let start = rects[0];
-                  let end = rects[rects.length - 1];
-                  if (backward && start.y > top || (end.y + end.height) > bottom) {
-                      this.popup.x = start.x + window.scrollX;
-                      this.popup.y = start.y + window.scrollY;
-                      this.$refs.arguePopup.classList.remove('bottom');
-                      this.$refs.arguePopup.classList.add('top');
-                  } else {
-                      this.popup.x = end.x + end.width + window.scrollX;
-                      this.popup.y = end.y + end.height + window.scrollY;
-                      this.$refs.arguePopup.classList.remove('top');
-                      this.$refs.arguePopup.classList.add('bottom');
-                  }
-              }
-          },
           getCommentContainer(comment) {
               return comment.parent
                       ? document.querySelector("#comment_" + comment.parent.id + " .argumentation")
@@ -488,40 +492,37 @@
                       isInfo: true
                   });
               } else {
-                  this.newComment = new Comment();
-                  this.newComment.debate = this.debate;
-                  this.newComment.hypostases = [];
-                  this.newComment.tags = [];
-                  this.newComment.parent = this.selectedParent;
-                  this.newComment.selection = this.selectedRange.getHtml();
-                  let container = this.getCommentContainer(this.newComment);
-                  this.newComment.startContainer = container.getChildPathTo(this.selectedRange.startContainer);
-                  this.newComment.endContainer = container.getChildPathTo(this.selectedRange.endContainer);
-                  this.newComment.startOffset = this.selectedRange.startOffset;
-                  this.newComment.endOffset = this.selectedRange.endOffset;
-
-                  this.$refs.commentModal.open((returnValue) => {
-                      if (returnValue) {
-                          ArenService.Debates.addComment({
-                              id: this.newComment.debate.id,
-                              data: this.newComment,
-                              loading: false
-                          });
-                      }
-                  });
-                  // For the selected text to stay
-                  this.highlight(this.newComment);
+                this.newComment = new Comment();
+                this.newComment.debate = this.debate;
+                this.newComment.hypostases = [];
+                this.newComment.tags = [];
+                this.newComment.parent = this.selectedParent;
+                this.newComment.selection = this.selectedRange.getHtml();
+                let container = this.getCommentContainer(this.newComment);
+                this.newComment.startContainer = container.getChildPathTo(this.selectedRange.startContainer);
+                this.newComment.endContainer = container.getChildPathTo(this.selectedRange.endContainer);
+                this.newComment.startOffset = this.selectedRange.startOffset;
+                this.newComment.endOffset = this.selectedRange.endOffset;
+                
+                this.$refs.commentModal.open((returnValue) => {
+                  if (returnValue) {
+                    ArenService.Debates.addComment({
+                      id: this.newComment.debate.id,
+                      data: this.newComment,
+                      loading: false
+                    });
+                  }
+                });
               }
           },
           selectComment(comment) {
-              this.hidePopup();
+              clearSelection( );
               let range = new Range( );
               let container = comment.parent
                       ? document.querySelector("#comment_" + comment.parent.id + " .argumentation")
                       : this.$refs.documentDisplay;
               range.setPathStart(container, comment.startContainer, comment.startOffset);
               range.setPathEnd(container, comment.endContainer, comment.endOffset);
-              clearSelection( );
               getSelection( ).addRange(range);
               return range;
           },
