@@ -3,9 +3,9 @@ package fr.lirmm.aren.producer;
 import static fr.lirmm.aren.producer.Scope.Type.APPLICATION;
 import static fr.lirmm.aren.producer.Scope.Type.REQUEST;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +26,8 @@ import javax.persistence.Persistence;
  */
 @ApplicationScoped
 public class EntityManagerProducer {
+
+  private static final String DB_CONFIG_PATH = String.format("%s/conf/aren.properties", System.getProperty("catalina.base"));
 
   private EntityManagerFactory factory;
 
@@ -50,13 +52,9 @@ public class EntityManagerProducer {
     if (credentials == null) {
       this.credentials = new Properties();
 
-      InputStream stream = EntityManagerProducer.class.getResourceAsStream("/database.properties");
-      if (stream != null) {
-        try {
-          this.credentials.load(stream);
-        } catch (final IOException e) {
-          throw new RuntimeException("Database configuration file cannot be loaded.");
-        }
+      try {
+        credentials.load(new FileInputStream(DB_CONFIG_PATH));
+      } catch (IOException e) {
       }
     }
   }
@@ -89,9 +87,8 @@ public class EntityManagerProducer {
     credentials.put("hibernate.connection.password", password);
     credentials.put("hibernate.hbm2ddl.auto", "update");
 
-    String path = EntityManagerProducer.class.getResource("/database.properties").getPath();
     try {
-      credentials.store(new FileOutputStream(path), null);
+      credentials.store(new FileOutputStream(DB_CONFIG_PATH), null);
     } catch (IOException e) {
       throw new RuntimeException("Cannot write database.properties configuration file.");
     }
