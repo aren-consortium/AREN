@@ -4,7 +4,7 @@
 
   <groupId>fr.lirmm</groupId>
   <artifactId>aren</artifactId>
-  <version>3.11.2</version>
+  <version>3.11.3</version>
   <packaging>war</packaging>
 
   <name>aren</name>

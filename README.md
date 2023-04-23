@@ -39,8 +39,8 @@ A `target` folder is then created with the `aren.war` file inside.
 Deploy the `aren.war` on the Java WebSever of your choice [Tomcat 7 tested and functional].
 
 ### First launch
-On the first launche, the application will ask you for DB creentials, then the admin informations.
-Once done, the context will reload so the loading of the first page may be a bit long.
+On the first launch, the application will ask you for DB creentials.
+This infomation will be stored in `${catalina.base}/conf/aren.properties`, so make sure this file is writable by the Tomcat process.
 
 ### Update from 3.9.x to 3.11.x
 * Dump your SQL data with `pg_dump -h [db_server] -p [db_port] -a -U [db_user] [db_name] > dump.sql`  
