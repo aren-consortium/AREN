@@ -32,7 +32,7 @@
                  v-bind:id="'label_'+label.key"
                  v-bind:key="label.key">
                 <span class="square" v-bind:style="'background:'+label.color"></span>
-                <span>{{ label.label }}</pan>
+                <span>{{ label.label }}</span>
             </div>
         </transition-group>
     </div>
@@ -42,6 +42,7 @@
     module.exports = {
         props: {
             debate: Object,
+            colors: { type: WeakMap },
             duration: {type: Number, default: 750}
         },
         data() {
@@ -79,11 +80,10 @@
             userDisplay() {
                 return this.debate.comments.map(c => c.owner)
                         .filter((u, i, a) => a.indexOf(u) === i) //unique
-                        .sort((a, b) => a.fullName() < b.fullName() ? -1 : 1)
                         .map((u, i, a) => ({
                                 key: u.id,
                                 label: u.fullName(),
-                                color: d3.interpolateRainbow(i / a.length)
+                                color: this.colors ? this.colors.get(u) : d3.interpolateRainbow(i / a.length)
                             }));
             },
             focusedUser() {

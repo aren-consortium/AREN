@@ -17,12 +17,14 @@
                             @close="detail=false">
             </comment-widget>
         </div>
+    </div>
 </template>
 
 <script>
     module.exports = {
         props: {
             debate: Object,
+            colors: { type: WeakMap },
             duration: {type: Number, default: 750},
             dy: {type: Number, default: 180},
             dx: {type: Number, default: 15}

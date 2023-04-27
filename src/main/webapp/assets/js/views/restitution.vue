@@ -33,12 +33,14 @@
             </template>
             <template v-slot:tab.2>
                 <d3-pie ref="debatePie"
-                        v-bind:debate="debate">
+                        v-bind:debate="debate"
+                        :colors="colorByUser">
                 </d3-pie>
             </template>
             <template v-slot:tab.3>
                 <d3-sunburst ref="debateSunburst"
-                             v-bind:debate="debate">
+                             v-bind:debate="debate"
+                             :colors="colorByUser">
                 </d3-sunburst>
             </template>
             <template v-slot:tab.4>
@@ -72,6 +74,21 @@
         },
         mounted() {
             this.fetchData();
+        },
+        computed: {
+          colorByUser() {
+              const users = new Set();
+              for (const comment of this.debate.comments) {
+                  users.add(comment.owner);
+              }
+              const result = new WeakMap();
+              let i = 0;
+              for (const user of users) {
+                  result.set(user, d3.interpolateRainbow(i / users.size));
+                  i++;
+              }
+              return result;
+          }
         },
         methods: {
             fetchData() {
