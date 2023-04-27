@@ -8610,7 +8610,7 @@ html body #app #loading {
   margin: auto;
   top: 64px;
   border-radius: none;
-  z-index: 5;
+  z-index: 100;
 }
 html body #app .current-view-wrapper {
   display: flex;

@@ -137,7 +137,7 @@ html {
                 margin: auto;
                 top: $navigation-height;
                 border-radius: none;
-                z-index: 5;
+                z-index: 100;
             }
             .current-view-wrapper {
                 display: flex;
