@@ -1,5 +1,5 @@
 <template>
-  <div class="D3_pie">
+  <div :class="{D3_pie: true, loading}">
       <toggle-action-button
           ref="option"
           v-bind:off-label="$t('by_comment_count')"
@@ -40,6 +40,7 @@
       },
       data() {
           return  {
+              loading: false,
               byLetter: false,
               byOpinion: false,
               pie: d3.pie()
@@ -52,6 +53,7 @@
                d3.interpolatePlasma, d3.interpolateViridis, d3.interpolateSpectral,
                d3.interpolateRdYlGn, d3.interpolateRdYlBu*/
               margin: {top: 10, right: 10, bottom: 10, left: 10}
+
           }
       },
       computed: {
@@ -132,6 +134,11 @@
                       .attr("height", height);
           },
           update(duration = 0) {
+              this.loading = true;
+              setTimeout(() => {
+                  this.loading = false;
+              }, duration + 100 );
+              
               this.updatePosition();
 
               // SLICES //

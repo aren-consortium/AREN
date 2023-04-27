@@ -9829,6 +9829,12 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   stroke: none;
   cursor: pointer;
 }
+#restitution .D3_pie.loading, #restitution .D3_sunburst.loading {
+  pointer-events: none;
+}
+#restitution .D3_pie.loading svg, #restitution .D3_sunburst.loading svg {
+  pointer-events: none;
+}
 #restitution .D3_pie .switch, #restitution .D3_sunburst .switch {
   padding: 9px 0;
   align-self: center;

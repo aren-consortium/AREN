@@ -1478,6 +1478,12 @@ nav {
     }
 
     .D3_pie, .D3_sunburst {
+        &.loading {
+          pointer-events: none;
+          svg {
+              pointer-events: none;
+          }
+        }
         .switch {
             padding: 9px 0;
             align-self: center;

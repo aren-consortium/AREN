@@ -1,5 +1,5 @@
 <template>
-    <div class="D3_sunburst">
+    <div :class="{D3_sunburst: true, loading}">
         <toggle-action-button
             v-bind:off-label="$t('display_labels')"
             v-bind:on-label="$t('display_arguments')"
@@ -47,6 +47,7 @@
         },
         data() {
             return {
+                loading: false,
                 root: false,
                 radius: 0,
                 byOpinion: false,
@@ -148,6 +149,11 @@
                         .attr("height", height);
             },
             update(duration = this.duration) {
+                this.loading = true;
+                setTimeout(() => {
+                    this.loading = false;
+                }, duration + 100 );
+
                 this.updatePosition();
 
                 this.root.each(d => d.visible = false);
