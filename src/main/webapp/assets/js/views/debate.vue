@@ -467,15 +467,22 @@
           },
           editTags(comment) {
               this.$refs.tagModal.comment = comment;
-              let copy = [...comment.proposedTags];
+              let backup = [...comment.proposedTags];
               this.$refs.tagModal.open((returnComment) => {
                   if (returnComment) {
-                      ArenService.Comments.edit({
-                          data: returnComment,
-                          loading: false
+                      this.$confirm({
+                          title: this.$t('update_tags'),
+                          message: this.$t('helper.update_tags'),
+                          callback: (val) => {
+                            if (val) {
+                                ArenService.Comments.edit({
+                                    data: returnComment
+                                });
+                            }
+                          }
                       });
                   } else {
-                      comment.proposedTags = copy;
+                      comment.proposedTags = backup;
                   }
               });
           },

@@ -86,20 +86,14 @@
                 this.$confirm({
                     title: this.$t('update_tags'),
                     message: this.$t('helper.update_tags'),
-                    notCloseable: true
-                });
-                ArenService.Comments.updateTags({
-                    id: this.comment.id,
-                    onSuccess: (response) => {
-                        this.$closeConfirm();
-                    },
-                    onError: () => {
-                        this.$confirm({
-                            title: this.$t('error.Insertion error'),
-                            message: this.$t('error.tag_update'),
-                            isInfo: true
+                    callback: (val) => {
+                      if (val) {
+                        ArenService.Comments.updateTags({
+                            id: this.comment.id,
                         });
-                    },
+                        this.close();
+                      }
+                    }
                 });
             },
             afterClose() {

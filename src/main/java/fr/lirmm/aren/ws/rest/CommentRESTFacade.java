@@ -4,20 +4,20 @@ import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-
-import fr.lirmm.aren.service.CommentService;
-import fr.lirmm.aren.model.Comment;
-import fr.lirmm.aren.model.TagSet;
-import fr.lirmm.aren.service.BroadcasterService;
-import fr.lirmm.aren.service.HttpRequestService;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.sse.Sse;
 import javax.ws.rs.sse.SseEventSink;
+
+import fr.lirmm.aren.model.Comment;
+import fr.lirmm.aren.model.TagSet;
+import fr.lirmm.aren.service.BroadcasterService;
+import fr.lirmm.aren.service.CommentService;
+import fr.lirmm.aren.service.HttpRequestService;
 
 /**
  * JAX-RS resource class for Comments managment
@@ -74,9 +74,9 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
         commentService.edit(toEdit);
 
         if (!sameProposedTags || !sameText) {
-            broadcasterService.broadcastComment(toEdit);
-            commentService.updateTags(toEdit);
+            asyncUpdateTag(comment.getId());
         }
+
         broadcasterService.broadcastComment(toEdit);
         return toEdit;
     }
@@ -121,10 +121,23 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
     @PUT
     @Path("{id}/updateTags")
     @RolesAllowed({"ADMIN"})
-    public TagSet updateTag(@PathParam("id") Long id) {
+    public void updateTag(@PathParam("id") Long id) {
         Comment comment = commentService.find(id);
-        commentService.updateTags(comment);
+        comment.setTags(new TagSet());
+        commentService.edit(comment);
         broadcasterService.broadcastComment(comment);
-        return comment.getTags();
+        asyncUpdateTag(comment.getId());
+    }
+
+    private void asyncUpdateTag(Long id) {
+        new Thread() {
+          public void run() {
+            Comment comment = commentService.find(id);
+            // This can be really long, hence why the Thread
+            commentService.updateTags(comment);
+            commentService.edit(comment);
+            broadcasterService.broadcastComment(comment);
+          }
+      }.start();
     }
 }

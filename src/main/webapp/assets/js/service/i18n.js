@@ -256,8 +256,9 @@ const messages = {
       with_hypostases: "Propose une selection d'hypostase pour les arguments",
       reformulation_mandatory: "Active / Désactive la reformulation dans le débat",
       aaf_import_success: "Les données AAF ont bien été importées, vous pouvez fermer cette fenêtre.",
-      update_tags: "Veuillez patienter, ce processus peut-être très long.<br><b>Ne fermez pas cette fenêtre</b>",
-      tag_update_success: "La mise à jour des tags est un succès, vous pouvez fermer cette fenêtre.",
+      update_all_tags: "Veuillez patienter, ce processus peut-être très long.<br><b>Ne fermez pas cette fenêtre</b>",
+      update_tags: "<p>Ce processus peut-être long, il sera executé en arrière plan et vous n'aurez pas la possibilité de modifier les tags pendant ce temps.</p><p>Voulez-vous continuer ?</p>",
+      tag_update_success: "La mise à jour des tags est un succès.",
       active: "Le débat peut être commenté",
       open_public: "Le débat sera accessible par n'importe quel utilisateur⋅ice, même non coonnecté⋅e",
     },
@@ -285,7 +286,7 @@ const messages = {
       expired_token: "Jeton d'authentification expiré",
       internal_message: "<p>Toutes nos excuses, une erreur s'est produite sur nos serveurs.</p><p>Veuillez réessayer ou contacter un administrateur⋅trice si l'erreur persiste.</p>",
       aaf_import: "<p>Erreur lors de l'import AAF.</p><p>Il est probable que votre fichier soit corompu ou n'entre pas dans les standard de l'application.</p>",
-      tag_update_success: "<p>Erreur lors de la mise à jour des tags.</p><p>Contacter un développeur.</p>"
+      tag_update_success: "<p>Erreur lors de la mise à jour des tags.</p><p>Contacter un admin.</p>"
     },
     menu: {
       open: "Ouvrir un débat",

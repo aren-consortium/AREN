@@ -167,10 +167,11 @@ public class HttpRequestService {
             params.add(new BasicNameValuePair("extract_term_list", text));
             params.add(new BasicNameValuePair("extract_submit", "Extraire"));
             params.add(new BasicNameValuePair("number", "20"));
-            httppost.setEntity(new UrlEncodedFormEntity(params, "windows-1252"));
+            params.add(new BasicNameValuePair("task", "task"));
+            httppost.setEntity(new UrlEncodedFormEntity(params, "iso-8859-1"));
 
             CloseableHttpResponse response = httpClient.execute(httppost);
-            String responseString = EntityUtils.toString(response.getEntity(), "windows-1252");
+            String responseString = EntityUtils.toString(response.getEntity(), "iso-8859-1");
 
             if (responseString.contains("Pas assez de termes, bye")) {
                 return null;
@@ -204,17 +205,18 @@ public class HttpRequestService {
             httppost.setConfig(requestConfig);
 
             List< NameValuePair> params = new ArrayList<NameValuePair>(5);
-            params.add(new BasicNameValuePair("linkit_add", "Valider"));
+            params.add(new BasicNameValuePair("linkit_add", "Ajouter"));
             params.add(new BasicNameValuePair("add_items", tags.toString()));
             params.add(new BasicNameValuePair("extract_submit", "1"));
             params.add(new BasicNameValuePair("extract_term_list", text));
             params.add(new BasicNameValuePair("extract_termid_list", ""));
-            httppost.setEntity(new UrlEncodedFormEntity(params, "windows-1252"));
+            params.add(new BasicNameValuePair("task", ""));
+            httppost.setEntity(new UrlEncodedFormEntity(params, "iso-8859-1"));
 
             CloseableHttpResponse response = httpClient.execute(httppost);
-            String responseString = EntityUtils.toString(response.getEntity(), "windows-1252");
+            String responseString = EntityUtils.toString(response.getEntity(), "iso-8859-1");
             if (responseString.contains("Pas assez de termes, bye")) {
-                return null;
+              return null;
             }
             newTags = this.parseTags(responseString);
         } catch (UnsupportedEncodingException ex) {
@@ -229,7 +231,7 @@ public class HttpRequestService {
 
     private TagSet parseTags(String string) throws IOException {
         TagSet tags = new TagSet();
-        Document doc = Jsoup.parse(string, "windows-1252");
+        Document doc = Jsoup.parse(string, "iso-8859-1");
         if (doc.getElementsByTag("result").size() > 0) {
             String tagString = doc.getElementsByTag("result").get(0).text();
             if (tagString.length() > 0) {

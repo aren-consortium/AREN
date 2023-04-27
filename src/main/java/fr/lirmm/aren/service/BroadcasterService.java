@@ -54,7 +54,7 @@ public class BroadcasterService {
         if (broadcasters.containsKey(which)) {
 
             OutboundSseEvent sseEvent = this.eventBuilder
-                    .comment(((AuthenticatedUserDetails) securityContext.getUserPrincipal()).getUser().getId() + "")
+                    // .comment(((AuthenticatedUserDetails) securityContext.getUserPrincipal()).getUser().getId() + "")
                     .name("message")
                     .mediaType(MediaType.APPLICATION_JSON_TYPE)
                     .data(which, object)
