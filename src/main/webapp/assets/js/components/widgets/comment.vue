@@ -33,7 +33,7 @@
                              v-html="highlightedReformulation"></div>
                         <tooltiped v-if="!preview && comment.debate.idefixLink && comment.tags"
                                    v-bind:value="comment.tags.length > 0 ? $t('tags_edition') : $t('no_tags_yet')">
-                            <span v-bind:class="{tags: true, disabled: comment.tags.length === 0}"
+                            <span v-bind:class="{'no-print': true, tags: true, disabled: comment.tags.length === 0}"
                                   @click="(comment.tags.length > 0 || $root.user.is('ADMIN')) ? $emit('tag-edition', comment) : ''">
                                 <i class="material-icons">local_offer</i>
                             </span>

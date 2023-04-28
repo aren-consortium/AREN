@@ -1,5 +1,5 @@
 <template>
-    <div class="bullets-container">
+    <div class="bullets-container no-print">
         <div v-for="(bullets, y) in bulletsByY"
              v-bind:style="'top: ' + y + 'px'"
              class="bullets-box">

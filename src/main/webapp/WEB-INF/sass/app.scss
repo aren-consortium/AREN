@@ -227,19 +227,44 @@ html {
     }
 }
 
-@media only print {
-    html body #app {
-        > nav {
+@media print {
+  html body #app {
+        print-color-adjust: exact;
+        > nav, > footer, .no-print {
             display: none;
         }
         .current-view {
             padding-top: 0;
             > .container {
                 width: 100%;
+                * {
+                    overflow: visible !important;
+                }
                 > #header {
-                    top: 0;
+                    position: initial !important;
+                    padding: 0 !important;
+                    margin: 0 auto !important;
                 }
             }
+
+            &#debate {
+              height: auto !important;
+              .selection {
+                  > div {
+                      max-height: none !important;
+                  }
+                  &::before, &::after {
+                      content: none;
+                  }
+              }
+              #mainContainer {
+                  display: block !important;
+                  height: auto !important;
+                  #documentContainer, #commentsContainer {
+                      width: 100% !important;
+                  }
+              }
+          }
         }
     }
 }
@@ -511,23 +536,6 @@ nav {
     }
 }
 
-@media only print {
-    #debate {
-        height: auto !important;
-        .selection {
-            > div {
-                max-height: none !important;
-            }
-            &::before, &::after {
-                content: none;
-            }
-        }
-        #documentContainer, #commentsContainer {
-            height: auto !important;
-        }
-    }
-}
-
 #debate {
     .row {
         margin: 0;
@@ -602,6 +610,7 @@ nav {
     }
 
     #mainContainer {
+        display: flex;
         height: calc(100vh - #{($navigation-height + $header-height) + 20px});
         overflow: hidden;
     }
@@ -618,35 +627,38 @@ nav {
         }
     }
 
-    #commentsContainer.loading {
-        position: relative;
-        overflow-x: hidden;
+    #commentsContainer {
+        margin-left: 5px;
+        &.loading {
+            position: relative;
+            overflow-x: hidden;
 
-        &::before, &::after {
-            content: "";
-            display: block;
-            top:0;
-            left:0;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-        }
+            &::before, &::after {
+                content: "";
+                display: block;
+                top:0;
+                left:0;
+                width: 100%;
+                height: 100%;
+                position: absolute;
+            }
 
-        &::before {
-            background: rgb(224, 224, 224);
-            z-index: 1;
-        }
+            &::before {
+                background: rgb(224, 224, 224);
+                z-index: 1;
+            }
 
-        &::after {
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: translateX(-100%);
-            animation: loading 1.5s infinite;
-            z-index: 1;
-        }
+            &::after {
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transform: translateX(-100%);
+                animation: loading 1.5s infinite;
+                z-index: 1;
+            }
 
-        @keyframes loading {
-            100% {
-                transform: translateX(100%);
+            @keyframes loading {
+                100% {
+                    transform: translateX(100%);
+                }
             }
         }
     }
@@ -669,17 +681,14 @@ nav {
                 display: flex;
                 min-height: 100%;
                 #documentDisplay {
+                    flex: 1;
                     text-align: justify;
                     font-size: 13px;
                     line-height: 1.42;
-                    width: calc(100% - 60px);
-                    float: left;
+                    margin-right: 5px;
                     &::selection, ::selection {
                         background-color: $text-select-color;
                     }
-                }
-                .bullets-container {
-                    float: left;
                 }
             }
         }
@@ -693,6 +702,7 @@ nav {
         padding: 0 5px;
         user-select: none;
         pointer-events: none;
+        z-index: 10;
         > span {
           pointer-events: all;
         }
@@ -768,6 +778,7 @@ nav {
         position: relative;
         width: 50px;
         margin: 0 5px;
+        flex: 0 50px;
         .bullets-box {
             position: absolute;
             height: 1em;
@@ -980,6 +991,7 @@ nav {
         .argumentation-wrapper {
             .argumentation {
                 white-space: pre-wrap;
+                margin-right: 5px;
                 &::selection {
                     background-color: $text-select-color;
                 }

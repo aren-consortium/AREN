@@ -8696,8 +8696,12 @@ html body #app .page-footer .contributors a img {
   max-height: 100%;
 }
 
-@media only print {
-  html body #app > nav {
+@media print {
+  html body #app {
+    -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+  }
+  html body #app > nav, html body #app > footer, html body #app .no-print {
     display: none;
   }
   html body #app .current-view {
@@ -8706,8 +8710,29 @@ html body #app .page-footer .contributors a img {
   html body #app .current-view > .container {
     width: 100%;
   }
+  html body #app .current-view > .container * {
+    overflow: visible !important;
+  }
   html body #app .current-view > .container > #header {
-    top: 0;
+    position: initial !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+  html body #app .current-view#debate {
+    height: auto !important;
+  }
+  html body #app .current-view#debate .selection > div {
+    max-height: none !important;
+  }
+  html body #app .current-view#debate .selection::before, html body #app .current-view#debate .selection::after {
+    content: none;
+  }
+  html body #app .current-view#debate #mainContainer {
+    display: block !important;
+    height: auto !important;
+  }
+  html body #app .current-view#debate #mainContainer #documentContainer, html body #app .current-view#debate #mainContainer #commentsContainer {
+    width: 100% !important;
   }
 }
 .switch label {
@@ -8968,20 +8993,6 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   flex: 1;
 }
 
-@media only print {
-  #debate {
-    height: auto !important;
-  }
-  #debate .selection > div {
-    max-height: none !important;
-  }
-  #debate .selection::before, #debate .selection::after {
-    content: none;
-  }
-  #debate #documentContainer, #debate #commentsContainer {
-    height: auto !important;
-  }
-}
 #debate .row {
   margin: 0;
 }
@@ -9048,6 +9059,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   width: 100%;
 }
 #debate #mainContainer {
+  display: flex;
   height: calc(100vh - 129px);
   overflow: hidden;
 }
@@ -9061,6 +9073,9 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   height: 100%;
   overflow-y: scroll;
   position: relative;
+}
+#debate #commentsContainer {
+  margin-left: 5px;
 }
 #debate #commentsContainer.loading {
   position: relative;
@@ -9107,20 +9122,17 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   min-height: 100%;
 }
 #debate #documentContainer .scroll-area .wrap #documentDisplay {
+  flex: 1;
   text-align: justify;
   font-size: 13px;
   line-height: 1.42;
-  width: calc(100% - 60px);
-  float: left;
+  margin-right: 5px;
 }
 #debate #documentContainer .scroll-area .wrap #documentDisplay::-moz-selection, #debate #documentContainer .scroll-area .wrap #documentDisplay ::-moz-selection {
   background-color: #C6E4E3;
 }
 #debate #documentContainer .scroll-area .wrap #documentDisplay::selection, #debate #documentContainer .scroll-area .wrap #documentDisplay ::selection {
   background-color: #C6E4E3;
-}
-#debate #documentContainer .scroll-area .wrap .bullets-container {
-  float: left;
 }
 #debate .selection_popup {
   position: absolute;
@@ -9133,6 +9145,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
      -moz-user-select: none;
           user-select: none;
   pointer-events: none;
+  z-index: 10;
 }
 #debate .selection_popup > span {
   pointer-events: all;
@@ -9202,6 +9215,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   position: relative;
   width: 50px;
   margin: 0 5px;
+  flex: 0 50px;
 }
 #debate .bullets-container .bullets-box {
   position: absolute;
@@ -9400,6 +9414,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 }
 .comment .comment-body .argumentation-wrapper .argumentation {
   white-space: pre-wrap;
+  margin-right: 5px;
 }
 .comment .comment-body .argumentation-wrapper .argumentation::-moz-selection {
   background-color: #C6E4E3;
