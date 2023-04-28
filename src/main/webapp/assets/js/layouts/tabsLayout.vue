@@ -32,18 +32,26 @@
                 activeIndex: 0
             }
         },
-        mounted() {
-            if (this.withLink) {
-                this.activeIndex = this.tabs.findIndex((t) => t.id === this.$route.hash.substring(1));
-                if (this.activeIndex === -1) {
-                    this.activeIndex = this.$route.hash.substring(1) * 1;
-                }
-                if (this.tabs[this.activeIndex].href) {
-                    window.location = this.tabs[this.activeIndex].href;
-                }
+        watch: {
+            '$route.hash'() {
+                this.openByHash();
             }
         },
+        mounted() {
+            this.openByHash();
+        },
         methods: {
+            openByHash() {
+                if (this.withLink) {
+                    this.activeIndex = this.tabs.findIndex((t) => t.id === this.$route.hash.substring(1));
+                    if (this.activeIndex === -1) {
+                        this.activeIndex = this.$route.hash.substring(1) * 1;
+                    }
+                    if (this.tabs[this.activeIndex].href) {
+                        window.location = this.tabs[this.activeIndex].href;
+                    }
+                }
+            },
             changeTab(index) {
                 if (!this.tabs[index].disabled && index !== this.activeIndex) {
                     this.activeIndex = index;
