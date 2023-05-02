@@ -5,7 +5,7 @@
             <div id="header">
                 <div>
                     <!--a id="backTo" href="javascript:history.back()"><i class="material-icons">chevron_left</i></a-->
-                    <h1 class="clickable" @click="$router.go(-1)">←</h1>
+                    <h1 class="clickable" @click="$router.go(-1)"><span class="no-print">←</span></h1>
                     <slot name="title"></slot>
                 </div>
                 <div>

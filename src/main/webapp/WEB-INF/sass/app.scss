@@ -257,6 +257,9 @@ html {
                       content: none;
                   }
               }
+              #header {
+                  height: auto !important;
+              }
               #mainContainer {
                   display: block !important;
                   height: auto !important;

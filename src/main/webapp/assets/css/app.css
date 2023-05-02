@@ -8727,6 +8727,9 @@ html body #app .page-footer .contributors a img {
   html body #app .current-view#debate .selection::before, html body #app .current-view#debate .selection::after {
     content: none;
   }
+  html body #app .current-view#debate #header {
+    height: auto !important;
+  }
   html body #app .current-view#debate #mainContainer {
     display: block !important;
     height: auto !important;

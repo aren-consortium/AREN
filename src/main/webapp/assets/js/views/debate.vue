@@ -10,11 +10,11 @@
 
       <template v-slot:right>
           <label class="clickable" @click="openOptions">
-              <i class="material-icons">settings_applications</i>
+              <i class="no-print material-icons">settings_applications</i>
           </label>
       </template>
 
-      <div class="row" id="options">
+      <div class="row no-print" id="options">
           <div class="col s6">
               <documented v-bind:value="$t('documentation.debate_display')">
                   <div id="leftDisplay">
