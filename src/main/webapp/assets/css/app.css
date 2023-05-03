@@ -8551,6 +8551,9 @@ img {
   color: black;
   opacity: 0.25;
 }
+.input-field .materialize-textarea + label {
+  pointer-events: none;
+}
 
 [tabindex]:focus {
   outline: none;
