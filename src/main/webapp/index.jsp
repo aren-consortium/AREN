@@ -20,6 +20,19 @@
     <% if (request.getAttribute("development") !=null) {%>
       <link rel="stylesheet" type="text/css" href="assets/css/quill.snow.css">
       <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+      <style>
+        html::after {
+          content: "DEVELOPMENT";
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          font-size: 15vw;
+          opacity: 0.1;
+          text-align: center;
+          pointer-events: none;
+          transform: translate(-50%, -50%) rotate(-15deg);
+        }
+      </style>
 
       <script src="assets/js/vendors/vue.js"></script>
       <script src="assets/js/vendors/httpVueLoader.js"></script>
