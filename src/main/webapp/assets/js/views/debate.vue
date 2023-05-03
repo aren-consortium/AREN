@@ -322,8 +322,6 @@
           selectionEnd() {
               if (!this.$root.user.is('USER')) 
                   return
-              if (this.$refs.commentModal.isOpen()) 
-                  this.revertSelection()
               else
                   snapSelectionToWord()
           },
@@ -462,7 +460,7 @@
           },
           revertSelection( ) {
               if (this.$refs.commentModal.isOpen()) {
-                this.selectComment(this.newComment, false)
+                  clearSelection();
               }
           },
           editTags(comment) {
