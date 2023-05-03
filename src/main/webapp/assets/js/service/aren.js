@@ -340,10 +340,10 @@ ApiService = function (anUrl, locale) {
         }
       }
 
-      let attrs = that.attrs;
-      let manyToOne = that.manyToOne;
-      let oneToMany = that.oneToMany;
-      let manyToMany = that.manyToMany;
+      const attrs = that.attrs;
+      const manyToOne = that.manyToOne || {};
+      const oneToMany = that.oneToMany || {};
+      const manyToMany = that.manyToMany || {};
 
       for (let attr in attrs) {
         if (obj[attr] !== undefined) {
@@ -380,54 +380,64 @@ ApiService = function (anUrl, locale) {
         }
       }
 
-      for (let foreignKey in manyToOne) {
-        if (obj[foreignKey] !== undefined) {
-          that[foreignKey] = this.createOrUpdate(obj[foreignKey], manyToOne[foreignKey][0]);
-          if (manyToOne[foreignKey][1]) {
-            let foreignCollection = that[foreignKey][manyToOne[foreignKey][1]];
-            if (!foreignCollection.includes(that)) {
-              foreignCollection.push(that);
-            }
-          }
-        }
-      }
-      for (let collection in oneToMany) {
-        if (obj[collection] !== undefined) {
-          if (obj[collection] && obj[collection].length > 0) {
-            that[collection].splice(0, that[collection].length);
-            let len = obj[collection].length;
-            for (let i = 0; i < len; i++) {
-              let foreignObj = this.createOrUpdate(obj[collection][i], oneToMany[collection][0]);
-              if (!that[collection].includes(foreignObj)) {
-                that[collection].push(foreignObj);
-              }
-              if (oneToMany[collection][1]) {
-                foreignObj[oneToMany[collection][1]] = that;
+      for (const key in obj) {
+        if (manyToOne.hasOwnProperty(key)) {
+          if (obj[key] !== undefined) {
+            that[key] = this.createOrUpdate(obj[key], manyToOne[key][0]);
+            if (manyToOne[key][1]) {
+              let foreignCollection = that[key][manyToOne[key][1]];
+              if (!foreignCollection.includes(that)) {
+                foreignCollection.push(that);
               }
             }
           }
-        }
-      }
-      for (let collection in manyToMany) {
-        if (obj[collection] !== undefined) {
-          if (obj[collection] && obj[collection].length > 0) {
-            that[collection].splice(0, that[collection].length);
-            let len = obj[collection].length;
-            for (let i = 0; i < len; i++) {
-              let foreignObj = this.createOrUpdate(obj[collection][i], manyToMany[collection][0]);
-              if (!that[collection].includes(foreignObj)) {
-                that[collection].push(foreignObj);
+        } else if (oneToMany.hasOwnProperty(key)) {
+          if (obj[key] !== undefined) {
+            if (obj[key] && obj[key].length > 0) {
+              that[key].splice(0, that[key].length);
+              let len = obj[key].length;
+              for (let i = 0; i < len; i++) {
+                let foreignObj = this.createOrUpdate(obj[key][i], oneToMany[key][0]);
+                if (!that[key].includes(foreignObj)) {
+                  that[key].push(foreignObj);
+                }
+                if (oneToMany[key][1]) {
+                  foreignObj[oneToMany[key][1]] = that;
+                }
               }
-              if (manyToMany[collection][1]) {
-                let foreignCollection = foreignObj[manyToMany[collection][1]];
-                if (!foreignCollection.includes(that)) {
-                  foreignCollection.push(that);
+            }
+          }
+        } else if (manyToMany.hasOwnProperty(key)) {
+          if (obj[key] !== undefined) {
+            if (obj[key] && obj[key].length > 0) {
+              that[key].splice(0, that[key].length);
+              let len = obj[key].length;
+              for (let i = 0; i < len; i++) {
+                let foreignObj = this.createOrUpdate(obj[key][i], manyToMany[key][0]);
+                if (!that[key].includes(foreignObj)) {
+                  that[key].push(foreignObj);
+                }
+                if (manyToMany[key][1]) {
+                  let foreignCollection = foreignObj[manyToMany[key][1]];
+                  if (!foreignCollection.includes(that)) {
+                    foreignCollection.push(that);
+                  }
                 }
               }
             }
           }
         }
       }
+
+      // for (let foreignKey in manyToOne) {
+
+      // }
+      // for (let collection in oneToMany) {
+
+      // }
+      // for (let collection in manyToMany) {
+
+      // }
       return that;
     },
     get(id, constructor) {
