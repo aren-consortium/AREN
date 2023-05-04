@@ -8574,6 +8574,11 @@ img {
   margin-bottom: 0;
 }
 
+:root {
+  --navigation-height: 64px;
+  --header-height: 45px;
+}
+
 html body {
   min-width: 900px;
   overflow-y: scroll;
@@ -8600,7 +8605,7 @@ html body #app.help .documented {
   pointer-events: all;
 }
 html body #app > nav {
-  height: 64px;
+  height: var(--navigation-height);
   position: sticky;
   min-width: 900px;
   width: 100%;
@@ -8611,7 +8616,7 @@ html body #app > nav {
 html body #app #loading {
   position: fixed;
   margin: auto;
-  top: 64px;
+  top: var(--navigation-height);
   border-radius: none;
   z-index: 100;
 }
@@ -8635,11 +8640,11 @@ html body #app .current-view-wrapper .current-view > .container {
 html body #app .current-view-wrapper .current-view > .container > #header {
   position: sticky;
   padding: 0 17px;
-  top: 64px;
+  top: var(--navigation-height);
   background: white;
   display: grid;
   grid-template-columns: 1fr max-content;
-  height: 45px;
+  height: var(--header-height);
   align-items: center;
   z-index: 10;
 }
@@ -8679,7 +8684,7 @@ html body #app .current-view-wrapper .current-view > .container > .grid {
 }
 html body #app .current-view-wrapper .current-view > .container > .grid > .ghead .gh {
   position: sticky;
-  top: 109px;
+  top: calc(var(--navigation-height) + var(--header-height));
   background: white;
   z-index: 8;
 }
@@ -9006,7 +9011,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   position: sticky;
   height: 20px;
   padding: 0 17px;
-  top: 109px;
+  top: calc(var(--navigation-height) + var(--header-height));
   background: white;
   z-index: 2;
   text-align: right;
@@ -9066,7 +9071,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 }
 #debate #mainContainer {
   display: flex;
-  height: calc(100vh - 129px);
+  height: calc(100vh - var(--navigation-height) - var(--header-height) - 20px);
   overflow: hidden;
 }
 #debate #documentContainer, #debate #commentsContainer {
@@ -9317,7 +9322,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   margin-bottom: 10px;
 }
 #debate svg.spaghettis {
-  position: absolute;
+  position: fixed;
   pointer-events: none;
   top: 0;
   left: 0;
@@ -9633,7 +9638,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 }
 #document .ql-toolbar {
   position: sticky;
-  top: 109px;
+  top: calc(var(--navigation-height) + var(--header-height));
   background: white;
   z-index: 10;
   height: 42px;
@@ -9666,7 +9671,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 }
 #createDebate .steps > .tabs {
   position: sticky;
-  top: 64px;
+  top: var(--navigation-height);
   z-index: 9;
   display: block;
   margin-top: -60px;

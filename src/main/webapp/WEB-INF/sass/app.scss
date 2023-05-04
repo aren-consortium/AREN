@@ -99,8 +99,10 @@ img {
     }
 }
 
-$navigation-height: 64px;
-$header-height: 45px;
+:root {
+    --navigation-height: 64px;
+    --header-height: 45px;
+}
 
 html {
     body {
@@ -127,7 +129,7 @@ html {
                 }
             }
             > nav {
-                height: $navigation-height;
+                height: var(--navigation-height);
                 position: sticky;
                 min-width: 900px;
                 width: 100%;
@@ -138,7 +140,7 @@ html {
             #loading {
                 position: fixed;
                 margin: auto;
-                top: $navigation-height;
+                top: var(--navigation-height);
                 border-radius: none;
                 z-index: 100;
             }
@@ -159,11 +161,11 @@ html {
                         > #header {
                             position: sticky;
                             padding: 0 17px;
-                            top: $navigation-height;
+                            top: var(--navigation-height);
                             background: $background-color;
                             display: grid;
                             grid-template-columns: 1fr max-content;
-                            height: $header-height;
+                            height: var(--header-height);
                             align-items: center;
                             z-index: 10;
                             > div:first-child {
@@ -201,7 +203,7 @@ html {
                             flex: 1;
                             > .ghead .gh {
                                 position: sticky;
-                                top: ($navigation-height + $header-height);
+                                top: calc(var(--navigation-height) + var(--header-height));
                                 background: $background-color;
                                 z-index: 8;
                             }
@@ -551,7 +553,7 @@ nav {
         position: sticky;
         height: 20px;
         padding: 0 17px;
-        top: ($navigation-height + $header-height);
+        top: calc(var(--navigation-height) + var(--header-height));
         background: $background-color;
         z-index: 2;
         text-align: right;
@@ -617,7 +619,7 @@ nav {
 
     #mainContainer {
         display: flex;
-        height: calc(100vh - #{($navigation-height + $header-height) + 20px});
+        height: calc(100vh - var(--navigation-height) - var(--header-height) - 20px);
         overflow: hidden;
     }
 
@@ -886,7 +888,7 @@ nav {
     }
 
     svg.spaghettis {
-        position: absolute;
+        position: fixed;
         pointer-events: none;
         top: 0;
         left: 0;
@@ -1243,7 +1245,7 @@ nav {
     }
     .ql-toolbar {
         position: sticky;
-        top: ($navigation-height + $header-height);
+        top: calc(var(--navigation-height) + var(--header-height));
         background: $background-color;
         z-index: 10;
         height: 42px;
@@ -1279,7 +1281,7 @@ nav {
         margin-top: 15px;
         > .tabs {
             position: sticky;
-            top: $navigation-height;
+            top: var(--navigation-height);
             z-index: 9;
             display: block;
             margin-top: -60px;
