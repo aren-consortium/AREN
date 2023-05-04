@@ -631,7 +631,6 @@ nav {
         .scroll-area {
             height: 100%;
             overflow-y: scroll;
-            position: relative;
         }
     }
 
@@ -888,7 +887,7 @@ nav {
     }
 
     svg.spaghettis {
-        position: fixed;
+        position: absolute;
         pointer-events: none;
         top: 0;
         left: 0;

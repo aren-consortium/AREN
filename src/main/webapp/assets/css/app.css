@@ -9083,7 +9083,6 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
 #debate #documentContainer .scroll-area, #debate #commentsContainer .scroll-area {
   height: 100%;
   overflow-y: scroll;
-  position: relative;
 }
 #debate #commentsContainer {
   margin-left: 5px;
@@ -9322,7 +9321,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   margin-bottom: 10px;
 }
 #debate svg.spaghettis {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   top: 0;
   left: 0;

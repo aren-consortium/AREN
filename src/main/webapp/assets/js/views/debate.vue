@@ -566,14 +566,14 @@
               }
           },
           spaghetti(scrap, scrapIndex, comment, commentIndex) {
-              const scrapId = "scrap_" + scrapIndex;
-              const commentId = "comment_" + comment.id;
-              const scrapDiv = document.getElementById(scrapId);
+              let scrapId = "scrap_" + scrapIndex;
+              let commentId = "comment_" + comment.id;
+              let scrapDiv = document.getElementById(scrapId);
               let commentDiv = document.getElementById(commentId);
               // Check if a parent is collapsed, if so remove spaghettis
               let answersDiv = commentDiv.closest(".answers-container");
               while (answersDiv && commentDiv) {
-                  const commentParentDiv = answersDiv.previousElementSibling;
+                  let commentParentDiv = answersDiv.previousElementSibling;
                   if (commentDiv.offsetTop - commentParentDiv.offsetTop < (commentParentDiv.offsetHeight / 2)) {
                       commentDiv = false;
                   } else {
@@ -583,19 +583,19 @@
               }
               // Only if the div exists and is visible
               if (commentDiv && commentDiv.offsetParent !== null) {
-                  const sourceBox = scrapDiv.getBoundingClientRect();
-                  const targetBox = commentDiv.getBoundingClientRect();
-                  const sourceHeight = Math.min(sourceBox.height * 0.5, scrap.comments.length * 2);
-                  const deltaY = sourceHeight / scrap.comments.length;
+                  let offsetStart = this.$refs.documentContainer.scrollTop;
+                  let offsetEnd = this.$refs.commentsContainer.scrollTop;
+                  let heightStart = Math.min(scrapDiv.offsetHeight * 0.5, scrap.comments.length * 2);
+                  let deltaY = heightStart / scrap.comments.length;
 
                   return d3.linkHorizontal().x(d => d.x).y(d => d.y)({
                       source: {
-                          x: sourceBox.right,
-                          y: sourceBox.top + (sourceBox.height - sourceHeight) / 2 + commentIndex * deltaY
+                          x: (scrapDiv.offsetLeft + scrapDiv.offsetWidth),
+                          y: (scrapDiv.offsetTop + commentIndex * deltaY + (scrapDiv.offsetHeight - heightStart) / 2) - offsetStart
                       },
                       target: {
-                          x: targetBox.left,
-                          y: targetBox.top + targetBox.height / 2
+                          x: commentDiv.offsetLeft,
+                          y: (commentDiv.offsetTop + commentDiv.offsetHeight / 2) - offsetEnd
                       }
                   });
               }
