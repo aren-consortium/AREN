@@ -9,7 +9,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,12 +37,13 @@ public class BackgroundJobManager implements ServletContextListener {
         OffsetDateTime now = OffsetDateTime.now( ZoneOffset.UTC );
         ZonedDateTime nextMidnight = now.toLocalDate().plusDays( 1 ).atStartOfDay( ZoneOffset.UTC );
         Duration untilMidnight = Duration.between(now, nextMidnight);
-
+        
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
         this.scheduler.scheduleAtFixedRate(() -> {
             try {
               this.commentService.updateAllTags();
             } catch (Exception e) {
+              e.printStackTrace();
               // Exception trap to avoid the executor to halt silently
             }
         }, untilMidnight.toMillis(), TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
