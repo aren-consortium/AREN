@@ -1,17 +1,18 @@
 package fr.lirmm.aren.service;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 
 import fr.lirmm.aren.model.Comment;
 import fr.lirmm.aren.model.TagSet;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.function.BiConsumer;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * Service that provides operations for {link Comment}.
@@ -157,19 +158,18 @@ public class CommentService extends AbstractService<Comment> {
      */
     public void updateAllTags(BiConsumer<Comment, Float> callback) {
         Set<Comment> comments = this.findAll();
+        comments = comments.stream().filter((comment) -> comment.getDebate().isIdefixLink()).collect(Collectors.toSet());
         System.out.println("Starting tags update on " + comments.size() + " comments");
         int cpt = 0;
         Iterator<Comment> it = comments.iterator();
         while (it.hasNext()) {
             Comment comment = it.next();
-            if (comment.getDebate().isIdefixLink()) {
-                this.updateTags(comment, true);
-            }
+            this.updateTags(comment, true);
+            System.out.print("+");
             if (callback != null) {
                 callback.accept(comment, ((float) cpt / (float) comments.size()));
             }
             cpt++;
-            System.out.print(".");
         }
         System.out.println();
         System.out.println("Tags update done");

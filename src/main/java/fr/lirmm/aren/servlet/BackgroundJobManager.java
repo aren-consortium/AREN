@@ -5,15 +5,21 @@
  */
 package fr.lirmm.aren.servlet;
 
-import fr.lirmm.aren.service.CommentService;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+
+import fr.lirmm.aren.service.CommentService;
 
 /**
  *
@@ -29,19 +35,18 @@ public class BackgroundJobManager implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
-        long untilMidnight = (c.getTimeInMillis() - System.currentTimeMillis());
-        long millisInDay = 24 * 60 * 60 * 1000;
+        OffsetDateTime now = OffsetDateTime.now( ZoneOffset.UTC );
+        ZonedDateTime nextMidnight = now.toLocalDate().plusDays( 1 ).atStartOfDay( ZoneOffset.UTC );
+        Duration untilMidnight = Duration.between(now, nextMidnight);
 
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
         this.scheduler.scheduleAtFixedRate(() -> {
-            this.commentService.updateAllTags();
-        }, untilMidnight, millisInDay, TimeUnit.MILLISECONDS);
+            try {
+              this.commentService.updateAllTags();
+            } catch (Exception e) {
+              // Exception trap to avoid the executor to halt silently
+            }
+        }, untilMidnight.toMillis(), TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
     }
 
     @Override
