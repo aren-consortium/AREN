@@ -428,16 +428,6 @@ ApiService = function (anUrl, locale) {
           }
         }
       }
-
-      // for (let foreignKey in manyToOne) {
-
-      // }
-      // for (let collection in oneToMany) {
-
-      // }
-      // for (let collection in manyToMany) {
-
-      // }
       return that;
     },
     get(id, constructor) {
@@ -561,11 +551,16 @@ ApiService = function (anUrl, locale) {
     });
   };
   let parse = function (obj, className) {
+    let res;
     if (Array.isArray(obj)) {
-      return obj.map(obj => self.Store.createOrUpdate(obj, className));
+      res = obj.map(obj => self.Store.createOrUpdate(obj, className));
     } else {
-      return self.Store.createOrUpdate(obj, className);
+      res = self.Store.createOrUpdate(obj, className);
     }
+    if (self.Store[className.name]) {
+      self.Store[className.name].sort((a, b) => a.id - b.id)
+    }
+    return res;
   };
   let decycle = function (obj, root = true) {
     if (!obj || typeof obj !== 'object')
@@ -654,43 +649,20 @@ ApiService = function (anUrl, locale) {
     });
   };
 
-  let Listener;
-  if (!!window.SharedWorker) {
-    Listener = function (aPath, className) {
-      this.listen = ({ id, onMessage } = {}) => {
-        let sseWorker = new SharedWorker('assets/js/service/worker.js');
-        let eventPath = url + "/events/" + aPath + (id ? "/" + id : "");
-        sseWorker.port.postMessage(eventPath);
-        sseWorker.port.addEventListener("message", (message) => {
-          let result = parse(JSON.parse(message.data.data), className);
-          if (onMessage) {
-            onMessage(result);
+  const Listener = (path, classes) => {
+    return ({ type, id = "", ...args }) => {
+      const eventPath = url + "/events/" + path;
+      const source = new EventSource(eventPath + (id ? "/" + id : ""));
+      for (const klass of classes) {
+        source.addEventListener(klass.name, (message) => {
+          let result = parse(JSON.parse(message.data), klass);
+          if (args[`on${klass.name}`]) {
+            args[`on${klass.name}`](result);
           }
-        }, false);
-        sseWorker.port.start();
-      };
-    };
-  } else {
-    Listener = function (aPath, className) {
-      let eventPath = url + "/events/" + aPath;
-      let source = null;
-      this.listen = ({ id, onMessage } = {}) => {
-        source = new EventSource(eventPath + (id ? "/" + id : ""));
-        source.onmessage = (message) => {
-          let result = parse(JSON.parse(message.data), className);
-          if (onMessage) {
-            onMessage(result);
-          }
-        };
-        source.onclose = () => {
-        };
-      };
-      this.stop = () => {
-        if (source) {
-          source.close();
-        }
-      };
-    };
+        })
+      }
+      return source;
+    }
   }
 
   this.Categories = new EntityProcessor("categories", Category);
@@ -702,8 +674,8 @@ ApiService = function (anUrl, locale) {
   this.Users = new EntityProcessor("users", User);
   this.Notifications = new EntityProcessor("notifications", Notification);
   this.Configurations = new EntityProcessor("configurations", Configuration);
-  this.CommentListener = new Listener("comments", Comment);
-  this.NotificationListener = new Listener("notifications", Notification);
+  this.ListenDebate = Listener("debate", [Debate, Comment])
+  this.ListenNotifications = Listener("notifications", [Notification])
 
   this.Users.getLoged = function (params = {}) {
     params.method = "GET";
@@ -883,7 +855,7 @@ ApiService = function (anUrl, locale) {
   this.Configurations.getAll = function (params = {}) {
     params.method = "GET";
     let onSuccess = params.onSuccess;
-    params.onSuccess =  function (result) {
+    params.onSuccess = function (result) {
       self.Configs = {}
       for (const prop of result) {
         self.Configs[prop.key] = prop.value == 'true' ? true : prop.value == 'false' ? false : prop.value;

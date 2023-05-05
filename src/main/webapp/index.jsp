@@ -80,7 +80,8 @@
                 $t('menu.open') }}</router-link>
             </li>
             <li v-if="user.is('MODO')">
-              <router-link to="/teams" v-bind:class="{ active: $route.path === '/teams' || $route.path === '/users' }">{{ $t('menu.teams') }}
+              <router-link to="/teams"
+                v-bind:class="{ active: $route.path === '/teams' || $route.path === '/users' }">{{ $t('menu.teams') }}
               </router-link>
             </li>
             <li v-if="user.is('MODO')">
@@ -242,8 +243,8 @@
             onSuccess: (logedUser) => {
               this.user = logedUser;
 
-              ArenService.NotificationListener.listen({
-                onMessage: (notif) => {
+              this.listener = ArenService.ListenNotifications({
+                onNotification: (notif) => {
                   this.user.notifications.push(notif);
                   let message = this.$t('notification.' + notif.content.message, notif.content.details);
                   this.$toast(message);
@@ -269,6 +270,9 @@
               isInfo: true
             });
           };
+        },
+        beforeDestroy() {
+            this.listener.stop()
         },
         mounted() {
           // Hack to be shure everything is ready

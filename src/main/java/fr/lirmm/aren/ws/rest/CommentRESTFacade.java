@@ -77,7 +77,7 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
             asyncUpdateTag(comment.getId());
         }
 
-        broadcasterService.broadcastComment(toEdit);
+        broadcasterService.broadcast(toEdit);
         return toEdit;
     }
 
@@ -106,7 +106,7 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
     public void updateAllTags(@Context SseEventSink eventSink, @Context Sse sse) {
         commentService.updateAllTags((Comment comment, Float progress) -> {
             eventSink.send(sse.newEvent(progress + ""));
-            broadcasterService.broadcastComment(comment);
+            broadcasterService.broadcast(comment);
         });
         eventSink.send(sse.newEvent("1"));
         eventSink.close();
@@ -125,7 +125,7 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
         Comment comment = commentService.find(id);
         comment.setTags(new TagSet());
         commentService.edit(comment);
-        broadcasterService.broadcastComment(comment);
+        broadcasterService.broadcast(comment);
         asyncUpdateTag(comment.getId());
     }
 
@@ -136,7 +136,7 @@ public class CommentRESTFacade extends AbstractRESTFacade<Comment> {
             // This can be really long, hence why the Thread
             commentService.updateTags(comment);
             commentService.edit(comment);
-            broadcasterService.broadcastComment(comment);
+            broadcasterService.broadcast(comment);
           }
       }.start();
     }

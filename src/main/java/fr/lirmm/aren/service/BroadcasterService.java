@@ -7,17 +7,16 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import fr.lirmm.aren.model.AbstractEntity;
-import fr.lirmm.aren.model.Comment;
-import fr.lirmm.aren.model.Debate;
-import fr.lirmm.aren.model.Notification;
-import fr.lirmm.aren.security.AuthenticatedUserDetails;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.sse.OutboundSseEvent;
 import javax.ws.rs.sse.Sse;
 import javax.ws.rs.sse.SseBroadcaster;
 import javax.ws.rs.sse.SseEventSink;
+
+import fr.lirmm.aren.model.AbstractEntity;
+import fr.lirmm.aren.model.Comment;
+import fr.lirmm.aren.model.Debate;
+import fr.lirmm.aren.model.Notification;
 
 /**
  *
@@ -37,6 +36,10 @@ public class BroadcasterService {
 
     private OutboundSseEvent.Builder eventBuilder;
 
+    /**
+     * Store broadcasters (connected clients) by entity Id, by entity Type (Debate, Notification, ...)
+     * So each client listens to specific entity change
+     */ 
     private final Map<Class<? extends AbstractEntity>, HashMap<Long, SseBroadcaster>> broadcasters = new HashMap<Class<? extends AbstractEntity>, HashMap<Long, SseBroadcaster>>();
 
     /**
@@ -49,26 +52,43 @@ public class BroadcasterService {
         this.eventBuilder = sse.newEventBuilder();
     }
 
-    private void broadcast(Long id, AbstractEntity object, Class<? extends AbstractEntity> which) {
+    public void broadcast(AbstractEntity object) {
+        Long id = object.getId();
+        Class<? extends AbstractEntity> which = object.getClass();
+
+        if (object instanceof Notification) {
+          id = ((Notification)object).getOwner().getId();
+        } else if (object instanceof Comment) {
+          id = ((Comment)object).getDebate().getId();
+          which = Debate.class;
+        }
 
         if (broadcasters.containsKey(which)) {
 
             OutboundSseEvent sseEvent = this.eventBuilder
-                    // .comment(((AuthenticatedUserDetails) securityContext.getUserPrincipal()).getUser().getId() + "")
-                    .name("message")
+                    .name(object.getClass().getSimpleName())
                     .mediaType(MediaType.APPLICATION_JSON_TYPE)
-                    .data(which, object)
+                    .data(object)
                     .reconnectDelay(5000)
                     .build();
 
             if (broadcasters.get(which).containsKey(id)) {
                 broadcasters.get(which).get(id).broadcast(sseEvent);
             }
+            // Special key to listen for ALL entities
             if (broadcasters.get(which).containsKey(-1L)) {
                 broadcasters.get(which).get(-1L).broadcast(sseEvent);
             }
         }
     }
+
+    /**
+     *
+     * @param entities
+     */
+    public void broadcast(List<? extends AbstractEntity> entities) {
+      entities.forEach(this::broadcast);
+  }
 
     /**
      *
@@ -87,31 +107,5 @@ public class BroadcasterService {
         }
         broadcasters.get(which).get(id).register(sink);
         sink.send(sse.newEvent("registered", "true"));
-    }
-
-    /**
-     *
-     * @param comment
-     */
-    public void broadcastComment(Comment comment) {
-        broadcast(comment.getDebate().getId(), comment, Debate.class);
-    }
-
-    /**
-     *
-     * @param notif
-     */
-    public void broadcastNotification(Notification notif) {
-        broadcast(notif.getOwner().getId(), notif, Notification.class);
-    }
-
-    /**
-     *
-     * @param notifs
-     */
-    public void broadcastNotification(List<Notification> notifs) {
-        notifs.forEach(notif -> {
-            broadcastNotification(notif);
-        });
     }
 }

@@ -69,7 +69,7 @@ public class BroadcasterRESTFacade {
      * @param sseEventSink
      */
     @GET
-    @Path("comments/{debateId}")
+    @Path("debate/{debateId}")
     @RolesAllowed({"GUEST"})
     public void openDebateListener(@PathParam("debateId") Long debateId, @Context SseEventSink sseEventSink) {
 

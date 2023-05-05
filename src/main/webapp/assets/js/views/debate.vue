@@ -277,15 +277,16 @@
       },
       created( ) {
           this.fetchData( );
-          ArenService.CommentListener.listen({
+          this.listener = ArenService.ListenDebate({
               id: this.$route.params.id,
-              onMessage: (comment) => {
+              onComment: (comment) => {
                   Vue.set(this.displayableComments, comment.id, true);
               }
           });
           document.addEventListener('selectionchange', this.selectionChange)
       },
       beforeDestroy() {
+          this.listener.stop()
           document.removeEventListener('selectionchange', this.selectionChange)
       },
       methods: {

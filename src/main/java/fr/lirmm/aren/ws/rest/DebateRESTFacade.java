@@ -156,7 +156,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
         });
 
         notificationService.create(notifications);
-        broadcasterService.broadcastNotification(notifications);
+        broadcasterService.broadcast(notifications);
 
         return newDebate;
     }
@@ -208,11 +208,11 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
         }
 
         notificationService.create(notifications);
-        broadcasterService.broadcastNotification(notifications);
-        broadcasterService.broadcastComment(comment);
+        broadcasterService.broadcast(notifications);
+        broadcasterService.broadcast(comment);
 
         commentService.updateTags(comment); // It is long
-        broadcasterService.broadcastComment(comment);
+        broadcasterService.broadcast(comment);
 
         return comment;
     }
@@ -262,7 +262,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
             });
 
             notificationService.create(notifications);
-            broadcasterService.broadcastNotification(notifications);
+            broadcasterService.broadcast(notifications);
         }
         return comment;
     }
@@ -287,7 +287,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
 
         Notification notif = Notification.COMMENT_MODERATED(comment);
         notificationService.create(notif);
-        broadcasterService.broadcastNotification(notif);
+        broadcasterService.broadcast(notif);
 
         return comment;
     }
@@ -316,7 +316,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
         });
 
         notificationService.create(notifications);
-        broadcasterService.broadcastNotification(notifications);
+        broadcasterService.broadcast(notifications);
 
     }
 
@@ -358,7 +358,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
 
         Notification notif = Notification.INVITED_TO_DEBATE(user, debate);
         notificationService.create(notif);
-        broadcasterService.broadcastNotification(notif);
+        broadcasterService.broadcast(notif);
     }
 
     /**
@@ -489,7 +489,7 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
 
         debate.getComments().forEach((Comment comment) -> {
             commentService.updateTags(comment, true);
-            broadcasterService.broadcastComment(comment);
+            broadcasterService.broadcast(comment);
         });
     }
 
@@ -552,5 +552,6 @@ public class DebateRESTFacade extends AbstractRESTFacade<Debate> {
             return;
         }
         debateService.edit(debate);
+        broadcasterService.broadcast(debate);
     }
 }
