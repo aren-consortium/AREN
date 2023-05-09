@@ -286,7 +286,8 @@
           document.addEventListener('selectionchange', this.selectionChange)
       },
       beforeDestroy() {
-          this.listener.stop()
+          if (this.listener)
+                this.listener.stop()
           document.removeEventListener('selectionchange', this.selectionChange)
       },
       methods: {

@@ -272,7 +272,8 @@
           };
         },
         beforeDestroy() {
-            this.listener.stop()
+            if (this.listener)
+                this.listener.stop()
         },
         mounted() {
           // Hack to be shure everything is ready
