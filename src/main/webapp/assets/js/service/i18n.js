@@ -261,6 +261,8 @@ const messages = {
       tag_update_success: "La mise à jour des tags est un succès.",
       active: "Le débat peut être commenté",
       open_public: "Le débat sera accessible par n'importe quel utilisateur⋅ice, même non coonnecté⋅e",
+      404: "Après long débat, il est avéré que cette page n'existe pas.",
+      redirect_home: "Vous allez être automatiquement regirigé vers la page daccueil dans..."
     },
     notification: {
       team_added_to_debate: "Votre groupe {teamName} participe au débat {debateName}.",
