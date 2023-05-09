@@ -243,14 +243,16 @@
             onSuccess: (logedUser) => {
               this.user = logedUser;
 
-              this.listener = ArenService.ListenNotifications({
-                onNotification: (notif) => {
-                  this.user.notifications.push(notif);
-                  let message = this.$t('notification.' + notif.content.message, notif.content.details);
-                  this.$toast(message);
-                  new BrowserNotification("AREN", { body: message });
-                }
-              });
+              if (this.user.is('USER')) {
+                this.listener = ArenService.ListenNotifications({
+                  onNotification: (notif) => {
+                    this.user.notifications.push(notif);
+                    let message = this.$t('notification.' + notif.content.message, notif.content.details);
+                    this.$toast(message);
+                    new BrowserNotification("AREN", { body: message });
+                  }
+                });
+              }
             },
             onError: (e) => {
               this.logout();
