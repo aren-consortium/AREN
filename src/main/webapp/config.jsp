@@ -130,5 +130,11 @@
 
       <input type="submit" name="submitInitialization" value="Submit" />
     </form>
+
+    <% if (request.getAttribute("setParams") !=null) { %>
+      <script>
+        document.getElementsByName('reverseProxy')[0].defaultValue = location.href
+      </script>
+    <% } %>
 </body>
 </html>
