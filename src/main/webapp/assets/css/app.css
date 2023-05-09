@@ -9662,6 +9662,7 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   padding-top: 0;
   padding-bottom: 0;
   border-bottom-width: 0;
+  overflow: hidden;
 }
 
 #createDebate #header {
