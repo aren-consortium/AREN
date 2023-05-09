@@ -152,11 +152,10 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
             maxAge = 360 * 24 * 60 * 60;
         }
 
-        String domain;
         Response response;
         try {
-            domain = new URL(request.getRequestURL().toString()).getHost();
-            NewCookie cookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, "/", domain, "Authentification token for Aren platform", maxAge, false, true);
+            URL url = new URL(reverseProxy.get());
+            NewCookie cookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, url.getPath(), url.getHost(), "Authentification token for Aren platform", maxAge, false, true);
             response = Response.ok(token).cookie(cookie).build();
         } catch (MalformedURLException ex) {
             response = Response.ok(token).build();
@@ -173,11 +172,10 @@ public class UserRESTFacade extends AbstractRESTFacade<User> {
     @Path("logout")
     @PermitAll
     public Response logout() {
-        String domain;
         Response response;
         try {
-            domain = new URL(request.getRequestURL().toString()).getHost();
-            NewCookie cookie = new NewCookie(HttpHeaders.AUTHORIZATION, "", "/", domain, "", 0, false, true);
+            URL url = new URL(reverseProxy.get());
+            NewCookie cookie = new NewCookie(HttpHeaders.AUTHORIZATION, "", url.getPath(), url.getHost(), "", 0, false, true);
             response = Response.ok().cookie(cookie).build();
         } catch (MalformedURLException ex) {
             response = Response.ok().build();

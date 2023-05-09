@@ -206,13 +206,13 @@ public class Root implements Filter {
     while (proxy.endsWith("/")) {
       proxy = proxy.substring(0, proxy.length() - 1);
     }
-    Configuration configProxy = new Configuration("reverse-proxy", proxy + "/");
+    Configuration configProxy = new Configuration("reverse-proxy", proxy);
     em.persist(configProxy);
 
-    Configuration jwtIssuer = new Configuration("authentication.jwt.issuer", proxy + "/");
+    Configuration jwtIssuer = new Configuration("authentication.jwt.issuer", proxy);
     em.persist(jwtIssuer);
 
-    Configuration jwtAudience = new Configuration("authentication.jwt.audience", proxy + "/");
+    Configuration jwtAudience = new Configuration("authentication.jwt.audience", proxy);
     em.persist(jwtAudience);
 
     String secret = RandomStringUtils.random(16, true, true);

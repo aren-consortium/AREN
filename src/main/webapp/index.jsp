@@ -4,7 +4,7 @@
   <html lang="fr">
 
   <head>
-    <base href="${serverRoot}">
+    <base href="${serverRoot}/">
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -216,7 +216,7 @@
 
     <script>
       BrowserNotification.requestPermission();
-      const ArenService = new ApiService("${serverRoot}ws", "FR-fr");
+      const ArenService = new ApiService("${serverRoot}/ws", "FR-fr");
       let styles = window.getComputedStyle(document.documentElement);
       const redColor = styles.getPropertyValue('--red-color');
       const blueColor = styles.getPropertyValue('--blue-color');

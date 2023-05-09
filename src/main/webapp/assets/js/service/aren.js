@@ -687,8 +687,7 @@ ApiService = function (anUrl, locale) {
     params.path = "/login";
     params.parsingClassName = false;
     let onSuccess = params.onSuccess;
-    params.onSuccess = (token) => {
-      document.cookie = "Authorization=" + token + "; maxAge=" + (params.data.rememberMe ? (360 * 24 * 60 * 60) : -1) + "; path=/";
+    params.onSuccess = () => {
       document.location.reload(true);
       onSuccess ? onSuccess() : null;
     }
