@@ -125,6 +125,9 @@
         watch: {
             pages() {
                 this.page = 0;
+            },
+            page() {
+                window.scrollTo(0, 0);
             }
         },
         methods: {
