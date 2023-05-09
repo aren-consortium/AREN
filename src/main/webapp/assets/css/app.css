@@ -9641,7 +9641,6 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   background: white;
   z-index: 10;
   height: 42px;
-  overflow: hidden;
   transition: height 0.3s, padding 0.3s;
 }
 #document .ql-container {
@@ -9654,6 +9653,9 @@ nav #notifications .dropdown-content ul li .read-toggle:hover {
   margin-bottom: 10px;
   text-align: justify;
   transition: height 0.3s;
+}
+#document .ql-container .ql-editor p {
+  margin: revert !important;
 }
 #document #documentDisplay:not(.in-edition) .ql-toolbar {
   height: 0;

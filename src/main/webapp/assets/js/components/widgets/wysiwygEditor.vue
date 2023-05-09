@@ -30,6 +30,7 @@
                         [{header: [1, 2, 3, 4, false]}],
                         ['bold', 'italic', 'underline'],
                         [{'align': ''}, {'align': 'center'}, {'align': 'right'}],
+                        [{'size': ['small', false, 'large']}],
                         [{'color': []}, {'background': []}],
                         ['link', 'image', 'video'],
                         ['clean']

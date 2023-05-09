@@ -1248,7 +1248,6 @@ nav {
         background: $background-color;
         z-index: 10;
         height: 42px;
-        overflow: hidden;
         transition: height .3s, padding .3s;
     }
     .ql-container {
@@ -1260,6 +1259,9 @@ nav {
             margin-bottom: 10px;
             text-align: justify;
             transition: height .3s;
+            p {
+                margin: revert !important;
+            }
         }
     }
     #documentDisplay:not(.in-edition) {
