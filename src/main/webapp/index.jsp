@@ -68,7 +68,7 @@
   <body>
     <noscript><strong>We're sorry but Aren doesn't work properly without JavaScript enabled. Please enable it to
         continue.</strong></noscript>
-    <div v-if="user" id="app" v-bind:class="{help: help}">
+    <div v-if="user" id="app" v-bind:class="{help: help}" @click.once="requestNotificationPermission">
       <nav role="navigation">
         <div class="nav-wrapper">
           <router-link to="/" id="logoContainer">
@@ -215,7 +215,6 @@
     </div>
 
     <script>
-      BrowserNotification.requestPermission();
       const ArenService = new ApiService("${serverRoot}/ws", "FR-fr");
       let styles = window.getComputedStyle(document.documentElement);
       const redColor = styles.getPropertyValue('--red-color');
@@ -249,7 +248,10 @@
                     this.user.notifications.push(notif);
                     let message = this.$t('notification.' + notif.content.message, notif.content.details);
                     this.$toast(message);
-                    new BrowserNotification("AREN", { body: message });
+                    const notification = new BrowserNotification("AREN", { body: message });
+                    notification.onclick = () => {
+                      this.$router.push({ path: `/debates/${notif.debate}`, query: { comment: notif.comment } })
+                    }
                   }
                 });
               }
@@ -274,8 +276,7 @@
           };
         },
         beforeDestroy() {
-            if (this.listener)
-                this.listener.stop()
+          this?.listener?.stop()
         },
         mounted() {
           // Hack to be shure everything is ready
@@ -322,6 +323,11 @@
             if (!this.help) {
               this.help = true;
               this.$documentation.display(this.$t('documentation.help'));
+            }
+          },
+          requestNotificationPermission() {
+            if (BrowserNotification) {
+              BrowserNotification?.requestPermission()
             }
           }
         },
