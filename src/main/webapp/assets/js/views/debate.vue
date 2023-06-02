@@ -277,7 +277,7 @@
       },
       created( ) {
           this.fetchData( );
-          this.listener = ArenService.ListenDebate({
+          ArenService.ListenDebate({
               id: this.$route.params.id,
               onComment: (comment) => {
                   Vue.set(this.displayableComments, comment.id, true);
@@ -286,8 +286,6 @@
           document.addEventListener('selectionchange', this.selectionChange)
       },
       beforeDestroy() {
-          if (this.listener)
-                this.listener.stop()
           document.removeEventListener('selectionchange', this.selectionChange)
       },
       methods: {

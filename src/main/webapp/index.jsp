@@ -243,7 +243,7 @@
               this.user = logedUser;
 
               if (this.user.is('USER')) {
-                this.listener = ArenService.ListenNotifications({
+                ArenService.ListenNotifications({
                   onNotification: (notif) => {
                     this.user.notifications.push(notif);
                     let message = this.$t('notification.' + notif.content.message, notif.content.details);
@@ -255,9 +255,6 @@
                   }
                 });
               }
-            },
-            onError: (e) => {
-              this.logout();
             }
           });
 
@@ -274,9 +271,6 @@
               isInfo: true
             });
           };
-        },
-        beforeDestroy() {
-          this?.listener?.stop()
         },
         mounted() {
           // Hack to be shure everything is ready

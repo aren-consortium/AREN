@@ -650,7 +650,7 @@ ApiService = function (anUrl, locale) {
   };
 
   const Listener = (path, classes) => {
-    return ({ type, id = "", ...args }) => {
+    return ({ id = "", ...args }) => {
       const eventPath = url + "/events/" + path;
       const source = new EventSource(eventPath + (id ? "/" + id : ""));
       for (const klass of classes) {
@@ -661,7 +661,12 @@ ApiService = function (anUrl, locale) {
           }
         })
       }
-      return source;
+      source.addEventListener("error", () => {
+        source.close();
+        setTimeout(() => {
+          Listener(path, classes)({ id, ...args })
+        }, 1000)
+      })
     }
   }
 
