@@ -196,11 +196,9 @@
       </div>
     </footer>
 
-    <template v-if="user.is('GUEST')">
-      <login-modal ref="loginModal" @forgot-password="forgotPassword"></login-modal>
-      <create-user-modal ref="createUserModal"></create-user-modal>
-      <reset-password-modal ref="resetPasswdModal"></reset-password-modal>
-    </template>
+    <login-modal ref="loginModal" @forgot-password="forgotPassword"></login-modal>
+    <create-user-modal ref="createUserModal"></create-user-modal>
+    <reset-password-modal ref="resetPasswdModal"></reset-password-modal>
 
     <password-modal ref="passwdModal"></password-modal>
 

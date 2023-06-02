@@ -41,9 +41,10 @@
                         v-bind:error-helper="$t('helper.different_passwords')">
             </text-input>
 
-            <toggle-action-button v-if="$root.user && $root.user.is('GUEST')" v-model="modoRequest" :off-label="$t(`modo_request`)"/>
+            <toggle-action-button v-if="$root.user.authority == 'GUEST'" v-model="modoRequest" :off-label="$t(`modo_request`)">
+            </toggle-action-button>
 
-            <div v-if="$root.user && $root.user.is('MODO')" class="col s6">
+            <div v-if="$root.user.is('MODO')" class="col s6">
                 <label>{{ $t('authority') }}</label>
                 <select class="browser-default" v-model="user.authority">
                     <option value="USER">{{ $t('USER') }}</option>
@@ -58,7 +59,7 @@
 
         <template v-slot:footer>
             <button @click="close()" v-bind:disabled="loading" class="waves-effect waves-green btn-flat">{{ $t('cancel') }}</button>
-            <button @click="signUp();" v-bind:disabled="loading || !samePasswords || exists.username || exists.email || !validEmail" class="waves-effect waves-green btn-flat">{{ $t('validate') }}</button>
+            <button @click="signup();" v-bind:disabled="loading || !samePasswords || exists.username || exists.email || !validEmail" class="waves-effect waves-green btn-flat">{{ $t('validate') }}</button>
         </template>
 
     </modal-layout>
@@ -106,7 +107,7 @@
                     });
                 }, 500);
             },
-            signUp() {
+            signup() {
                 this.loading = true;
                 ArenService.Users.create({
                     data: this.user,
@@ -115,11 +116,13 @@
                     },
                     onSuccess: () => {
                         this.close();
-                        this.$confirm({
-                            title: this.$t('user_created'),
-                            message: this.$t('helper.user_created_email'),
-                            isInfo: true
-                        });
+                        if (!this.$root.user.is('MODO')) {
+                          this.$confirm({
+                              title: this.$t('user_created'),
+                              message: this.$t('helper.user_created_email'),
+                              isInfo: true
+                          });
+                        }
                     }
                 });
             }

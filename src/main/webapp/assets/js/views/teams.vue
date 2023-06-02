@@ -75,8 +75,6 @@
         <template v-slot:addons>
             <team-modal ref="teamModal">
             </team-modal>
-            <create-user-modal ref="createUserModal">
-            </create-user-modal>
         </template>
     </base-layout>
 </template>
@@ -141,7 +139,7 @@
                 });
             },
             createUser( ) {
-                this.$refs.createUserModal.open((newUser) => {
+                this.$root.$refs.createUserModal.open((newUser) => {
                     if (newUser) {
                         ArenService.Users.create({
                             data: newUser,
@@ -180,8 +178,7 @@
         components: {
             'team-modal': vueLoader('components/modals/teamModal'),
             'teams-grid': vueLoader('components/grids/teamsGrid'),
-            'users-grid': vueLoader('components/grids/usersGrid'),
-            'create-user-modal': vueLoader('components/modals/createUserModal')
+            'users-grid': vueLoader('components/grids/usersGrid')
         }
     };
 </script>
