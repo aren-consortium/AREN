@@ -21,7 +21,7 @@
 
     <!-- Usually non-critical updates -->
     <jackson.version>2.14.1</jackson.version>
-    <postgresql.version>42.5.1</postgresql.version>
+    <postgresql.version>42.7.2</postgresql.version>
     <jsoup.version>1.15.3</jsoup.version>
     <jjwt.version>0.9.1</jjwt.version>
     <jbcrypt.version>0.4.3</jbcrypt.version>
